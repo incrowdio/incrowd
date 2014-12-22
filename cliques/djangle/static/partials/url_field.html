@@ -1,0 +1,6 @@
+<div class="django_form_charfield">
+    <label>{{ form.label }} <small ng-if="form.required">Required</small>
+        <p ng-if="form.help_text" id="nameHelpText"><small>{{ form.help_text }}</small></p>
+        <input type="url" ng-model='form.value' placeholder="{{ form.default }}" ng-required="form.required"/>
+    </label>
+</div>

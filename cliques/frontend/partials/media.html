@@ -1,0 +1,14 @@
+<div ng-switch="post.type" class="embed">
+  <div ng-switch-when="youtube" class="flex-video">
+    <iframe style="overflow:hidden;" width="420px" height="315px"
+            ng-src="{{ trustSrc('https://youtube.com/embed/' + post.youtube + '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3') }}" frameborder="0" allowfullscreen></iframe>
+  </div>
+  <div ng-switch-when="image">
+    <div class="nsfw_show" ng-click="toggleNSFW(post)" ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
+      <p>Click</p><p>to show</p>
+    </div>
+    <a href="/#/posts/{{ post.id }}">
+      <img ng-show="post.nsfw_show || !post.nsfw" ng-src="{{ post.url }}">
+    </a>
+  </div>
+</div>

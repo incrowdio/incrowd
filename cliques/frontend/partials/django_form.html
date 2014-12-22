@@ -1,0 +1,20 @@
+<fieldset>
+  <legend>{{ form.title }}</legend>
+
+  <div class="django_form_field" ng-repeat="field in form.fields"
+       ng-switch="field.type_name">
+    <div ng-switch-when="CharField">
+      <charfield form="field"></charfield>
+    </div>
+    <div ng-switch-when="URLField">
+      <urlfield form="field"></urlfield>
+    </div>
+    <div ng-switch-when="DateField">
+      <datefield form="field"></datefield>
+    </div>
+    <div ng-switch-when="ChoiceField">
+      <choicefield form="field"></choicefield>
+    </div>
+  </div>
+  <button class="submit">Submit</button>
+</fieldset>

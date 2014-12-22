@@ -1,0 +1,50 @@
+<div class="large-8 small-12 columns content scroll">
+  <md-card class="md-whiteframe-z2 card_content">
+    <h2>New Submission</h2>
+
+    <form ng-submit="new_submission_submit()">
+      <md-text-float label="Title" ng-model="submission.title"
+                     class="long" focus-me="focus_input"></md-text-float>
+
+      <md-text-float label="URL" ng-model="submission.url"
+                     class="long" focus-me="focus_input"></md-text-float>
+      <md-button class="md-raised md-primary" type="submit">
+        Submit
+      </md-button>
+    </form>
+  </md-card>
+  <md-card class="md-whiteframe-z1 submission_entry"
+           ng-repeat="submission in poll.poll_submissions">
+    <md-toolbar class="md-theme-light">
+      <div class="md-toolbar-tools">
+        <div class="title_container" layout="column">
+          <h2 class="title">
+            {{ submission.title }}
+          </h2>
+        </div>
+        <div ng-if="submission.user == user.id" ng-click="delete_submission($index)">
+          <span class="delete icon-cancel-circle icomoon"></span>
+        </div>
+      </div>
+    </md-toolbar>
+    <div class="card_content">
+      <div class="image">
+        <img class="post_list image" ng-src="{{ submission.url }}">
+      </div>
+      <div layout="horizontal" layout-align="center" class="metadata">
+
+        <md-button class="md-raised md-primary md-warn"
+                   ng-if="submission.voted == true"
+                   ng-click="removeVote(submission.id)">
+          Remove
+        </md-button>
+        <md-button class="md-raised md-primary"
+                   ng-if="submission.voted == false"
+                   ng-click="addVote(submission.id)">
+          Vote
+        </md-button>
+      </div>
+    </div>
+
+  </md-card>
+</div>

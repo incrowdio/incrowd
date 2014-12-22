@@ -1,0 +1,27 @@
+<div class="content">
+  <md-card>
+    <md-toolbar>
+      <h1 class="md-toolbar-tools">Signup</h1>
+    </md-toolbar>
+    <md-content class="md-padding">
+
+      <form ng-submit="register()" ng-controller="SignupCtrl">
+        <md-text-float label="Username" ng-model="formData.username"
+                       focus-me="focus_input">
+        </md-text-float>
+        <md-text-float label="Password" ng-model="formData.password"
+                       type="password" focus-me="focus_input">
+        </md-text-float>
+        <md-text-float label="Email" ng-model="formData.email"
+                       type="email" focus-me="focus_input">
+        </md-text-float>
+        <md-text-float label="Invite Code" ng-model="formData.code"
+                       focus-me="focus_input">
+        </md-text-float>
+        <md-button class="md-raised md-primary" type="submit">
+          Signup
+        </md-button>
+      </form>
+    </md-content>
+  </md-card>
+</div>

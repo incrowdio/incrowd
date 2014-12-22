@@ -1,0 +1,19 @@
+language: python
+python: 2.7
+services:
+  - mysql
+env:
+  - TOX_ENV=flake8 MYSQL_USERNAME="root" MYSQL_PASSWORD="" DJANGO_SETTINGS_MODULE="cliques.settings" TRAVIS='True
+install:
+  - pip install tox
+  - pip install south
+  - pip install Django==1.5
+  - npm install grunt grunt-cli
+before_script:
+  - npm install -g bower
+  - npm install -g grunt-cli
+  - mysql -e "create database cliques;"
+  - make install
+  - npm install -g bower
+script:
+  make prod

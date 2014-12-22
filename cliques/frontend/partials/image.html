@@ -1,0 +1,10 @@
+<div class="flex-image"></div>
+  <div class="nsfw_show" ng-click="nsfw_show = !nsfw_show"
+       ng-hide="nsfw_show || !nsfw">
+    <p>Click</p>
+    <p>to show</p>
+  </div>
+  <a ng-href="/#/posts/{{ post.id }}">
+    <img ng-show="nsfw_show || !nsfw" ng-src="{{ post.url }}">
+  </a>
+</div>

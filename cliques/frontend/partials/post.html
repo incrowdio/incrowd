@@ -1,0 +1,51 @@
+<div class="md-whiteframe-z1 post {{post.category.color}}" ng-switch="post.type">
+  <md-toolbar class="md-toolbar {{post.category.color}}">
+    <div class="md-toolbar-tools">
+      <div class="profile-circular">
+        <a href="/#/users/{{ post.user.username }}/"><img class="profile-pic" ng-src="{{ post.user.profile_pic }}" alt=""/></a>
+      </div>
+      <div class="title_container" layout="column">
+        <h2 class="title">
+          <a href="/#/posts/{{ post.id }}">{{ post.title }}</a>
+        </h2>
+        <h4>
+          <a ng-href="/#/posts?category={{ post.category.id }}">{{ post.category.name }}</a> <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>
+        </h4>
+      </div>
+
+    </div>
+
+    <div ng-if="post.user.id == user.id" ng-click="delete_post($index)" aria-label="Delete">
+      <span class="delete icon-cancel-circle icomoon"></span>
+    </div>
+  </md-toolbar>
+  <div class="image" ng-switch-when="image">
+    <media></media>
+  </div>
+
+  <div class="youtube" ng-switch-when="youtube">
+    <media></media>
+  </div>
+
+  <div class="video" ng-switch-when="video">
+    <media></media>
+  </div>
+
+  <div class="link" ng-switch-when="link">
+  </div>
+
+  <div class="text" ng-switch-default>
+  </div>
+  <!--Metadata-->
+  <div layout="horizontal" layout-align="center" class="metadata">
+
+    <md-button class="md-raised md-primary post_comments">
+      <a ng-href="/#/posts/{{ post.id }}/">{{ post.comment_set.length }}
+        Comments</a>
+    </md-button>
+      <span ng-bind="post.submitted | DTSince" class="non-button"></span>
+
+  </div>
+
+  <!--End Metadata-->
+</div>

@@ -1,0 +1,9 @@
+<div class="django_form_choicefield">
+  <label>{{ form.label }}
+    <small ng-if="form.required">Required</small>
+    <small ng-if="form.help_text" id="nameHelpText">{{ form.help_text }}</small>
+    <select>
+      <option ng-selected="form.default == choice[0]" ng-repeat="choice in form.choices" value="{{ choice[0] }}">{{ choice[1] }}</option>
+    </select>
+  </label>
+</div>

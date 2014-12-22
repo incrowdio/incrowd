@@ -1,0 +1,12 @@
+.git/
+dev/
+.tox/
+libs/
+.vagrant
+fantasy
+frontend/node_modules
+frontend/bower_components
+ansible/
+google/
+web/
+.idea/

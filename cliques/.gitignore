@@ -1,0 +1,60 @@
+*.py[cod]
+*.DS_Store
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+.Python
+.idea
+include/
+.vagrant
+dev_settings.py
+share/
+*.log
+libs/
+frontend/platforms
+frontend/www/build
+dev/
+.tmp
+cordova/www
+prod_exports
+web/
+staticfiles/
+mobile/
+ansible/.vagrant/
+vagrant_ansible_inventory_default
+cliques/node_modules/
+db.sqlite3
+frontend/node_modules
+frontend/bower_components
+frontend/.tmp

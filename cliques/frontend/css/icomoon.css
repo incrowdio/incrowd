@@ -1,0 +1,215 @@
+/*!
+ * icomoon.css
+ */
+@font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/icomoon.eot?tqq5iw');
+    src: url('../fonts/icomoon.eot?#iefixtqq5iw') format('embedded-opentype'),
+    url('../fonts/icomoon.woff?tqq5iw') format('woff'),
+    url('../fonts/icomoon.ttf?tqq5iw') format('truetype'),
+    url('../fonts/icomoon.svg?tqq5iw#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icomoon {
+    font-family: 'icomoon';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-image:before {
+    content: "\e600";
+}
+
+.icon-images:before {
+    content: "\e601";
+}
+
+.icon-camera:before {
+    content: "\e602";
+}
+
+.icon-music:before {
+    content: "\e603";
+}
+
+.icon-play:before {
+    content: "\e604";
+}
+
+.icon-profile:before {
+    content: "\e614";
+}
+
+.icon-tag:before {
+    content: "\e615";
+}
+
+.icon-envelope:before {
+    content: "\e616";
+}
+
+.icon-location:before {
+    content: "\e617";
+}
+
+.icon-location2:before {
+    content: "\e618";
+}
+
+.icon-bell:before {
+    content: "\e605";
+}
+
+.icon-bubble:before {
+    content: "\e619";
+}
+
+.icon-bubbles:before {
+    content: "\e61a";
+    margin-left: 5px;
+}
+
+.icon-bubbles2:before {
+    content: "\e61b";
+}
+
+.icon-bubble2:before {
+    content: "\e61c";
+}
+
+.icon-bubbles3:before {
+    content: "\e61d";
+}
+
+.icon-bubbles4:before {
+    content: "\e61e";
+}
+
+.icon-user:before {
+    content: "\e61f";
+}
+
+.icon-users:before {
+    content: "\e620";
+}
+
+.icon-user2:before {
+    content: "\e621";
+}
+
+.icon-users2:before {
+    content: "\e622";
+}
+
+.icon-cog:before {
+    content: "\e606";
+}
+
+.icon-menu:before {
+    content: "\e607";
+}
+
+.icon-warning:before {
+    content: "\e608";
+}
+
+.icon-notification:before {
+    content: "\e609";
+}
+
+.icon-question:before {
+    content: "\e60a";
+}
+
+.icon-info:before {
+    content: "\e60b";
+}
+
+.icon-info2:before {
+    content: "\e60c";
+}
+
+.icon-cancel-circle:before {
+    content: "\e60d";
+}
+
+.icon-checkmark-circle:before {
+    content: "\e60e";
+}
+
+.icon-spam:before {
+    content: "\e60f";
+}
+
+.icon-close:before {
+    content: "\e610";
+}
+
+.icon-checkmark:before {
+    content: "\e611";
+}
+
+.icon-minus:before {
+    content: "\e612";
+}
+
+.icon-plus:before {
+    content: "\e613";
+}
+
+.icon-checkbox-checked:before {
+    content: "\e623";
+}
+
+.icon-checkbox-unchecked:before {
+    content: "\e624";
+}
+
+.icon-checkbox-partial:before {
+    content: "\e625";
+}
+
+.icon-radio-checked:before {
+    content: "\e626";
+}
+
+.icon-radio-unchecked:before {
+    content: "\e627";
+}
+
+
+/*Override to use icomoon inside md-buttons*/
+md-button .md-button-inner {
+    display: block;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: inherit;
+    outline: none;
+    text-transform: none;
+
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    font-size: inherit;
+    font-family: icomoon;
+    line-height: 1;
+    white-space: nowrap;
+    padding: 9px;
+
+}
+
+/*End IcoMoon*/

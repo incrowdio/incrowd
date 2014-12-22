@@ -1,0 +1,27 @@
+<div class="scroll">
+  <post></post>
+  <md-list layout="column">
+    <md-item ng-repeat="comment in post.comment_set">
+      <comment></comment>
+    </md-item>
+  </md-list>
+  <div layout="row">
+    <div class="comment_form" flex="100">
+      <form ng-submit="new_comment_submit()">
+        <div class="text_field">
+          <!--<md-input-group class="md-default-theme">-->
+            <!--<label for="">Add comment</label>-->
+            <!--<md-input ng-model="formData.text"-->
+                      <!--type="textarea" class="long multi-line"></md-input>-->
+          <!--</md-input-group>-->
+          <md-text-float label="Add comment" ng-model="formData.text"
+                         class="long multi-line"
+                         focus-me="focus_input"></md-text-float>
+        </div>
+        <md-button class="md-raised md-primary" type="submit">
+          Comment
+        </md-button>
+      </form>
+    </div>
+  </div>
+</div>

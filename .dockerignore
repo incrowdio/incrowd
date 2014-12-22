@@ -1,0 +1,12 @@
+.git/
+.idea/
+incrowd/dev/
+incrowd/.tox/
+incrowd/libs/
+incrowd/.vagrant
+incrowd/fantasy
+incrowd/frontend/node_modules
+incrowd/frontend/bower_components
+incrowd/.google/
+incrowd/.web/
+incrowd/.idea/

@@ -1,0 +1,15 @@
+/*!
+ * poll.css
+ */
+.submission_entry .image {
+    display: block;
+    margin: auto;
+    max-height: 400px;
+    max-width: 100%;
+}
+
+.metadata .md-button {
+    font-size: 110%;
+    padding: 5px 20px;
+    font-weight: bold;
+}
