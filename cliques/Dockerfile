@@ -12,12 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from debian:jessie
+from ubuntu:trusty
 
 maintainer josh@servercobra.com
 
+ENV INCROWD_PATH /home/docker/code
+ENV DJANGO_SETTINGS_MODULE cliques.settings
+ENV DEBIAN_FRONTEND noninteractive
+ENV INITRD No
+ENV SETTINGS_MODE prod
+
+RUN apt-get update
+RUN apt-get install  -y --no-install-recommends software-properties-common
+RUN apt-get update
+RUN add-apt-repository  -y  ppa:nginx/stable
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     gcc \
     git \
     libmysqlclient-dev \
@@ -25,23 +37,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     locales \
     make \
+    mysql-client \
     npm \
+    nginx \
     python \
     python-dev \
-    python-pip
+    python-pip \
+    sqlite3 \
+    supervisor
 
 RUN npm install -g bower grunt-cli
 
+RUN pip install uwsgi
+
 # Need symlink for bower to work with node
-ln -s /usr/bin/nodejs /usr/bin/node
-
-RUN dpkg-reconfigure locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8
-
-ENV LC_ALL C.UTF-8
-
-ENV INCROWD_PATH /home/docker/code
+RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # install our code
 ADD requirements.txt $INCROWD_PATH/requirements.txt

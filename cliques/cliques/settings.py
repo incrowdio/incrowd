@@ -14,10 +14,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 # Determine which environment we're running in.
-if os.environ.get('SERVER_SOFTWARE', '').startswith('Google App Engine'):
-    ENV = 'appengine'
-elif os.environ.get('SETTINGS_MODE') == 'prod':
-    ENV = 'localprod'
+if os.environ.get('SETTINGS_MODE') == 'prod':
+    ENV = 'prod'
 elif os.environ.get('SETTINGS_MODE') == 'CODESHIP':
     ENV = 'codeship'
 elif os.environ.get('TRAVIS'):
@@ -53,8 +51,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'frontend/www')
+    os.path.join(BASE_DIR, 'frontend/www'),
 )
+
 
 ALLOWED_HOSTS = []
 
@@ -118,48 +117,8 @@ AUTHENTICATION_BACKENDS = (
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-if ENV == 'appengine':
-    # Running on production App Engine, so use a Google Cloud SQL database.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/cliquesio:main',
-            'NAME': 'cliques',
-            'USER': 'root',
-        }
-    }
-    MAIL_PROVIDER = 'APPENGINE'
-    EMAIL_SENDER = 'josh@slashertraxx.com'
-    EMAIL_BACKEND = 'cliques.mail.EmailBackend'
-elif ENV == 'localprod':
-    # Running in development, but want to access the Google Cloud SQL instance
-    # in production.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': os.environ.get('APPENGINE_IP'),
-            'NAME': os.environ.get('APPENGINE_NAME', 'cliques'),
-            'USER': os.environ.get('APPENGINE_USERNAME', 'root'),
-            'PASSWORD': os.environ.get('APPENGINE_PASSWORD')
-        }
-    }
-    MAIL_PROVIDER = 'APPENGINE'
-    EMAIL_SENDER = 'josh@slashertraxx.com'
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    # EMAIL_BACKEND = 'djangoappengine.mail.EmailBackend'
-elif ENV == 'codeship':
-    # Running in development, so use a local MySQL database.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'test',
-            'USER': os.environ.get('MYSQL_USER'),
-            'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        }
-    }
-    MAIL_PROVIDER = 'DJANGO'
-    EMAIL_SENDER = 'josh@slashertraxx.com'
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if ENV == 'prod':
+    pass
 elif ENV == 'travis':
     # Running in development, so use a local MySQL database.
     DATABASES = {
@@ -202,12 +161,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    'frontend',
-)
+
+# Allow serving the frontend during dev, otherwise this is a webserver's job
+if ENV == 'local':
+    STATICFILES_DIRS = (
+        'frontend',
+    )
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-DEFAULT_FILE_STORAGE = 'appengine_toolkit.storage.GoogleCloudStorage'
 MEDIA_ROOT = 'media'
 
 # AllAuth
@@ -276,9 +237,6 @@ MIME_VIDEO = [
     'video/x-flv',
     'video/avi'
 ]
-
-DEFAULT_PROFILE_IMAGE = ('https://storage.googleapis.com/cliques'
-                         'io.appspot.com/default_profile.jpg')
 
 LOGGING = {
     'version': 1,

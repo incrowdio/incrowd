@@ -25,10 +25,19 @@ server {
 
     # Finally, send all non-media requests to the Django server.
     location / {
-        try_files $uri @django;
+        root /home/docker/code/web;
+        try_files $uri $uri/index.html;
     }
 
-    location @django {
+    location /api/ {
         uwsgi_pass  django;
-        include     /home/docker/code/uwsgi_params; # the uwsgi_params
+        include     /etc/nginx/uwsgi_params; # the uwsgi_params
+
     }
+    location /admin/ {
+        uwsgi_pass  django;
+        include     /etc/nginx/uwsgi_params; # the uwsgi_params
+
+    }
+
+}

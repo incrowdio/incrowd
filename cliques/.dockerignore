@@ -10,3 +10,4 @@ ansible/
 google/
 web/
 .idea/
+staticfiles

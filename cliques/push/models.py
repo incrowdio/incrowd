@@ -6,7 +6,7 @@ import random
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.conf import settings
-from google.appengine.api import channel
+# from google.appengine.api import channel
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
 import pusher
@@ -27,17 +27,7 @@ class PushSession(models.Model):
                                    db_index=True, unique=True)
     ended = models.DateTimeField(blank=True, null=True, default=None)
 
-    def send_message(self, message_type, message):
-        j = json.dumps(
-            {
-                'type': message_type,
-                'data': message
-            }, cls=DjangoJSONEncoder)
-        channel.send_message(self.session_key, j)
-
     def save(self, *args, **kwargs):
-        if not self.id:
-            self.session_key = channel.create_channel(random_key(), 24 * 60)
         super(PushSession, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -79,7 +69,7 @@ def send_all(message_type, message, user=None):
     p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
                       key=settings.PUSHER_KEY,
                       secret=settings.PUSHER_SECRET)
-    p.channel_type = pusher.GoogleAppEngineChannel
+    # p.channel_type = pusher.GoogleAppEngineChannel
     logger.info("Sending {}:{}".format(message_type, data))
     try:
         p[settings.PUSHER_CHANNEL].trigger(message_type, data)

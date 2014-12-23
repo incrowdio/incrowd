@@ -6,9 +6,6 @@ from django.conf import settings
 from urllib import urlencode
 import logging
 
-if settings.ENV == 'appengine':
-    from google.appengine.api import mail
-
 logger = logging.getLogger(__name__)
 
 
@@ -59,17 +56,7 @@ To sign up, go to:
                      "messages: {}. MAIL_PROVIDER: {}".format(
                          from_email, recipient_list, subject, body,
                          settings.MAIL_PROVIDER))
-        if settings.MAIL_PROVIDER == "APPENGINE":
-            # mail.send_mail(from_email, recipient_list[0], subject, message)
-            message = mail.EmailMessage(
-                sender="SlasherTraxx Invite <josh@slashertraxx.com>",
-                subject=subject)
-
-            message.to = self.invited_email
-            message.body = body
-            message.send()
-        else:
-            send_mail(subject, body, from_email, recipient_list)
+        send_mail(subject, body, from_email, recipient_list)
 
 
 class InviteForm(forms.Form):

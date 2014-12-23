@@ -12,12 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from debian:jessie
+from ubuntu:trusty
 
 maintainer josh@servercobra.com
 
+ENV INCROWD_PATH /home/docker/code
+ENV DJANGO_SETTINGS_MODULE cliques.settings
+ENV DEBIAN_FRONTEND noninteractive
+ENV INITRD No
+ENV SETTINGS_MODE prod
+
+RUN apt-get update
+RUN apt-get install  -y --no-install-recommends software-properties-common
+RUN apt-get update
+RUN add-apt-repository  -y  ppa:nginx/stable
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     gcc \
     git \
     libmysqlclient-dev \
@@ -25,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev \
     locales \
     make \
+    mysql-client \
     npm \
     nginx \
     python \
@@ -40,19 +53,26 @@ RUN pip install uwsgi
 # Need symlink for bower to work with node
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
-RUN dpkg-reconfigure locales && \
-    locale-gen C.UTF-8 && \
-    /usr/sbin/update-locale LANG=C.UTF-8
-
-ENV LC_ALL C.UTF-8
-
-ENV INCROWD_PATH /home/docker/code
-ENV DJANGO_SETTINGS_MODULE cliques.settings
-
-ADD ../ $INCROWD_PATH
+# Delay adding the whole root to speed up subsequent builds via caching
+ADD cliques/requirements.txt $INCROWD_PATH/requirements.txt
 
 # run pip install
 RUN pip install -r $INCROWD_PATH/requirements.txt
+
+# Prepare services
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+RUN rm /etc/nginx/sites-enabled/default
+ADD docker_configs/incrowd.nginx /etc/nginx/sites-enabled/incrowd.conf
+ADD docker_configs/uwsgi.params /etc/nginx/uwsgi.params
+ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
+ADD docker_configs/uwsgi.ini $INCROWD_PATH/uwsgi.ini
+
+ADD cliques/ $INCROWD_PATH
+
+WORKDIR $INCROWD_PATH
+
+# Prepare Django
+RUN python manage.py collectstatic --noinput --link
 
 # install frontend dependencies
 WORKDIR $INCROWD_PATH/frontend
@@ -63,12 +83,16 @@ RUN bower --allow-root --config.interactive=false install
 
 WORKDIR $INCROWD_PATH
 
-grunt --gruntfile frontend/Gruntfile.js prod
+RUN grunt --gruntfile frontend/Gruntfile.js prod
 
-# Prepare Django
-python manage.py collectstatic
+# clean packages
+RUN apt-get clean
+RUN rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 # Finalize
 EXPOSE 80
 
 WORKDIR $INCROWD_PATH
+
+cmd ["supervisord", "-n"]
+

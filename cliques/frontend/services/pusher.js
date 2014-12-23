@@ -4,7 +4,8 @@ angular.module('pusher_service', [])
     var Notifications = {};
     Notifications.pusher = new Pusher(PUSHER_APP_KEY, {
       auth: {
-        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')},
+        authEndpoint: '/api/v1/pusher/auth' }
       }
     });
     Notifications.channel = Notifications.pusher.subscribe(PUSHER_CHANNEL);

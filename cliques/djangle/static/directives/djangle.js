@@ -1,6 +1,6 @@
 angular.module('djangle', [])
   .factory('Form', ['$resource', function ($resource) {
-    return $resource('/_forms/', null,
+    return $resource('/api/_forms/', null,
       {
         'list': { method: 'GET' }
       });

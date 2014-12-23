@@ -139,19 +139,16 @@ notification_detail = NotificationViewSet.as_view({
 
 urlpatterns = patterns(
     '',
-    url(r'^auth/', include('django.contrib.auth.urls')),
-
     url(r'^admin/', include(admin.site.urls)),
-    url('^_ah/warmup$', 'website.views.warmup'),
 
-    url(r'^cron/poll/$', 'poll.views.cron'),
-    url(r'^cron/fantasy/$', 'fantasy_football.views.cron'),
+    url(r'^api/v1/cron/poll/$', 'poll.views.cron'),
+    url(r'^api/v1/cron/fantasy/$', 'fantasy_football.views.cron'),
 
     # Djangle
-    url(r'^_forms', 'djangle.views.render_serializers'),
+    url(r'^api/_forms', 'djangle.views.render_serializers'),
 
     # API
-    url(r'^api-auth/', include('rest_framework.urls',
+    url(r'^api/api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
     url(r'^api/v1/', include(v1_post_urls)),
     url(r'^api/v1/', include(v1_comment_urls)),
@@ -175,12 +172,10 @@ urlpatterns = patterns(
 
     url(r'^api/v1/token/', get_token),
     url(r'^api/cookie/', get_cookie),
-    url(r'^pusher/auth$', pusher_auth),
-    url(r'^_ah/channel/connected', 'push.views.connect'),
-    url(r'^_ah/channel/disconnected',
-        'push.views.disconnect'),
+    url(r'^api/v1/pusher/auth$', pusher_auth),
 
     # For serving outside of AppEngine
+    # TODO(pcsforeducation) move DEBUG only
     url(r'^$', 'django.contrib.staticfiles.views.serve', kwargs={
         'path': 'index.html',
         'document_root': settings.STATIC_ROOT}),
