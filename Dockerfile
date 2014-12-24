@@ -69,6 +69,8 @@ ADD docker_configs/uwsgi.ini $INCROWD_PATH/uwsgi.ini
 
 ADD cliques/ $INCROWD_PATH
 
+VOLUME [$INCROWD_PATH, 'cliques', 'production_settings.py']
+
 WORKDIR $INCROWD_PATH
 
 # Prepare Django

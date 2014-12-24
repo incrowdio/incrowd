@@ -54,6 +54,8 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'frontend/www'),
 )
 
+MAILGUN_ACCESS_KEY = 'ACCESS-KEY'
+MAILGUN_SERVER_NAME = 'SERVER-NAME'
 
 ALLOWED_HOSTS = []
 
@@ -118,7 +120,18 @@ AUTHENTICATION_BACKENDS = (
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 if ENV == 'prod':
-    pass
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'incrowd',
+            'USER': 'incrowd',
+            'PASSWORD': 'incrowd',
+            'HOST': '127.0.0.1',
+        }
+    }
+    MAIL_PROVIDER = 'DJANGO'
+    EMAIL_SENDER = 'josh@slashertraxx.com'
+    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
 elif ENV == 'travis':
     # Running in development, so use a local MySQL database.
     DATABASES = {
@@ -286,3 +299,8 @@ LOGGING = {
         },
     }
 }
+
+try:
+    from production_settings import *
+except Exception:
+    pass

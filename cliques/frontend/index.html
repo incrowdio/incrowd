@@ -34,93 +34,92 @@
   <!-- endbuild -->
 </head>
 <body layout="vertical" ng-controller="UserCtrl">
-<md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
-  <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
-      <span ng-click="toggleLeft()" class="icon-menu icomoon menu"
-          ></span>
-    <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
-    <a href="/#/">SlasherTraxx</a>
-  </h1>
-  <!--Preferred Action button-->
-  <md-button
-      class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
-      tabindex="-1"
-      ng-controller="PostListCtrl"
-      ng-click="newPostDialog($event)"
-      aria-label="New Post">
-    <md-tooltip>
-      New Post
-    </md-tooltip>
-      <span class="md-button-inner icon-plus icomoon"
-            ng-click="show($event)"></span>
 
-    <div class="md-ripple-container"></div>
-  </md-button>
-  <!--End preferred action-->
-</md-toolbar>
-<div layout="horizontal">
-  <md-sidenav layout="column"
-              class="md-sidenav-left md-whiteframe-z2"
-              md-component-id="left" ng-cloak>
-    <md-toolbar>
+<md-sidenav layout="column"
+            class="md-sidenav-left md-whiteframe-z2"
+            md-component-id="left" ng-cloak>
+  <md-toolbar>
 
-    </md-toolbar>
-    <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
-      <a href="/#/users/{{ user.username }}"
-         class="menu-item menu-title">{{ user.username }}</a>
+  </md-toolbar>
+  <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
+    <a href="/#/users/{{ user.username }}"
+       class="menu-item menu-title">{{ user.username }}</a>
 
-      <a class="menu-item menu-title "
-         attronoff
-         data-attr-on="{{ tab.mobile_only === true}}"
-         data-attr-name="hide-gt-md"
-         ng-href="{{ tab.link }}"
-         ng-repeat="tab in tabs"
-         ng-click="select(tab)"
-         ng-class="itemClass(tab)">
+    <a class="menu-item menu-title "
+       attronoff
+       data-attr-on="{{ tab.mobile_only === true}}"
+       data-attr-name="hide-gt-md"
+       ng-href="{{ tab.link }}"
+       ng-repeat="tab in tabs"
+       ng-click="select(tab)"
+       ng-class="itemClass(tab)">
 
         <span ng-if="tab.items.length > 0" class="notification_alert">
                 {{ tab.items.length }}
         </span>
-        {{ tab.name }}
-      </a>
-      <a class="menu-item menu-title" href="/#/invite">Invite</a>
-      <a class="menu-item menu-title" ng-controller="AuthCtrl"
-         ng-click="logout()">Log
-        out</a>
-      <!--<a class="menu-item menu-title" ng-click="toggleLeft()">Hide Bar</a>-->
-    </md-content>
-  </md-sidenav>
+      {{ tab.name }}
+    </a>
+    <a class="menu-item menu-title" href="/#/invite">Invite</a>
+    <a class="menu-item menu-title" ng-controller="AuthCtrl"
+       ng-click="logout()">Log
+      out</a>
+    <!--<a class="menu-item menu-title" ng-click="toggleLeft()">Hide Bar</a>-->
+  </md-content>
+</md-sidenav>
 
-  <div layout="column" layout-fill tabIndex="-1" role="main">
+<div layout="column" layout-fill tabIndex="-1" role="main">
+  <md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
+    <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
+      <span ng-click="toggleLeft()" class="icon-menu icomoon menu"
+          ></span>
+      <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
+      <a href="/#/">SlasherTraxx</a>
+    </h1>
+    <!--Preferred Action button-->
+    <md-button
+        class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
+        tabindex="-1"
+        ng-controller="PostListCtrl"
+        ng-click="newPostDialog($event)"
+        aria-label="New Post">
+      <md-tooltip>
+        New Post
+      </md-tooltip>
+      <span class="md-button-inner icon-plus icomoon"
+            ng-click="show($event)"></span>
 
+      <div class="md-ripple-container"></div>
+    </md-button>
+    <!--End preferred action-->
+  </md-toolbar>
 
-    <md-content id="content" ng-view md-scroll-y
-                class="md-padding content"></md-content>
+  <md-content id="content" ng-view md-scroll-y
+              class="md-padding content"></md-content>
 
-  </div>
+</div>
 
-  <md-sidenav
-      class="md-sidenav-right md-whiteframe-z2 chat-sidenav"
-      md-component-id="right"
-      md-is-locked-open="$media('gt-sm')"
-      ng-cloak>
+<md-sidenav
+    class="md-sidenav-right md-whiteframe-z2 chat-sidenav"
+    md-component-id="right"
+    md-is-locked-open="$media('gt-sm')"
+    ng-cloak>
 
-    <md-toolbar>
-      <h1 class="md-toolbar-tools">Chat</h1>
-    </md-toolbar>
-    <div class="connected_users chat_padding" layout="row"
-         ng-controller="UsersCtrl">
+  <md-toolbar>
+    <h1 class="md-toolbar-tools">Chat</h1>
+  </md-toolbar>
+  <div class="connected_users chat_padding" layout="row"
+       ng-controller="UsersCtrl">
     <span ng-repeat="user in connected_users" class="connected_user">
       <profile-pic id="user.id"></profile-pic>
     </span>
-    </div>
+  </div>
 
-    <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
-      <chat></chat>
-    </md-content>
-    <chatinput></chatinput>
+  <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
+    <chat></chat>
+  </md-content>
+  <chatinput></chatinput>
 
-  </md-sidenav>
+</md-sidenav>
 </div>
 <!-- build:js js/jquery-foundation.min.js -->
 <script src="/bower_components/jquery/dist/jquery.js"></script>

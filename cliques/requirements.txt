@@ -27,3 +27,4 @@ sqlparse==0.1.13
 tox==1.8.1
 urllib3==1.9.1
 virtualenv==1.11.6
+django-mailgun
