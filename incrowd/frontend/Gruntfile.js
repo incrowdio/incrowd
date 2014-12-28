@@ -9,8 +9,8 @@ module.exports = function (grunt) {
         },
         generated: {
           files: {
-            'build/js/cliques.min.js': [
-              '.tmp/concat/js/cliques.min.js'
+            'build/js/incrowd.min.js': [
+              '.tmp/concat/js/incrowd.min.js'
             ],
             'build/js/angular.min.js': [
               '.tmp/concat/js/angular.min.js'
@@ -43,11 +43,11 @@ module.exports = function (grunt) {
         }
 //      combine: {
 //        files: {
-//          'build/cliques.min.css': [
+//          'build/incrowd.min.css': [
 //
 //            'bower_components/foundation/css/foundation.css',
 //            'bower_components/foundation/css/normalize.css',
-//            'css/cliques.css'
+//            'css/incrowd.css'
 //          ]
 //        }
 //      }
@@ -67,13 +67,13 @@ module.exports = function (grunt) {
       },
       ngconstant: {
         options: {
-          name: 'cliques_config',
+          name: 'config',
           wrap: '"use strict";\n\n{%= __ngModule %}',
           space: '  '
         },
         development: {
           options: {
-            dest: 'build/js/cliques_config.js'
+            dest: 'build/js/config.js'
           },
           constants: {
             ENV: 'development',
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
         },
         production: {
           options: {
-            dest: 'build/js/cliques_config.js'
+            dest: 'build/js/config.js'
           },
           constants: {
             ENV: 'production',
@@ -143,8 +143,8 @@ module.exports = function (grunt) {
               dest: 'build/'
             },
             {
-              src: ['.tmp/concat/js/cliques.min.js'],
-              dest: 'build/js/cliques.min.js'
+              src: ['.tmp/concat/js/incrowd.min.js'],
+              dest: 'build/js/incrowd.min.js'
             }
           ]
         },

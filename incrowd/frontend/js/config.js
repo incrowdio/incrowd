@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('cliques_config', [])
+angular.module('config', [])
 
 .constant('ENV', 'development')
 

@@ -1,4 +1,4 @@
-var app = angular.module('cliques', [
+var app = angular.module('incrowd', [
   'ngCookies',
   'ngResource',
   'ngRoute',
@@ -10,7 +10,7 @@ var app = angular.module('cliques', [
   'offClick',
   //'luegg.directives',
   'monospaced.elastic',
-  'cliques_config',
+  'config',
   'auth',
   'pusher_service',
   'signup',

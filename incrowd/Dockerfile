@@ -17,7 +17,7 @@ from ubuntu:trusty
 maintainer josh@servercobra.com
 
 ENV INCROWD_PATH /home/docker/code
-ENV DJANGO_SETTINGS_MODULE cliques.settings
+ENV DJANGO_SETTINGS_MODULE incrowd.settings
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV SETTINGS_MODE testing

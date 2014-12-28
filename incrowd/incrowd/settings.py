@@ -1,5 +1,5 @@
 """
-Django settings for cliques project.
+Django settings for incrowd project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -46,8 +46,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
-    'cliques.context_processor.settings_context',
-    'cliques.context_processor.polls',
 )
 
 TEMPLATE_DIRS = (
@@ -105,9 +103,9 @@ if ENV in ['localprod', 'local', 'codeship', 'travis']:
     # MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.'
     # 'DebugToolbarMiddleware',)
 
-ROOT_URLCONF = 'cliques.urls'
+ROOT_URLCONF = 'incrowd.urls'
 
-WSGI_APPLICATION = 'cliques.wsgi.application'
+WSGI_APPLICATION = 'incrowd.wsgi.application'
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -137,7 +135,7 @@ elif ENV == 'travis':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'cliques',
+            'NAME': 'incrowd',
             'USER': 'root',
             'HOST': '127.0.0.1',
         }
@@ -195,13 +193,6 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 SITE_ID = 1
-
-APPENGINE_TOOLKIT = {
-    'APP_YAML': os.path.join(BASE_DIR, 'app.yaml'),
-    'BUCKET_NAME': 'cliquesio',
-}
-
-SITE_NAME = 'Slashertraxx'
 
 # API
 REST_FRAMEWORK = {

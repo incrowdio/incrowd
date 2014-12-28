@@ -1,7 +1,7 @@
 {
-  "name": "cliques",
+  "name": "incrowd",
   "version": "0.1.0",
-  "homepage": "https://github.com/pcsforeducation/cliques",
+  "homepage": "https://github.com/pcsforeducation/incrowd",
   "authors": [
     "Josh Gachnang <josh@servercobra.com>"
   ],
@@ -34,7 +34,7 @@
     "angular-off-click": "~0.0.2",
     "angular-elastic": "~2.4.2"
   },
-  "description": "A small, private social network site",
+  "description": "A small, private social network",
   "main": "js/app.js",
   "private": true,
   "resolutions": {

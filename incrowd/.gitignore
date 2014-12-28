@@ -47,7 +47,6 @@ frontend/www/build
 dev/
 .tmp
 cordova/www
-prod_exports
 web/
 staticfiles/
 mobile/

@@ -17,7 +17,7 @@ from ubuntu:trusty
 maintainer josh@servercobra.com
 
 ENV INCROWD_PATH /home/docker/code
-ENV DJANGO_SETTINGS_MODULE cliques.settings
+ENV DJANGO_SETTINGS_MODULE incrowd.settings
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV SETTINGS_MODE prod
@@ -54,7 +54,7 @@ RUN pip install uwsgi
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Delay adding the whole root to speed up subsequent builds via caching
-ADD cliques/requirements.txt $INCROWD_PATH/requirements.txt
+ADD incrowd/requirements.txt $INCROWD_PATH/requirements.txt
 
 # run pip install
 RUN pip install -r $INCROWD_PATH/requirements.txt
@@ -67,9 +67,9 @@ ADD docker_configs/uwsgi.params /etc/nginx/uwsgi.params
 ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
 ADD docker_configs/uwsgi.ini $INCROWD_PATH/uwsgi.ini
 
-ADD cliques/ $INCROWD_PATH
+ADD incrowd/ $INCROWD_PATH
 
-VOLUME [$INCROWD_PATH, 'cliques', 'production_settings.py']
+VOLUME [$INCROWD_PATH, 'incrowd', 'production_settings.py']
 
 WORKDIR $INCROWD_PATH
 

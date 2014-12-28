@@ -26,9 +26,9 @@ front:
 
 # Initialize the DB
 django_db:
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="cliques.settings" && python manage.py syncdb --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="cliques.settings" && python manage.py migrate --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="cliques.settings" && python manage.py loaddata getting_started_data.json
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py syncdb --noinput --no-initial-data
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py migrate --noinput --no-initial-data
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py loaddata getting_started_data.json
 
 docker_build:
 	docker build -t incrowd .
@@ -37,7 +37,7 @@ docker_run:
 	docker run -i -v `pwd`:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
 
 docker_server:
-	cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="cliques.settings" python manage.py runserver 0.0.0.0:8000
+	cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" python manage.py runserver 0.0.0.0:8000
 
 test_django:
 	tox -epep8
@@ -49,9 +49,9 @@ install_ubuntu:
 	sudo pip install tox
 	sudo npm install -g grunt-cli bower
 	tox -e dev
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py help
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py syncdb --noinput
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py migrate --noinput
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py help
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py syncdb --noinput
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py migrate --noinput
 
 install_osx:
 	brew install git mysql tox
@@ -59,9 +59,9 @@ install_osx:
 	sudo npm install -g grunt-cli bower
 	mysql.server start
 	tox -e dev
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py help
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py syncdb --noinput
-	DJANGO_SETTINGS_MODULE="cliques.settings" dev/bin/python manage.py migrate --noinput
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py help
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py syncdb --noinput
+	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py migrate --noinput
 
 # Dump data that can be loaded
 dump_data:
