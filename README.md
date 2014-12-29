@@ -43,6 +43,9 @@ runserver.
 You can load some dev data to get you started by running `make load_dev_data` 
 after you've run docker_dev once. 
 
+The default user name and password is "admin" and "pass".
+
+You can access the admin interface at http://$DOCKER_IP:8000/admin/.
 
 Contributing
 ------------
