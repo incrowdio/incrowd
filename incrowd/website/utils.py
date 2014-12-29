@@ -10,7 +10,6 @@ import urllib3
 
 logger = logging.getLogger(__name__)
 
-
 content_types = {
     'image': [
         'website.content_types.Imgur',
@@ -55,9 +54,9 @@ def detect_link_type(url):
         http = urllib3.PoolManager()
         response = http.request('HEAD', url)
         content_type = response.headers.get('content-type')
-    except Exception:
-        logger.exception("Could not detect content type. Defaulting to "
-                         "link for url: {}".format(url))
+    except Exception as e:
+        logger.warning("Could not detect content type. Defaulting to "
+                       "link for url: {}, exception: {}".format(url, e))
         return 'link'
 
     # Find list of content detectors based on mime
@@ -116,7 +115,7 @@ def render_to_json(request, data):
     # messages_list = messages.get_messages(request)
     # count = 0
     # for message in messages_list:
-    #     msgs[count] = {'message': message.message, 'level': message.level}
+    # msgs[count] = {'message': message.message, 'level': message.level}
     #     count += 1
     # data['messages'] = msgs
     return HttpResponse(
