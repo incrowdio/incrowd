@@ -98,11 +98,6 @@ def url_filter(text):
         logger.info('replacing extra urls: {}'.format(url))
         text = text.replace(
             url, '<a ng-href="{0}">{0}</a>'.format(url))
-    print {
-        'message': text,
-        'attachment_type': attachment_type,
-        'attachment_url': attachment_url
-    }
     return {
         'message': text,
         'attachment_type': attachment_type,

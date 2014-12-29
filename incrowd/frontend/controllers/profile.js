@@ -1,7 +1,7 @@
 angular.module("profile", ["djangle"])
   .controller('ProfileCtrl', ['$scope', '$http', '$routeParams', 'Form', 'BACKEND_SERVER', function ($scope, $http, $routeParams, Form, BACKEND_SERVER) {
     $scope.username = $routeParams.username;
-    console.log('profile ctrl', $scope.username)
+    console.log('profile ctrl', $scope.username);
     $http.get(BACKEND_SERVER + 'users\/' + $scope.username + '\/')
       .then(function (res) {
         console.log('profiles', res);
@@ -14,7 +14,7 @@ angular.module("profile", ["djangle"])
     }
   }])
   .controller('ProfileListCtrl', function ($http, $scope, BACKEND_SERVER) {
-    console.log('profileslistctrl')
+    console.log('profileslistctrl');
     $http.get(BACKEND_SERVER + 'users\/')
       .then(function (res) {
         console.log('profiles', res);

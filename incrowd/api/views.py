@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 @authentication_classes((BasicAuthentication,))
 @permission_classes((AllowAny, ))
 def get_token(request):
-    print "USER", request.user
     user = UserProfile.objects.get(id=request.user.id)
     token = Token.objects.get_or_create(user=user)
     return render_to_json(request, {
