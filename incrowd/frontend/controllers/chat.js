@@ -28,7 +28,8 @@ angular.module('chat', [])
       var username = localStorage.getItem('username');
       if (username) {
         // Fight race where username isn't set yet
-        var regex = new RegExp('\@' + username, 'gi');
+        // TODO(pcsforeducation) fix for usernames at end of message
+        var regex = new RegExp('\@' + username + ' ', 'gi');
         if (regex.exec(message.message) != null) {
           return 'highlight'
         }
