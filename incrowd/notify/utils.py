@@ -9,11 +9,7 @@ logger = logging.getLogger(__name__)
 def ping_filter(message, users, sending_user, notify_text, notify_type,
                 notify_url=None):
     for user in users:
-        # Check if @username in message. Edge case for username at the end of
-        # the message.
-        if ('@' + user.username.lower() + ' ' in message.lower() or
-                message.index('@' + user.username.lower()) ==
-                len(message.lower()) - len('@' + user.username.lower())):
+        if username_in_message(message, user.username):
             # Create notification
             if user == sending_user:
                 continue
@@ -28,3 +24,17 @@ def ping_filter(message, users, sending_user, notify_text, notify_type,
             logger.info("Created notification for user {} from {}"
                         .format(note))
     return message
+
+
+def username_in_message(message, username):
+    message = message.lower()
+    username = username.lower()
+    # Check if @username in message. Edge case for username at the end of
+    # the message.
+    if '@' + username + ' ' in message.lower():
+        return True
+    try:
+        return (message.index('@' + username) ==
+                len(message.lower()) - len('@' + username))
+    except ValueError:
+        return False
