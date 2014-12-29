@@ -35,7 +35,8 @@
       <!-- button to show form -->
       <md-button class="md-raised md-primary"
                  ng-click="profileForm.$show()"
-                 ng-show="profile.id == user.id && !profileForm.$visible">
+                 ng-show="profile.id == user.id && !profileForm.$visible"
+                 type="button">
         Edit
       </md-button>
       <!-- buttons to submit / cancel form -->
@@ -45,8 +46,10 @@
               Save
             </md-button>
             <md-button class="md-raised md-warn"
+                       ng-show="profile.id == user.id && profileForm.$visible"
                        ng-disabled="profileForm.$waiting"
-                       ng-click="profileForm.$cancel()">
+                       ng-click="profileForm.$cancel()"
+                       type="button">
               Cancel
             </md-button>
         </span>
