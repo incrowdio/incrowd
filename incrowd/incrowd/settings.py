@@ -70,7 +70,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'debug_toolbar',
+    'south',
     'djangle',
     'invite_only',
     'chat_server',
@@ -88,17 +88,15 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
 )
 CORS_ORIGIN_ALLOW_ALL = True
 
-if ENV in ['localprod', 'local', 'codeship', 'travis']:
-    INSTALLED_APPS += [
-        'south',
+# if ENV in ['localprod', 'local', 'codeship', 'travis']:
+#     INSTALLED_APPS += [
         # 'debug_toolbar',
         # 'appengine_toolkit'
-    ]
+    # ]
     # DEBUG_TOOLBAR_PATCH_SETTINGS = False
     # MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.'
     # 'DebugToolbarMiddleware',)
@@ -124,7 +122,7 @@ if ENV == 'prod':
             'NAME': 'incrowd',
             'USER': 'incrowd',
             'PASSWORD': 'incrowd',
-            'HOST': '127.0.0.1',
+            'HOST': os.environ.get('DOCKER_HOST_IP', '127.0.0.1'),
         }
     }
     MAIL_PROVIDER = 'DJANGO'

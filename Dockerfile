@@ -85,7 +85,10 @@ RUN bower --allow-root --config.interactive=false install
 
 WORKDIR $INCROWD_PATH
 
-RUN grunt --gruntfile frontend/Gruntfile.js prod
+# TODO(pcsforeducation) make this dynamic
+ENV DOCKER_HOST_IP 172.17.42.1
+
+RUN make www_prod
 
 # clean packages
 RUN apt-get clean

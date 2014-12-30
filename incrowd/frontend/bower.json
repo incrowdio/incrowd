@@ -30,7 +30,7 @@
     "angular-xeditable": "~0.1.8",
     "angular-pusher": "~0.0.13",
     "pusher": "~2.2.3",
-    "angular-material": "~0.6.1",
+    "angular-material": "~0.7.0-rc1",
     "angular-off-click": "~0.0.2",
     "angular-elastic": "~2.4.2"
   },

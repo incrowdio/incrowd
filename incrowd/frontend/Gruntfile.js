@@ -34,23 +34,13 @@ module.exports = function (grunt) {
           options: {
             import: false
           },
-          src: [ 'css/*.css', '!css/*.min.css']
+          src: ['css/*.css', '!css/*.min.css']
         }
       },
       cssmin: {
         options: {
           banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
         }
-//      combine: {
-//        files: {
-//          'build/incrowd.min.css': [
-//
-//            'bower_components/foundation/css/foundation.css',
-//            'bower_components/foundation/css/normalize.css',
-//            'css/incrowd.css'
-//          ]
-//        }
-//      }
       },
       htmlangular: {
         html: {
@@ -63,6 +53,12 @@ module.exports = function (grunt) {
           files: {
             src: ['index.html', 'templates/*.html', 'partials/*.html']
           }
+        }
+      },
+      uglify: {
+        options: {
+          report: 'min',
+          mangle: false
         }
       },
       ngconstant: {
@@ -86,7 +82,7 @@ module.exports = function (grunt) {
           },
           constants: {
             ENV: 'production',
-            BACKEND_SERVER: 'https://www.slashertraxx.com/api/v1/',
+            BACKEND_SERVER: '/api/v1/',
             PUSHER_CHANNEL: 'private-incrowd-dev',
             PUSHER_APP_KEY: 'ae4f4ab0b1792c193f3f',
             PUSHER_PRESENCE: 'presence-incrowd-dev'
@@ -213,89 +209,7 @@ module.exports = function (grunt) {
       },
       eslint: {                    // task
         target: ['js/app.js', 'js/controller.js']        // array of files
-      },
-      cordovacli: {
-        options: {
-          path: '../mobile/www'
-        },
-        cordova: {
-          options: {
-            command: ['platform', 'plugin', 'build'],
-            platforms: ['android'],
-            plugins: ['device', 'dialogs'],
-            path: '../mobile/www',
-            id: 'com.slashertraxx.slashertraxx',
-            name: 'Slashertraxx'
-          }
-        },
-//      add_platforms: {
-//        options: {
-//          command: 'platform',
-//          action: 'add',
-//          platforms: ['ios', 'android']
-//        }
-//      },
-        add_plugins: {
-          options: {
-            command: 'plugin',
-            action: 'add',
-            plugins: [
-//            'battery-status',
-//            'camera'
-//            'console',
-//            'contacts',
-//            'device',
-//            'device-motion',
-//            'device-orientation',
-//            'dialogs',
-//            'file',
-//            'geolocation',
-//            'globalization',
-//            'inappbrowser',
-//            'media',
-//            'media-capture',
-//            'network-information',
-//            'splashscreen',
-//            'vibration'
-            ]
-          }
-        },
-        build_ios: {
-          options: {
-            command: 'build',
-            platforms: ['ios']
-          }
-        },
-        build_android: {
-          options: {
-            command: 'build',
-            platforms: ['android']
-          }
-        },
-        emulate_android: {
-          options: {
-            command: 'emulate',
-            platforms: ['android'],
-            args: ['--target', 'Nexus5']
-          }
-        },
-        run_android: {
-          options: {
-            command: 'run',
-            platforms: ['android']
-          }
-        },
-        serve_android: {
-          options: {
-            command: 'serve',
-//            platforms: ['android'],
-//            host: 'localhost',
-            port: 8001
-          }
-        }
       }
-
-
     }
   )
   ;
@@ -343,7 +257,7 @@ module.exports = function (grunt) {
   grunt.registerTask('prod', [
     'clean:build',
     'ngconstant:production',
-//    'csslint',
+    //'csslint',
     'useminPrepare',
     'concat:generated',
     'cssmin:generated',
@@ -354,5 +268,4 @@ module.exports = function (grunt) {
     'usemin'
   ]);
 
-}
-;
+};

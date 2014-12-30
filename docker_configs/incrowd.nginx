@@ -12,6 +12,8 @@ server {
     # is the block to use if no blocks match the server_name
     listen      80 default_server;
 
+    root /home/docker/code/web;
+
     # the domain name it will serve for
     #server_name .example.com; # substitute your machine's IP address or FQDN
     charset     utf-8;
@@ -25,8 +27,7 @@ server {
 
     # Finally, send all non-media requests to the Django server.
     location / {
-        root /home/docker/code/web;
-        try_files $uri $uri/index.html;
+        index index.html;
     }
 
     location /api/ {
