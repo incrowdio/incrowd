@@ -16,35 +16,31 @@ from ubuntu:trusty
 
 maintainer josh@servercobra.com
 
-ENV INCROWD_PATH /home/docker/code
 ENV DJANGO_SETTINGS_MODULE incrowd.settings
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV SETTINGS_MODE prod
+# TODO(pcsforeducation) make this dynamic
+ENV DOCKER_HOST_IP 172.17.42.1
 
-RUN apt-get update
-RUN apt-get install  -y --no-install-recommends software-properties-common
-RUN apt-get update
-RUN add-apt-repository  -y  ppa:nginx/stable
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    gcc \
-    git \
-    libmysqlclient-dev \
-    libsqlite3-dev \
-    libxml2-dev \
-    locales \
-    make \
-    mysql-client \
-    npm \
-    nginx \
-    python \
-    python-dev \
-    python-pip \
-    sqlite3 \
-    supervisor
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository -y ppa:nginx/stable && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git-core \
+        libmysqlclient-dev \
+        libsqlite3-dev \
+        libxml2-dev \
+        make \
+        npm \
+        nginx-full \
+        python \
+        python-dev \
+        python-pip \
+        supervisor
 
 RUN npm install -g bower grunt-cli
 
@@ -54,10 +50,29 @@ RUN pip install uwsgi
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # Delay adding the whole root to speed up subsequent builds via caching
-ADD incrowd/requirements.txt $INCROWD_PATH/requirements.txt
+ADD incrowd/requirements.txt /home/docker/code/requirements.txt
 
 # run pip install
-RUN pip install -r $INCROWD_PATH/requirements.txt
+RUN pip install -r /home/docker/code/requirements.txt
+
+# Clean up packages required for build
+RUN apt-get purge -y \
+    man \
+    vim-common \
+    vim-tiny \
+    libpython3.4-stdlib:amd64 \
+    python3.4-minimal \
+    eject \
+    locales \
+    software-properties-common \
+    python-pip \
+    python3
+
+# clean packages
+RUN apt-get -y clean && \
+    apt-get -y autoclean && \
+    apt-get -y autoremove && \
+    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 # Prepare services
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
@@ -65,39 +80,42 @@ RUN rm /etc/nginx/sites-enabled/default
 ADD docker_configs/incrowd.nginx /etc/nginx/sites-enabled/incrowd.conf
 ADD docker_configs/uwsgi.params /etc/nginx/uwsgi.params
 ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
-ADD docker_configs/uwsgi.ini $INCROWD_PATH/uwsgi.ini
+ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
-ADD incrowd/ $INCROWD_PATH
+ADD incrowd/ /home/docker/code
 
-VOLUME [$INCROWD_PATH, 'incrowd', 'production_settings.py']
-
-WORKDIR $INCROWD_PATH
+WORKDIR /home/docker/code
 
 # Prepare Django
 RUN python manage.py collectstatic --noinput --link
 
 # install frontend dependencies
-WORKDIR $INCROWD_PATH/frontend
+WORKDIR /home/docker/code/frontend
 
 RUN npm install
 
 RUN bower --allow-root --config.interactive=false install
 
-WORKDIR $INCROWD_PATH
-
-# TODO(pcsforeducation) make this dynamic
-ENV DOCKER_HOST_IP 172.17.42.1
+WORKDIR /home/docker/code
 
 RUN make www_prod
 
-# clean packages
-RUN apt-get clean
-RUN rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+RUN rm -rf /home/docker/code/frontend/node_modules/ && \
+    rm -rf /home/docker/code/frontend/bower_components/ && \
+    rm -rf /home/docker/code/frontend/build && \
+    rm -rf /home/docker/code/frontend/.tmp && \
+    rm -rf /usr/local/lib/node_modules/ && \
+    rm -rf /root/.cache && \
+    rm -rf /root/.npm && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/*
 
 # Finalize
 EXPOSE 80
 
-WORKDIR $INCROWD_PATH
+VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs"]
+
+WORKDIR /home/docker/code
 
 cmd ["supervisord", "-n"]
 

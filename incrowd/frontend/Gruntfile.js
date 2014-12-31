@@ -216,18 +216,14 @@ module.exports = function (grunt) {
 
 // Tasks
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-csslint');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-html-angular-validate');
   grunt.loadNpmTasks('grunt-ng-constant');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-usemin');
-  grunt.loadNpmTasks('grunt-filerev');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-cordovacli');
-  grunt.loadNpmTasks('grunt-eslint');
 
 
   grunt.registerTask('app', [
@@ -242,29 +238,24 @@ module.exports = function (grunt) {
   grunt.registerTask('default', [
     'clean:build',
     'ngconstant:development',
-//    'csslint',
-//    'eslint',
     'useminPrepare',
     'concat:generated',
     'cssmin:generated',
     'ngAnnotate:generated',
     'uglify',
     'copy:generated',
-//    'filerev',
     'usemin'
   ]);
 
   grunt.registerTask('prod', [
     'clean:build',
     'ngconstant:production',
-    //'csslint',
     'useminPrepare',
     'concat:generated',
     'cssmin:generated',
     'ngAnnotate:generated',
     'uglify',
     'copy:generated',
-//    'filerev',
     'usemin'
   ]);
 
