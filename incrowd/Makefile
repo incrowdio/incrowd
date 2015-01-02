@@ -28,7 +28,7 @@ front:
 django_db:
 	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py syncdb --noinput --no-initial-data
 	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py migrate --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py loaddata getting_started_data.json
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && bash initial_db_load.sh
 
 docker_build:
 	docker build -t incrowd .

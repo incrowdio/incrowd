@@ -42,7 +42,15 @@ RUN apt-get update && \
         python-pip \
         supervisor
 
-RUN npm install -g bower grunt-cli
+# Get NPM installs done early, they take time and should be cached
+# Plus, they're only for the build system
+WORKDIR /tmp/
+
+ADD incrowd/frontend/package.json /tmp/package.json
+
+RUN npm install -g bower grunt-cli && npm install
+
+WORKDIR /home/docker/code
 
 RUN pip install uwsgi
 
@@ -84,22 +92,21 @@ ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
 ADD incrowd/ /home/docker/code
 
-WORKDIR /home/docker/code
-
 # Prepare Django
 RUN python manage.py collectstatic --noinput --link
 
 # install frontend dependencies
 WORKDIR /home/docker/code/frontend
 
-RUN npm install
+RUN mv /tmp/node_modules /home/docker/code/frontend/node_modules && npm install
 
 RUN bower --allow-root --config.interactive=false install
 
 WORKDIR /home/docker/code
 
-RUN make www_prod
+RUN INCROWD_PATH=/home/docker/code make www_prod
 
+# Finalize and clean up
 RUN rm -rf /home/docker/code/frontend/node_modules/ && \
     rm -rf /home/docker/code/frontend/bower_components/ && \
     rm -rf /home/docker/code/frontend/build && \
@@ -110,12 +117,11 @@ RUN rm -rf /home/docker/code/frontend/node_modules/ && \
     rm -rf /tmp/* && \
     rm -rf /var/tmp/*
 
-# Finalize
 EXPOSE 80
 
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs"]
+VOLUME ["/home/docker/code/prod/", "/etc/nginx/sites-enabled", "/etc/nginx/certs"]
 
-WORKDIR /home/docker/code
+ENV INCROWD_PATH "/home/docker/code"
 
 cmd ["supervisord", "-n"]
 
