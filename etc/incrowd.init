@@ -1,0 +1,106 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:	  incrowd
+# Required-Start:    $local_fs $remote_fs $network $syslog $named
+# Required-Stop:     $local_fs $remote_fs $network $syslog $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: starts the inCrowd docker container
+# Description:       starts the inCrowd docker container
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=$(which docker)
+NAME=incrowd
+CONTAINER_NAME=incrowd
+CONTAINER_REPO=incrowd/incrowd
+
+# Override these in the defaults file to disable
+PULL_ON_STARTUP=true
+DB_SYNC_ON_STARTUP=true
+
+# Include nginx defaults if available
+if [ -r /etc/default/incrowd ]; then
+	. /etc/default/incrowd
+fi
+
+test -x $DAEMON || exit 0
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+
+#
+# Function that starts the daemon/service
+#
+do_start()
+{
+	$DAEMON run -d -p 80:80 $CONTAINER_REPO
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+	$DAEMON kill $CONTAINER_NAME
+	$DAEMON rm $CONTAINER_NAME
+}
+
+#
+# Function that pulls the latest copy of the repo
+#
+do_pull()
+{
+    $DAEMON pull $CONTAINER_REPO
+}
+
+#
+# Function that syncs and performs DB migrations
+#
+do_sync()
+{
+    $DAEMON run -a STDOUT -a STDERR -t $CONTAINER_REPO make django_db
+}
+
+case "$1" in
+	start)
+		[ "$VERBOSE" != no ] && log_daemon_msg "Starting $NAME" "$NAME"
+		if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
+		if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
+		do_start
+		;;
+	stop)
+		[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $NAME" "$NAME"
+		do_stop
+		;;
+	restart)
+		log_daemon_msg "Restarting $NAME" "$NAME"
+		do_stop
+		if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
+		if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
+		do_start
+		;;
+	status)
+		if [ $(docker ps | grep "incrowd3" | wc -l) = 1 ]; then
+			log_daemon_msg "$NAME is running" "$NAME"
+		else
+			log_daemon_msg "$NAME is not running" "$NAME"
+		fi
+		;;
+  	sync)
+		log_daemon_msg "Syncing database for container $CONTAINER_REPO" "$NAME"
+		do_sync
+		;;
+	upgrade)
+		log_daemon_msg "Upgrading container $CONTAINER_REPO" "$NAME"
+		do_pull
+		;;
+	*)
+		echo "Usage: $NAME {start|stop|restart|status|upgrade}" >&2
+		exit 3
+		;;
+esac
+
+:
