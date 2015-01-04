@@ -15,3 +15,4 @@ incrowd/debug.log
 incrowd/db.sqlite3
 incrowd/dev_data.json
 incrowd/app/
+incrowd/config/

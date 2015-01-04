@@ -70,7 +70,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'south',
     'djangle',
     'invite_only',
     'chat_server',
@@ -290,6 +289,6 @@ LOGGING = {
 }
 
 try:
-    from production_settings import *
+    from config.production_settings import *
 except Exception:
     pass

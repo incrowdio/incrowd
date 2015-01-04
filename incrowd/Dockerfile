@@ -16,35 +16,32 @@ from ubuntu:trusty
 
 maintainer josh@servercobra.com
 
-ENV INCROWD_PATH /home/docker/code
 ENV DJANGO_SETTINGS_MODULE incrowd.settings
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV SETTINGS_MODE testing
+# TODO(pcsforeducation) make this dynamic
+ENV DOCKER_HOST_IP 172.17.42.1
 
-RUN apt-get update
-RUN apt-get install  -y --no-install-recommends software-properties-common
-RUN apt-get update
-RUN add-apt-repository  -y  ppa:nginx/stable
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    gcc \
-    git \
-    libmysqlclient-dev \
-    libsqlite3-dev \
-    libxml2-dev \
-    locales \
-    make \
-    mysql-client \
-    npm \
-    nginx \
-    python \
-    python-dev \
-    python-pip \
-    sqlite3 \
-    supervisor
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository -y ppa:nginx/stable && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        git-core \
+        libmysqlclient-dev \
+        libsqlite3-dev \
+        libxml2-dev \
+        make \
+        npm \
+        nginx-full \
+        python \
+        python-dev \
+        python-pip \
+        sqlite3 \
+        supervisor
 
 RUN npm install -g bower grunt-cli
 
@@ -54,12 +51,15 @@ RUN pip install uwsgi
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # install our code
-ADD requirements.txt $INCROWD_PATH/requirements.txt
+ADD dev_requirements.txt /home/docker/code/dev_requirements.txt
+ADD requirements.txt /home/docker/code/requirements.txt
 
 # run pip install
-RUN pip install -r $INCROWD_PATH/requirements.txt
+RUN pip install -r /home/docker/code/dev_requirements.txt
 
 EXPOSE 8000
 
-VOLUME $INCROWD_PATH
-WORKDIR $INCROWD_PATH
+ENV INCROWD_PATH "/home/docker/code"
+
+VOLUME /home/docker/code
+WORKDIR /home/docker/code

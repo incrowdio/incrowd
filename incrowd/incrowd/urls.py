@@ -149,7 +149,7 @@ urlpatterns = patterns(
 
     # API
     url(r'^api/api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
+                                   namespace='rest_framework')),
     url(r'^api/v1/', include(v1_post_urls)),
     url(r'^api/v1/', include(v1_comment_urls)),
     url(r'^api/v1/', include(v1_user_urls)),
@@ -176,16 +176,22 @@ urlpatterns = patterns(
 
     # For serving outside of AppEngine
     # TODO(pcsforeducation) move DEBUG only
-    url(r'^$', 'django.contrib.staticfiles.views.serve', kwargs={
-        'path': 'index.html',
-        'document_root': settings.STATIC_ROOT}),
-    url(r'^(?P<path>.*)$', 'django.contrib.staticfiles.views.serve', {
-        'document_root': settings.STATIC_ROOT, 'show_indexes': True
-    }),
+
 )
 
 if settings.DEBUG:
     import debug_toolbar
-urlpatterns += patterns('',
-                        url(r'^__debug__/', include(debug_toolbar.urls)),
+urlpatterns += patterns(
+    '',
+    url(r'^__debug__/', include(debug_toolbar.urls)),
+    url(r'^$', 'django.contrib.staticfiles.views.serve',
+        kwargs={
+            'path': 'index.html',
+            # 'document_root': settings.STATIC_ROOT
+        }),
+    url(r'^(?P<path>.*)$',
+        'django.contrib.staticfiles.views.serve', {
+            # 'document_root': settings.STATIC_ROOT,
+            'show_indexes': True
+        }),
 )

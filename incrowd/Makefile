@@ -37,7 +37,12 @@ docker_run:
 	docker run -i -v `pwd`:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
 
 docker_server:
-	cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" python manage.py runserver 0.0.0.0:8000
+	if [ -e config/newrelic.ini ]; then \
+		echo "Running with NewRelic"; \
+		cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" NEW_RELIC_CONFIG_FILE=config/newrelic.ini newrelic-admin run-program python manage.py runserver 0.0.0.0:8000; \
+	else \
+		cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" python manage.py runserver 0.0.0.0:8000; \
+	fi
 
 test_django:
 	tox -epep8

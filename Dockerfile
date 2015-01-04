@@ -119,7 +119,7 @@ RUN rm -rf /home/docker/code/frontend/node_modules/ && \
 
 EXPOSE 80
 
-VOLUME ["/home/docker/code/prod/", "/etc/nginx/sites-enabled", "/etc/nginx/certs"]
+VOLUME ["/home/docker/code/config/", "/etc/nginx/sites-enabled", "/etc/nginx/certs"]
 
 ENV INCROWD_PATH "/home/docker/code"
 
