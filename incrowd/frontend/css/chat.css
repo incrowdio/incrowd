@@ -22,7 +22,7 @@
 }
 
 .chat_message {
-    padding: 2px 16px;
+    padding: 2px 5px;
     /* Trick to avoid overflow-x: hidden for wrapping*/
 
     /* Non standard for webkit */
@@ -86,7 +86,8 @@
 }
 
 .chat_container .md-tile-left {
-    padding: 15px 0 5px 0;
+    padding: 15px 0 5px 5px;
+    margin-right: 0px;
 }
 
 .chat_message p {
