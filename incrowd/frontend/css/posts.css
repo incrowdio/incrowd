@@ -204,6 +204,11 @@ md-dialog {
     height: 56px;
 }
 
+.category_select {
+    width: 100%;
+    margin: 10px 0;
+}
+
 comment .md-tile-content {
     /* Trick to avoid overflow-x: hidden for wrapping*/
 
@@ -218,6 +223,7 @@ comment .md-tile-content {
     hyphens: auto;
     /* End trick (applause) */
 }
+
 post div.purple {
     border: 2px solid #9C27B1;
 }
