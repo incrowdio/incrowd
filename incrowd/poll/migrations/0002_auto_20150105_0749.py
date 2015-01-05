@@ -8,29 +8,29 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('poll', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('website', '0001_initial'),
+        ('poll', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='vote',
-            name='user',
-            field=models.ForeignKey(related_name='user_votes', to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
+            model_name='poll',
+            name='category',
+            field=models.ForeignKey(default=1, to='website.Category'),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='submission',
             name='poll',
-            field=models.ForeignKey(related_name='poll_submissions', to='poll.Poll'),
-            preserve_default=True,
+            field=models.ForeignKey(related_name='poll_submissions', default=1, to='poll.Poll'),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='submission',
             name='user',
-            field=models.ForeignKey(related_name='user_submissions', to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
+            field=models.ForeignKey(related_name='user_submissions', default=1, to=settings.AUTH_USER_MODEL),
+            preserve_default=False,
         ),
         migrations.AddField(
             model_name='submission',
@@ -39,9 +39,9 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='poll',
-            name='category',
-            field=models.ForeignKey(to='website.Category'),
-            preserve_default=True,
+            model_name='vote',
+            name='user',
+            field=models.ForeignKey(related_name='user_votes', default=1, to=settings.AUTH_USER_MODEL),
+            preserve_default=False,
         ),
     ]

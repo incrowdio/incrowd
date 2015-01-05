@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='pushsession',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
+            field=models.ForeignKey(default=1, to=settings.AUTH_USER_MODEL),
+            preserve_default=False,
         ),
     ]
