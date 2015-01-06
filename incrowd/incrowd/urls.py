@@ -174,24 +174,21 @@ urlpatterns = patterns(
     url(r'^api/cookie/', get_cookie),
     url(r'^api/v1/pusher/auth$', pusher_auth),
 
-    # For serving outside of AppEngine
-    # TODO(pcsforeducation) move DEBUG only
-
 )
 
 if settings.DEBUG:
     import debug_toolbar
-urlpatterns += patterns(
-    '',
-    url(r'^__debug__/', include(debug_toolbar.urls)),
-    url(r'^$', 'django.contrib.staticfiles.views.serve',
-        kwargs={
-            'path': 'index.html',
-            # 'document_root': settings.STATIC_ROOT
-        }),
-    url(r'^(?P<path>.*)$',
-        'django.contrib.staticfiles.views.serve', {
-            # 'document_root': settings.STATIC_ROOT,
-            'show_indexes': True
-        }),
-)
+    urlpatterns += patterns(
+        '',
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^$', 'django.contrib.staticfiles.views.serve',
+            kwargs={
+                'path': 'index.html',
+                # 'document_root': settings.STATIC_ROOT
+            }),
+        url(r'^(?P<path>.*)$',
+            'django.contrib.staticfiles.views.serve', {
+                # 'document_root': settings.STATIC_ROOT,
+                'show_indexes': True
+            }),
+    )
