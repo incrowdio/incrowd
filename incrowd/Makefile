@@ -70,11 +70,17 @@ install_osx:
 
 # Dump data that can be loaded
 dump_data:
-	python manage.py dumpdata | python -mjson.tool > dev_data.json
+	python manage.py dumpdata  --natural \
+               --indent=4 \
+               -e south \
+               -e sessions \
+               -e admin \
+               -e contenttypes \
+               -e auth.Permission > getting_started_data.json
 
 # Load dev data
-load_dev_data:
-	python manage.py loaddata dev_data.json
+load_data:
+	python manage.py loaddata getting_started_data.json
 
 #########################
 # Build/deploy tools
