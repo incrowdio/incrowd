@@ -25,6 +25,7 @@ else:
 
 DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -51,9 +52,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'frontend/www'),
 )
-
-MAILGUN_ACCESS_KEY = 'ACCESS-KEY'
-MAILGUN_SERVER_NAME = 'SERVER-NAME'
 
 ALLOWED_HOSTS = []
 
@@ -124,9 +122,7 @@ if ENV == 'prod':
             'HOST': os.environ.get('DOCKER_HOST_IP', '127.0.0.1'),
         }
     }
-    MAIL_PROVIDER = 'DJANGO'
-    EMAIL_SENDER = 'josh@slashertraxx.com'
-    EMAIL_BACKEND = 'django_mailgun.MailgunBackend'
+
 elif ENV == 'travis':
     # Running in development, so use a local MySQL database.
     DATABASES = {
@@ -137,9 +133,8 @@ elif ENV == 'travis':
             'HOST': '127.0.0.1',
         }
     }
-    MAIL_PROVIDER = 'DJANGO'
     EMAIL_SENDER = 'josh@slashertraxx.com'
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 else:
     # Running in development, so use sqlite for simplicity
     DATABASES = {
@@ -148,7 +143,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
         }
     }
-    MAIL_PROVIDER = 'DJANGO'
     EMAIL_SENDER = 'josh@slashertraxx.com'
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     # EMAIL_BACKEND = 'djangoappengine.mail.EmailBackend'
@@ -205,11 +199,11 @@ REST_FRAMEWORK = {
 }
 
 # Pusher
-PUSHER_APP_ID = '93343'
-PUSHER_KEY = 'ae4f4ab0b1792c193f3f'
-PUSHER_SECRET = '785e5bf3db247bb50569'
-PUSHER_CHANNEL = 'private-incrowd-dev'
-PUSHER_PRESENCE = 'presence-incrowd-dev'
+PUSHER_APP_ID = ''
+PUSHER_KEY = ''
+PUSHER_SECRET = ''
+PUSHER_CHANNEL = ''
+PUSHER_PRESENCE = ''
 
 # Mime Types
 MIME_IMAGES = [
