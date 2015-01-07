@@ -176,11 +176,16 @@ urlpatterns = patterns(
 
 )
 
-if settings.DEBUG:
+if settings.DEBUG_TOOLBAR:
     import debug_toolbar
     urlpatterns += patterns(
         '',
         url(r'^__debug__/', include(debug_toolbar.urls)),
+    )
+
+if settings.DEBUG:
+    urlpatterns += patterns(
+        '',
         url(r'^$', 'django.contrib.staticfiles.views.serve',
             kwargs={
                 'path': 'index.html',
