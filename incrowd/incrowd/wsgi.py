@@ -16,7 +16,7 @@ logger = logging.getLogger()
 try:
     import newrelic.agent
     logger.info('initializing with new relic')
-    newrelic.agent.initialize(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__), 'config/newrelic.ini'))))
+    newrelic.agent.initialize(os.path.abspath('config/newrelic.ini'))
 except Exception:
     logger.info('running without newrelic')
 
