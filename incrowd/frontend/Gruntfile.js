@@ -83,9 +83,9 @@ module.exports = function (grunt) {
           constants: {
             ENV: 'production',
             BACKEND_SERVER: '/api/v1/',
-            PUSHER_CHANNEL: 'private-incrowd-dev',
-            PUSHER_APP_KEY: 'ae4f4ab0b1792c193f3f',
-            PUSHER_PRESENCE: 'presence-incrowd-dev'
+            PUSHER_CHANNEL: 'private-slashertraxx-dev',
+            PUSHER_APP_KEY: 'b17774a1dd2ca4755159',
+            PUSHER_PRESENCE: 'presence-slashertraxx-dev'
           }
         }
       },
