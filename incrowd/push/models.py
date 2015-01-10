@@ -74,4 +74,4 @@ def send_all(message_type, message, user=None):
         logger.info("Sending {}:{}".format(message_type, data))
         p[settings.PUSHER_CHANNEL].trigger(message_type, data)
     except Exception as e:
-        logger.warning('Unable to send requests to push: {}'.format(str(e)))
+        logger.exception('Unable to send requests to push: {}'.format(str(e)))
