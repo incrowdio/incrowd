@@ -13,6 +13,14 @@ def random_code():
     return '%08x' % random.randrange(16 ** 8)
 
 
+def send(recipient_list, subject, body):
+    from_email = "josh@slashertraxx.com"
+    logging.info("Sending invite mail from {} to {}, subject: {}, "
+                 "messages: {}.".format(
+        from_email, recipient_list, subject, body))
+    send_mail(subject, body, from_email, recipient_list)
+
+
 class InviteCode(models.Model):
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     code = models.CharField(max_length=32, default=random_code, unique=True)
@@ -53,10 +61,13 @@ To sign up, go to:
         from_email = "josh@slashertraxx.com"
         recipient_list = [self.invited_email]
         logging.info("Sending invite mail from {} to {}, subject: {}, "
-                     "messages: {}. MAIL_PROVIDER: {}".format(
-                         from_email, recipient_list, subject, body,
-                         settings.MAIL_PROVIDER))
-        send_mail(subject, body, from_email, recipient_list)
+                     "messages: {}.".format(
+                         from_email, recipient_list, subject, body))
+        try:
+            send(recipient_list, subject, body)
+        except Exception as e:
+            logger.exception('Could not send email: {}: {} because: {}'.format(
+                subject, body, str(e)))
 
 
 class InviteForm(forms.Form):

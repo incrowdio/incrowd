@@ -132,7 +132,11 @@ class Post(models.Model):
 
         logger.info("Sending email to {}, subject {}, message {}".format(
             users_to_email, subject, message))
-        send(users_to_email, subject, message)
+        try:
+            send(users_to_email, subject, message)
+        except Exception as e:
+            logger.exception('Could not send email: {}: {} because: {}'.format(
+                subject, message, str(e)))
 
     def youtube_video_id(self):
         youtube = YouTube()
