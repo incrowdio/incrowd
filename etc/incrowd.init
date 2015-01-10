@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:	  incrowd
+# Provides:      incrowd
 # Required-Start:    $local_fs $remote_fs $network $syslog $named
 # Required-Stop:     $local_fs $remote_fs $network $syslog $named
 # Default-Start:     2 3 4 5
@@ -15,6 +15,9 @@ DAEMON=$(which docker)
 NAME=incrowd
 CONTAINER_NAME=incrowd
 CONTAINER_REPO=incrowd/incrowd
+CONFIG_DIR=
+NGINX_SITES_DIR=
+NGINX_CERTS_DIR=
 
 # Override these in the defaults file to disable
 PULL_ON_STARTUP=true
@@ -22,7 +25,15 @@ DB_SYNC_ON_STARTUP=true
 
 # Include nginx defaults if available
 if [ -r /etc/default/incrowd ]; then
-	. /etc/default/incrowd
+    . /etc/default/incrowd
+else
+    echo "# Directory with production_settings.py.
+# Should have an __init__.py as well (to make it a Python module)
+CONFIG_DIR=
+# Enabled Nginx sites directory
+NGINX_SITES_DIR=
+# Directory with SSL certs for Nginx sites
+NGINX_CERTS_DIR=" > /etc/default/incrowd
 fi
 
 test -x $DAEMON || exit 0
@@ -36,7 +47,28 @@ test -x $DAEMON || exit 0
 #
 do_start()
 {
-	$DAEMON run -d -p 80:80 $CONTAINER_REPO
+    # Mount volumes if necessary
+    VOLUMES=
+    if [ ! -z "$CONFIG_DIR" ]; then
+        VOLUMES="$VOLUMES -v $CONFIG_DIR:/home/docker/code/config/"
+    fi
+
+    if [ ! -z "$NGINX_SITES_DIR" ]; then
+        VOLUMES="$VOLUMES -v $NGINX_SITES_DIR:/etc/nginx/sites-enabled/"
+    fi
+
+    if [ ! -z "$NGINX_CERTS_DIR" ]; then
+        VOLUMES="$VOLUMES -v $NGINX_CERTS_DIR:/etc/nginx/certs/"
+    fi
+
+    echo "Starting incrowd with volumes: $VOLUMES"
+
+    # Start the container
+    if [ -z "$CONFIG_DIR" ]; then
+            $DAEMON run -d -p 80:80 -p 443:443 --dns 8.8.8.8 --dns 8.8.4.4 --name $CONTAINER_NAME $CONTAINER_REPO
+    else
+            $DAEMON run -d -p 80:80 -p 443:443 $VOLUMES --dns 8.8.8.8 --dns 8.8.4.4 --name $CONTAINER_NAME $CONTAINER_REPO
+    fi
 }
 
 #
@@ -44,8 +76,8 @@ do_start()
 #
 do_stop()
 {
-	$DAEMON kill $CONTAINER_NAME
-	$DAEMON rm $CONTAINER_NAME
+    $DAEMON kill $CONTAINER_NAME
+    $DAEMON rm $CONTAINER_NAME
 }
 
 #
@@ -61,46 +93,63 @@ do_pull()
 #
 do_sync()
 {
-    $DAEMON run -a STDOUT -a STDERR -t $CONTAINER_REPO make django_db
+    # Mount volumes if necessary
+    VOLUMES=
+    if [ ! -z "$CONFIG_DIR" ]; then
+        VOLUMES="$VOLUMES -v $CONFIG_DIR:/home/docker/code/config/"
+    fi
+
+    if [ ! -z "$NGINX_SITES_DIR" ]; then
+        VOLUMES="$VOLUMES -v $NGINX_SITES_DIR:/etc/nginx/sites-enabled/"
+    fi
+
+    if [ ! -z "$NGINX_CERTS_DIR" ]; then
+        VOLUMES="$VOLUMES -v $NGINX_CERTS_DIR:/etc/nginx/certs/"
+    fi
+
+    echo "Starting incrowd with volumes: $VOLUMES"
+    $DAEMON run -v $VOLUMES -a STDOUT -a STDERR -t $CONTAINER_REPO make django_db
 }
 
 case "$1" in
-	start)
-		[ "$VERBOSE" != no ] && log_daemon_msg "Starting $NAME" "$NAME"
-		if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
-		if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
-		do_start
-		;;
-	stop)
-		[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $NAME" "$NAME"
-		do_stop
-		;;
-	restart)
-		log_daemon_msg "Restarting $NAME" "$NAME"
-		do_stop
-		if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
-		if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
-		do_start
-		;;
-	status)
-		if [ $(docker ps | grep "incrowd3" | wc -l) = 1 ]; then
-			log_daemon_msg "$NAME is running" "$NAME"
-		else
-			log_daemon_msg "$NAME is not running" "$NAME"
-		fi
-		;;
-  	sync)
-		log_daemon_msg "Syncing database for container $CONTAINER_REPO" "$NAME"
-		do_sync
-		;;
-	upgrade)
-		log_daemon_msg "Upgrading container $CONTAINER_REPO" "$NAME"
-		do_pull
-		;;
-	*)
-		echo "Usage: $NAME {start|stop|restart|status|upgrade}" >&2
-		exit 3
-		;;
+    start)
+        [ "$VERBOSE" != no ] && log_daemon_msg "Starting $NAME"
+        if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
+        if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
+        do_start
+        ;;
+    stop)
+        [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $NAME"
+        do_stop
+        ;;
+    restart)
+        log_daemon_msg "Restarting $NAME"
+        do_stop
+        if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
+        if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
+        do_start
+        ;;
+    status)
+        if [ $(docker ps | grep "incrowd3" | wc -l) = 1 ]; then
+            log_daemon_msg "$NAME is running"
+            exit 0
+        else
+            log_daemon_msg "$NAME is not running"
+            exit 3
+        fi
+        ;;
+      sync)
+        log_daemon_msg "Syncing database for container $CONTAINER_REPO"
+        do_sync
+        ;;
+    upgrade)
+        log_daemon_msg "Upgrading container $CONTAINER_REPO"
+        do_pull
+        ;;
+    *)
+        echo "Usage: $NAME {start|stop|restart|status|upgrade}" >&2
+        exit 3
+        ;;
 esac
 
 :
