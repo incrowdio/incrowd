@@ -14,7 +14,7 @@ mccabe==0.3
 meld3==0.6.10
 MySQL-python==1.2.5
 newrelic==2.40.0.34
-pusher==0.8
+pusher-rest
 py==1.4.26
 requests==2.5.1
 six==1.9.0
