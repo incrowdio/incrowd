@@ -13,7 +13,7 @@ angular.module('djangle', [])
       scope: {
         form: '='
       },
-      templateUrl: 'static/partials/char_field.html'
+      templateUrl: 'partials/char_field.html'
     }
   })
 
@@ -24,7 +24,7 @@ angular.module('djangle', [])
       scope: {
         form: '='
       },
-      templateUrl: 'static/partials/date_field.html'
+      templateUrl: 'partials/date_field.html'
     }
   })
 
@@ -35,7 +35,7 @@ angular.module('djangle', [])
       scope: {
         form: '='
       },
-      templateUrl: 'static/partials/choice_field.html'
+      templateUrl: 'partials/choice_field.html'
     }
   })
 
@@ -47,7 +47,7 @@ angular.module('djangle', [])
       scope: {
         form: '='
       },
-      templateUrl: 'static/partials/url_field.html'
+      templateUrl: 'partials/url_field.html'
     }
   })
 
@@ -57,6 +57,6 @@ angular.module('djangle', [])
       scope: {
         form: '='
       },
-      templateUrl: 'static/partials/django_form.html'
+      templateUrl: 'partials/django_form.html'
     }
   });

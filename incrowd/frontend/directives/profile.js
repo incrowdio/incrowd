@@ -3,7 +3,7 @@ angular.module('profile')
     return {
       restrict: 'E',
       transclue: true,
-      templateUrl: 'static/partials/profile.html'
+      templateUrl: 'partials/profile.html'
     }
   })
 
