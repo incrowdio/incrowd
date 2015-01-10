@@ -389,13 +389,8 @@ angular.module('post_controllers', [])
     // Get a list of categories for the dropdown
     $http.get(BACKEND_SERVER + 'categories/')
       .success(function (res, status, headers, config) {
-        console.log('categories', res);
         $scope.categories = res;
-        $scope.category_list = [];
-        $scope.categories.forEach(function (category) {
-          $scope.category_list.push(category.name);
-        });
-        console.log('category list', $scope.category_list)
+        console.log('categories', $scope.categories)
       });
 
     $http.get(BACKEND_SERVER + 'categories/top/')
@@ -408,7 +403,6 @@ angular.module('post_controllers', [])
     $scope.post = {};
 
     $scope.new_post_submit = function () {
-      $scope.post.category = $scope.post.category.originalObject.id;
       console.log("submitting", $scope.post);
 
       $http({

@@ -66,12 +66,12 @@ def get_all_connected(user=None):
 
 def send_all(message_type, message, user=None):
     data = JSONRenderer().render(message)
-    p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
-                      key=settings.PUSHER_KEY,
-                      secret=settings.PUSHER_SECRET)
-    # p.channel_type = pusher.GoogleAppEngineChannel
-    logger.info("Sending {}:{}".format(message_type, data))
     try:
+        p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
+                          key=settings.PUSHER_KEY,
+                          secret=settings.PUSHER_SECRET)
+        # p.channel_type = pusher.GoogleAppEngineChannel
+        logger.info("Sending {}:{}".format(message_type, data))
         p[settings.PUSHER_CHANNEL].trigger(message_type, data)
     except Exception:
         logger.warning('Unable to send requests to push')

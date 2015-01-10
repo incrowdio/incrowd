@@ -260,9 +260,8 @@ class ProfileUpdateForm(forms.ModelForm):
 def send(recipient_list, subject, body):
     from_email = "josh@slashertraxx.com"
     logging.info("Sending invite mail from {} to {}, subject: {}, "
-                 "messages: {}. MAIL_PROVIDER: {}".format(
-        from_email, recipient_list, subject, body,
-        settings.MAIL_PROVIDER))
+                 "messages: {}.".format(
+        from_email, recipient_list, subject, body))
     send_mail(subject, body, from_email, recipient_list)
 
 

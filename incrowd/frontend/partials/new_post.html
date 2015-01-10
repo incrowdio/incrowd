@@ -6,8 +6,8 @@
 
       <md-text-float label="URL" ng-model="post.url"
                      class="long"></md-text-float>
-      <select class="category_select">
-        <option ng-repeat="category in category_list">{{ category }}</option>
+      <select ng-model="post.category" ng-options="category.id as category.name for category in categories">
+        <option value="">-- choose category --</option>
       </select>
       <md-checkbox ng-model="post.nsfw" aria-label="NSFW">
         NSFW?
