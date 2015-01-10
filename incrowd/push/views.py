@@ -7,7 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
-import pusher
+from pusher import Config, Pusher
 
 from website.models import UserSerializer
 
@@ -39,17 +39,30 @@ def pusher_auth(request):
     channel_name = request.POST.get('channel_name')
     socket_id = request.POST.get('socket_id')
 
+    # Convert datetime to string
+    user_info = UserSerializer(request.user).data
+    user_info['last_updated'] = str(user_info['last_updated'])
+
     channel_data = {
         'user_id': request.user.id,
-        'user_info': UserSerializer(request.user).data
+        'user_info': user_info
     }
 
-    p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
-                      key=settings.PUSHER_KEY,
-                      secret=settings.PUSHER_SECRET)
-    p.encoder = DjangoJSONEncoder
+    conf = Config(
+        app_id=settings.PUSHER_APP_ID,
+        key=settings.PUSHER_KEY,
+        secret=settings.PUSHER_SECRET)
 
-    auth = p[channel_name].authenticate(socket_id, channel_data)
+    auth = conf.authenticate_subscription(
+        channel=channel_name,
+        socket_id=socket_id,
+        custom_data=channel_data
+    )
+
+
+    # # p.encoder = DjangoJSONEncoder
+    # auth = p.trigger([settings.PUSHER_CHANNEL], unicode(message_type), data)
+    # auth = p[channel_name].authenticate(socket_id, channel_data)
     json_data = json.dumps(auth)
 
     return HttpResponse(json_data)
