@@ -1,6 +1,6 @@
 <md-list ng-controller="ChatCtrl" md-scroll-y layout="column"
            class="chat_container chat_padding" >
-    <md-item ng-repeat="message in messages" >
+    <md-item ng-repeat="message in messages" ng-class="chatBackground(message, messages[$index - 1])">
       <md-item-content ng-class="chatHighlight(message)">
         <div class="md-tile-left">
           <profile-pic id="message.user" displayUsername></profile-pic>

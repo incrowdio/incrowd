@@ -36,6 +36,23 @@ angular.module('chat', [])
       }
     };
 
+    $scope.chatBackground = function (message, previous_message) {
+      console.log('chat background', message, previous_message);
+      if (previous_message != undefined && message.user != previous_message.user) {
+        if (previous_message.chat_class == 'chat_background_alternate') {
+          message.chat_class = 'chat_background_primary';
+          return 'chat_background_primary'
+        }
+        else {
+          message.chat_class = 'chat_background_alternate';
+          return 'chat_background_alternate'
+        }
+      }
+      else {
+        return 'chat_background_primary'
+      }
+    };
+
     $rootScope.$on('chat', function () {
       $timeout(function () {
         var message_div = $('#sidebar_chat_container');

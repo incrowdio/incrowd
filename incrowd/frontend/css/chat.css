@@ -86,8 +86,8 @@
 }
 
 .chat_container .md-tile-left {
-    padding: 15px 0 5px 5px;
-    margin-right: 0px;
+    padding: 7px 0 7px 5px;
+    margin-right: 0;
 }
 
 .chat_message p {
@@ -183,4 +183,11 @@ chatinput {
 
 .chat_fullscreen {
     margin-top: -16px;
+}
+
+.chat_background_primary {
+}
+
+.chat_background_alternate {
+    background-color: #eee;
 }
