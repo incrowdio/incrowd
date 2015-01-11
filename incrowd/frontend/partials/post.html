@@ -6,7 +6,8 @@
       </div>
       <div class="title_container" layout="column">
         <h2 class="title">
-          <a href="/#/posts/{{ post.id }}">{{ post.title }}</a>
+          <a ng-switch-when="link" ng-href="{{ post.url }}">{{ post.title }} <span class="icon-link icomoon link"></span></a>
+          <a ng-switch-default ng-href="/#/posts/{{ post.id }}">{{ post.title }}</a>
         </h2>
         <h4>
           <a ng-href="/#/posts?category={{ post.category.id }}">{{ post.category.name }}</a> <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>

@@ -248,12 +248,9 @@ angular.module('post_controllers', [])
       var time;
       var label;
       var difference = (now - Date.parse(dt)) / 1000;
-      if (difference < 10) {
-        return "A few seconds ago"
-      }
-      else if (difference < 60) {
+      if (difference < 60) {
         time = Math.floor(difference);
-        label = time > 1 ? 'seconds' : 'second';
+        return "a few seconds ago";
       }
       else if (difference < 3600) {
         time = Math.floor(difference / 60);

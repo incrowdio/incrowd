@@ -3,11 +3,11 @@
  */
 @font-face {
     font-family: 'icomoon';
-    src: url('../fonts/icomoon.eot?tqq5iw');
-    src: url('../fonts/icomoon.eot?#iefixtqq5iw') format('embedded-opentype'),
-    url('../fonts/icomoon.woff?tqq5iw') format('woff'),
-    url('../fonts/icomoon.ttf?tqq5iw') format('truetype'),
-    url('../fonts/icomoon.svg?tqq5iw#icomoon') format('svg');
+    src: url('../fonts/icomoon.eot?-l8imuo');
+    src: url('../fonts/icomoon.eot?#iefix-l8imuo') format('embedded-opentype'),
+    url('../fonts/icomoon.woff?-l8imuo') format('woff'),
+    url('../fonts/icomoon.ttf?-l8imuo') format('truetype'),
+    url('../fonts/icomoon.svg?-l8imuo#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -76,7 +76,6 @@
 
 .icon-bubbles:before {
     content: "\e61a";
-    margin-left: 5px;
 }
 
 .icon-bubbles2:before {
@@ -187,6 +186,9 @@
     content: "\e627";
 }
 
+.icon-link:before {
+    content: "\e628";
+}
 
 /*Override to use icomoon inside md-buttons*/
 md-button .md-button-inner {

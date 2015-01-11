@@ -255,3 +255,7 @@ post div.green {
 .post .green {
     background-color: #4CAF50;
 }
+
+.post .link {
+    font-size: 65%;
+}
