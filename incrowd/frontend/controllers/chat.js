@@ -38,7 +38,11 @@ angular.module('chat', [])
 
     $scope.chatBackground = function (message, previous_message) {
       console.log('chat background', message, previous_message);
-      if (previous_message != undefined && message.user != previous_message.user) {
+      if (previous_message == undefined) {
+        // First message edge case
+        return 'chat_background_primary'
+      }
+      else if (message.user != previous_message.user) {
         if (previous_message.chat_class == 'chat_background_alternate') {
           message.chat_class = 'chat_background_primary';
           return 'chat_background_primary'
@@ -49,7 +53,7 @@ angular.module('chat', [])
         }
       }
       else {
-        return 'chat_background_primary'
+        return previous_message.chat_class
       }
     };
 
