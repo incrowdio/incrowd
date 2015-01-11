@@ -93,7 +93,7 @@ angular.module('post_controllers', [])
 
     $scope.newPostDialog = function (ev) {
       $mdDialog.show({
-        templateUrl: '/partials/new_post.html',
+        templateUrl: 'partials/new_post.html',
         targetEvent: ev
       })
     };

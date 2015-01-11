@@ -24,7 +24,7 @@ var app = angular.module('incrowd', [
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider.
     when('/posts', {
-      templateUrl: '/templates/posts.html',
+      templateUrl: 'templates/posts.html',
       controller: 'PostListCtrl',
       resolve: {
         'UserData': function (User) {
@@ -33,7 +33,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/posts/:postId', {
-      templateUrl: '/templates/post_detail.html',
+      templateUrl: 'templates/post_detail.html',
       controller: 'PostDetailCtrl',
       resolve: {
         'UserData': function (User) {
@@ -42,11 +42,11 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/login', {
-      templateUrl: '/templates/login.html',
+      templateUrl: 'templates/login.html',
       controller: 'AuthCtrl'
     }).
     when('/chat', {
-      templateUrl: '/templates/chat.html',
+      templateUrl: 'templates/chat.html',
       controller: 'ChatCtrl',
       resolve: {
         'UserData': function (User) {
@@ -55,7 +55,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/polls/:pollStub', {
-      templateUrl: '/templates/poll.html',
+      templateUrl: 'templates/poll.html',
       controller: 'PollDetailCtrl',
       resolve: {
         'UserData': function (User) {
@@ -64,7 +64,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/notifications', {
-      templateUrl: '/templates/notifications.html',
+      templateUrl: 'templates/notifications.html',
       controller: 'NotificationCtrl',
       resolve: {
         'UserData': function (User) {
@@ -73,15 +73,15 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/accounts/signup', {
-      templateUrl: '/templates/signup.html',
+      templateUrl: 'templates/signup.html',
       controller: 'SignupCtrl'
     }).
     when('/invite', {
-      templateUrl: '/templates/invite.html',
+      templateUrl: 'templates/invite.html',
       controller: 'InviteCtrl'
     }).
     when('/users/:username', {
-      templateUrl: '/templates/profile.html',
+      templateUrl: 'templates/profile.html',
       controller: 'ProfileCtrl',
       resolve: {
         'UserData': function (User) {
@@ -90,7 +90,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       }
     }).
     when('/users', {
-      templateUrl: '/templates/profiles.html',
+      templateUrl: 'templates/profiles.html',
       controller: 'ProfileListCtrl',
       resolve: {
         'UserData': function (User) {

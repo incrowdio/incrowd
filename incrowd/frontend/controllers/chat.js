@@ -39,7 +39,6 @@ angular.module('chat', [])
     $scope.chatBackground = function (message, previous_message) {
       var primary = 'chat_background_primary';
       var alt = 'chat_background_alternate';
-      console.log('chat background', message, previous_message);
       if (previous_message == undefined) {
         // First message edge case
         return 'chat_background_primary'
