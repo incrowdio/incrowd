@@ -39,9 +39,12 @@ def pusher_auth(request):
     channel_name = request.POST.get('channel_name')
     socket_id = request.POST.get('socket_id')
 
-    # Convert datetime to string
+    # Convert datetime to string. Pusher doesn't take an encoder
+    # anymore.
     user_info = UserSerializer(request.user).data
-    user_info['last_updated'] = str(user_info['last_updated'])
+    user_info['last_updated'] = str(user_info.get('last_updated', ''))
+    for vote in user_info.get('user_votes', []):
+        vote['day'] = str(vote['day'])
 
     channel_data = {
         'user_id': request.user.id,
