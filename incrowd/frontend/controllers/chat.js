@@ -37,20 +37,16 @@ angular.module('chat', [])
     };
 
     $scope.chatBackground = function (message, previous_message) {
+      var primary = 'chat_background_primary';
+      var alt = 'chat_background_alternate';
       console.log('chat background', message, previous_message);
       if (previous_message == undefined) {
         // First message edge case
         return 'chat_background_primary'
       }
       else if (message.user != previous_message.user) {
-        if (previous_message.chat_class == 'chat_background_alternate') {
-          message.chat_class = 'chat_background_primary';
-          return 'chat_background_primary'
-        }
-        else {
-          message.chat_class = 'chat_background_alternate';
-          return 'chat_background_alternate'
-        }
+        message.chat_class = previous_message.chat_class == alt ? alt : primary;
+        return message.chat_class;
       }
       else {
         return previous_message.chat_class
