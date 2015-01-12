@@ -17,7 +17,7 @@ angular.module('auth', [])
     $scope.loggedIn = $rootScope.loggedIn;
   })
 
-  .factory('httpInterceptor', function httpInterceptor($q, $window, $location) {
+  .factory('httpInterceptor', function httpInterceptor($q, $window, $location, $state) {
     return function (promise) {
 //      console.log('http intercepted');
       var success = function (response) {
@@ -26,7 +26,7 @@ angular.module('auth', [])
 
       var error = function (response) {
         if (response.status === 401) {
-          $location.path('/#/login');
+          $state.go('login');
         }
 
         return $q.reject(response);
@@ -71,7 +71,7 @@ angular.module('auth', [])
     };
   })
 
-  .factory('Auth', ['Base64', '$http', '$rootScope', '$location', '$window', 'BACKEND_SERVER', function (Base64, $http, $rootScope, $location, $window, BACKEND_SERVER) {
+  .factory('Auth', ['Base64', '$http', '$rootScope', '$location', '$window', '$state', 'BACKEND_SERVER', function (Base64, $http, $rootScope, $location, $window, $state, BACKEND_SERVER) {
     // initialize to whatever is in the cookie, if anything
     $http.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
 
@@ -84,7 +84,8 @@ angular.module('auth', [])
       $rootScope.loggedIn = true;
       console.log('login successful, setting token, redirecting', $rootScope.loggedIn, $window.location.href);
       // TODO(pcsforeducation) move to controller
-      $window.location.href = $window.location.href.replace('/#/login', '/#/posts');
+      //$state.transitionTo('posts', {}, { reload: true });
+      $window.location.href = $window.location.href.replace('#/login', '#/posts');
       $window.location.reload();
     };
 
@@ -196,14 +197,6 @@ angular.module('auth', [])
       }
     };
   })
-  .constant('AUTH_EVENTS', {
-    loginSuccess: 'auth-login-success',
-    loginFailed: 'auth-login-failed',
-    logoutSuccess: 'auth-logout-success',
-    sessionTimeout: 'auth-session-timeout',
-    notAuthenticated: 'auth-not-authenticated',
-    notAuthorized: 'auth-not-authorized'
-  })
   .service('Session', function () {
     this.create = function (sessionId, userId, token) {
       this.id = sessionId;
@@ -215,10 +208,4 @@ angular.module('auth', [])
       token = null;
     };
     return this;
-  })
-  .constant('USER_ROLES', {
-    all: '*',
-    admin: 'admin',
-    editor: 'editor',
-    guest: 'guest'
   })

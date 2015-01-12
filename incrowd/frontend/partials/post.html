@@ -2,15 +2,15 @@
   <md-toolbar class="md-toolbar {{post.category.color}}">
     <div class="md-toolbar-tools">
       <div class="profile-circular">
-        <a href="/#/users/{{ post.user.username }}/"><img class="profile-pic" ng-src="{{ post.user.profile_pic }}" alt=""/></a>
+        <a href="#/user/{{ post.user.username }}"><img class="profile-pic" ng-src="{{ post.user.profile_pic }}" alt=""/></a>
       </div>
       <div class="title_container" layout="column">
         <h2 class="title">
           <a ng-switch-when="link" ng-href="{{ post.url }}">{{ post.title }} <span class="icon-link icomoon link"></span></a>
-          <a ng-switch-default ng-href="/#/posts/{{ post.id }}">{{ post.title }}</a>
+          <a ng-switch-default ng-href="#/posts/{{ post.id }}">{{ post.title }}</a>
         </h2>
         <h4>
-          <a ng-href="/#/posts?category={{ post.category.id }}">{{ post.category.name }}</a> <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>
+          <a ng-href="#/posts?category={{ post.category.id }}">{{ post.category.name }}</a> <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>
         </h4>
       </div>
 
@@ -41,7 +41,7 @@
   <div layout="horizontal" layout-align="center" class="metadata">
 
     <md-button class="md-raised md-primary post_comments">
-      <a ng-href="/#/posts/{{ post.id }}/">{{ post.comment_set.length }}
+      <a ng-href="#/posts/{{ post.id }}">{{ post.comment_set.length }}
         Comments</a>
     </md-button>
       <span ng-bind="post.submitted | DTSince" class="non-button"></span>

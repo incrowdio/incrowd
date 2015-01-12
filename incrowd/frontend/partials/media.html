@@ -7,7 +7,7 @@
     <div class="nsfw_show" ng-click="toggleNSFW(post)" ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
       <p>Click</p><p>to show</p>
     </div>
-    <a href="/#/posts/{{ post.id }}">
+    <a href="#/posts/{{ post.id }}">
       <img ng-show="post.nsfw_show || !post.nsfw" ng-src="{{ post.url }}">
     </a>
   </div>

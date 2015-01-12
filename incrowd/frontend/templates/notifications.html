@@ -3,7 +3,7 @@
   <md-card class="notification" ng-repeat="notification in notifications">
     <md-toolbar>
       <h3 class="md-toolbar-tools">
-        <a href="/#{{ notification.link }}"
+        <a href="#{{ notification.link }}"
            ng-click="remove_notification(notification)">
           {{ notification.text }}
         </a>

@@ -10,7 +10,7 @@ angular.module('post_controllers', [])
     $scope.getProfilePic = function (user_id) {
       User.users.forEach(function (user) {
         if (user.id == user_id) {
-          console.log('profile pic', user.profile_pic)
+          console.log('profile pic', user.profile_pic);
           return user.profile_pic
         }
       })
@@ -110,8 +110,8 @@ angular.module('post_controllers', [])
     add_pages(1);
   })
 
-  .controller('PostDetailCtrl', function ($scope, $rootScope, $http, $sce, $route, $routeParams, $location, BACKEND_SERVER) {
-    $scope.postId = $routeParams.postId;
+  .controller('PostDetailCtrl', function ($scope, $rootScope, $http, $sce, $stateParams, $location, BACKEND_SERVER) {
+    $scope.postId = $stateParams.postId;
     $scope.formData = {};
 
     $scope.toggleNSFW = function () {
@@ -283,9 +283,9 @@ angular.module('post_controllers', [])
   })
 
 
-  .controller('InviteCtrl', function ($scope, $http, $location, BACKEND_SERVER) {
+  .controller('InviteCtrl', function ($scope, $http, $location, $state, BACKEND_SERVER) {
     var success_func = function (data, status, headers, config) {
-      $location.path('/#/posts').replace();
+      $state.go('posts');
       $scope.$apply();
     };
     var error_func = function (data, status, headers, config) {

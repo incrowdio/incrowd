@@ -24,7 +24,7 @@ angular.module('signup', [])
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
       }).success(function (data, status, headers, config) {
-        $location.path('/#/login').replace();
+        $location.path('#/login').replace();
       }).error(function ($scope, data, status, headers, config) {
         console.log('error', data);
         $scope.status = status + ' ' + headers;

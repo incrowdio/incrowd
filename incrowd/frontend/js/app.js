@@ -1,7 +1,7 @@
 var app = angular.module('incrowd', [
   'ngCookies',
   'ngResource',
-  'ngRoute',
+  'ui.router',
   'ngSanitize',
   'ngMaterial',
   'infinite-scroll',
@@ -21,9 +21,13 @@ var app = angular.module('incrowd', [
   'post_controllers'
 ]);
 
-app.config(['$routeProvider', function ($routeProvider) {
-  $routeProvider.
-    when('/posts', {
+app.config(function ($stateProvider, $urlRouterProvider) {
+
+  $urlRouterProvider.otherwise('/posts');
+
+  $stateProvider
+    .state('posts', {
+      url: '/posts',
       templateUrl: 'templates/posts.html',
       controller: 'PostListCtrl',
       resolve: {
@@ -31,8 +35,9 @@ app.config(['$routeProvider', function ($routeProvider) {
           return User.promise;
         }
       }
-    }).
-    when('/posts/:postId', {
+    })
+    .state('post_details', {
+      url: '/posts/{postId}',
       templateUrl: 'templates/post_detail.html',
       controller: 'PostDetailCtrl',
       resolve: {
@@ -40,12 +45,14 @@ app.config(['$routeProvider', function ($routeProvider) {
           return User.promise;
         }
       }
-    }).
-    when('/login', {
+    })
+    .state('login', {
+      url: '/login',
       templateUrl: 'templates/login.html',
       controller: 'AuthCtrl'
-    }).
-    when('/chat', {
+    })
+    .state('chat', {
+      url: '/chat',
       templateUrl: 'templates/chat.html',
       controller: 'ChatCtrl',
       resolve: {
@@ -53,8 +60,9 @@ app.config(['$routeProvider', function ($routeProvider) {
           return User.promise;
         }
       }
-    }).
-    when('/polls/:pollStub', {
+    })
+    .state('polls', {
+      url: '/polls/:pollStub',
       templateUrl: 'templates/poll.html',
       controller: 'PollDetailCtrl',
       resolve: {
@@ -62,8 +70,9 @@ app.config(['$routeProvider', function ($routeProvider) {
           return User.promise;
         }
       }
-    }).
-    when('/notifications', {
+    })
+    .state('notifications', {
+      url: '/notifications',
       templateUrl: 'templates/notifications.html',
       controller: 'NotificationCtrl',
       resolve: {
@@ -71,45 +80,38 @@ app.config(['$routeProvider', function ($routeProvider) {
           return User.promise;
         }
       }
-    }).
-    when('/accounts/signup', {
+    })
+    .state('signup', {
+      url: '/accounts/signup',
       templateUrl: 'templates/signup.html',
       controller: 'SignupCtrl'
-    }).
-    when('/invite', {
+    })
+    .state('invite', {
+      url: '/invite',
       templateUrl: 'templates/invite.html',
       controller: 'InviteCtrl'
-    }).
-    when('/users/:username', {
-      templateUrl: 'templates/profile.html',
+    })
+    .state('users', {
+      url: '/users',
+      templateUrl: 'templates/profiles.html',
       controller: 'ProfileCtrl',
       resolve: {
         'UserData': function (User) {
           return User.promise;
         }
       }
-    }).
-    when('/users', {
+    })
+    .state('users_details', {
+      url: '/user/:username',
       templateUrl: 'templates/profiles.html',
-      controller: 'ProfileListCtrl',
+      controller: 'ProfileCtrl',
       resolve: {
         'UserData': function (User) {
           return User.promise;
         }
       }
-    }).
-
-    otherwise({
-      redirectTo: '/posts'
-    });
-  //    $locationProvider.html5Mode(true);
-}
-
-])
-
-  //.config(['msdElasticConfig', function (config) {
-  //  config.append = '\n\n';
-  //}])
+    })
+})
 
   // Allow loading of YouTube
   .config(function ($sceDelegateProvider) {
@@ -118,6 +120,7 @@ app.config(['$routeProvider', function ($routeProvider) {
       'http://**.youtube.com/**'
     ]);
   })
+
   // Django CSRF
   .config(['$httpProvider', function ($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -233,32 +236,32 @@ app.service('Config', function ($http, $q, Notification, BACKEND_SERVER) {
       tabs = [
         {
           'name': 'Posts',
-          'link': '/#/posts',
+          'link': '#/posts',
           'alert': ''
         },
         {
           'name': 'Notifications',
-          'link': '/#/notifications',
+          'link': '#/notifications',
           'alert': '',
           'items': Notification.notifications
         },
         {
           'name': 'Chat',
-          'link': '/#/chat',
+          'link': '#/chat',
           'alert': '',
           'mobile_only': true
         }];
       var last_tabs = [
         {
           'name': 'Users',
-          'link': '/#/users',
+          'link': '#/users',
           'alert': ''
         }
       ];
       res.forEach(function (poll) {
         tabs.push({
           'name': poll.stub,
-          'link': '/#/polls/' + poll.stub,
+          'link': '#/polls/' + poll.stub,
           'alert': ''
         });
 
@@ -272,22 +275,32 @@ app.service('Config', function ($http, $q, Notification, BACKEND_SERVER) {
   return conf;
 });
 
-app.run(function ($rootScope, $http, $location) {
+app.run(function ($rootScope, $http, $location, $state) {
   if (localStorage.getItem('token')) {
     $http.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
     $rootScope.loggedIn = true;
   } else {
     $rootScope.loggedIn = false;
   }
-  $rootScope.$watch(function () {
-    return $location.path();
-  }, function (newValue, oldValue) {
-    var no_auth_urls = ['/login', '/accounts/signup'];
-    if ($rootScope.loggedIn == false && no_auth_urls.indexOf(newValue) == -1) {
-      $location.path('/login');
+
+  // Watch state changes, check if authed, if not, redirect to login
+  $rootScope.$on('$stateChangeStart', function (e, toState, toParams,
+      fromState, fromParams) {
+
+    var isLogin = toState.name === "login";
+    if (isLogin) {
+      return; // no need to redirect
+    }
+
+    // now, redirect only not authenticated and on auth required states
+    var no_auth_states = ['login', 'signup'];
+    if ($rootScope.loggedIn !== true && no_auth_states.indexOf(toState) == -1) {
+      e.preventDefault(); // stop current execution
+      $state.go('login'); // go to login
     }
   });
 });
+
 
 app.run(function (User) {
 });

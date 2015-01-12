@@ -1,7 +1,6 @@
 angular.module('poll', [])
-  .controller('PollDetailCtrl', function ($scope, $http, $routeParams, $location, User, BACKEND_SERVER) {
-    $scope.pollStub = $routeParams.pollStub;
-//    console.log('/#/polls/' + $scope.pollStub);
+  .controller('PollDetailCtrl', function ($scope, $http, $stateParams, $location, User, BACKEND_SERVER) {
+    $scope.pollStub = $stateParams.pollStub;
     $scope.new_submission_submit = function () {
       $scope.submission['poll'] = $scope.poll.id;
       console.log("submitting poll", $scope.submission, this, $scope.poll);

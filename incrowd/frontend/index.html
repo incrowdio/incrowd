@@ -42,12 +42,12 @@
 
   </md-toolbar>
   <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
-    <a href="/#/users/{{ user.username }}"
+    <a href="#/user/{{ user.username }}"
        class="menu-item menu-title">{{ user.username }}</a>
 
     <a class="menu-item menu-title "
        attronoff
-       data-attr-on="{{ tab.mobile_only === true}}"
+       data-attr-on="{{ tab.mobile_only == true}}"
        data-attr-name="hide-gt-md"
        ng-href="{{ tab.link }}"
        ng-repeat="tab in tabs"
@@ -59,7 +59,7 @@
         </span>
       {{ tab.name }}
     </a>
-    <a class="menu-item menu-title" href="/#/invite">Invite</a>
+    <a class="menu-item menu-title" href="#/invite">Invite</a>
     <a class="menu-item menu-title" ng-controller="AuthCtrl"
        ng-click="logout()">Log
       out</a>
@@ -73,7 +73,7 @@
       <span ng-click="toggleLeft()" class="icon-menu icomoon menu"
           ></span>
       <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
-      <a href="/#/">SlasherTraxx</a>
+      <a href="#/">SlasherTraxx</a>
     </h1>
     <!--Preferred Action button-->
     <md-button
@@ -93,7 +93,7 @@
     <!--End preferred action-->
   </md-toolbar>
 
-  <md-content id="content" ng-view md-scroll-y
+  <md-content id="content" ui-view md-scroll-y
               class="md-padding content"></md-content>
 
 </div>
@@ -127,7 +127,7 @@
 <script src="bower_components/angular/angular.js"></script>
 <script src="bower_components/angular-cookies/angular-cookies.js"></script>
 <script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="bower_components/angular-touch/angular-touch.js"></script>
 <script src="bower_components/angular-local-storage/angular-local-storage.js"></script>
 <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
