@@ -171,7 +171,7 @@ Linux, OSX, or Windows.
 After the initial config, you can use `make docker_sever` to do a Django
 runserver.
 
-You can load some dev data to get you started by running `make load_dev_data` 
+You can load some dev data to get you started by running `make load_data` 
 after you've run docker_dev once. 
 
 The default user name and password is "admin" and "pass".
