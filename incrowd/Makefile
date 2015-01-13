@@ -6,7 +6,7 @@ upload: prod deploy
 
 docker: docker_build docker_run
 
-docker_dev: check_docker frontend django_db docker_server
+docker_dev: check_docker frontend_deps django_db docker_server
 
 clean: clean_www clean_app clean_build
 
@@ -20,7 +20,7 @@ check_docker:
 	if [ ! -f /.dockerinit ]; then echo "Must be run in Docker container, exiting"; exit 1; fi
 
 # Install frontend dependencies
-front:
+frontend_deps:
 	cd $(INCROWD_PATH)/frontend && npm install
 	cd $(INCROWD_PATH)/frontend && bower --allow-root --config.interactive=false install
 
