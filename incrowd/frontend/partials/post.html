@@ -1,41 +1,53 @@
-<div class="md-whiteframe-z1 post {{post.category.color}}" ng-switch="post.type">
-  <md-toolbar class="md-toolbar {{post.category.color}}">
+<div class="md-whiteframe-z1 post {{ post.category.color }}">
+  <md-toolbar class="md-toolbar {{ post.category.color }}"
+              ng-switch="post.type">
     <div class="md-toolbar-tools">
       <div class="profile-circular">
-        <a href="#/user/{{ post.user.username }}"><img class="profile-pic" ng-src="{{ post.user.profile_pic }}" alt=""/></a>
+        <a href="#/user/{{ post.user.username }}">
+          <img class="profile-pic" ng-src="{{ post.user.profile_pic }}"
+               alt=""/></a>
       </div>
       <div class="title_container" layout="column">
         <h2 class="title">
-          <a ng-switch-when="link" ng-href="{{ post.url }}">{{ post.title }} <span class="icon-link icomoon link"></span></a>
-          <a ng-switch-default ng-href="#/posts/{{ post.id }}">{{ post.title }}</a>
+          <a ng-if="post.type == 'link'" ng-href="{{ post.url }}">
+            {{ post.title }}
+            <span class="icon-link icomoon link"></span>
+          </a>
+          <a ng-href="#/posts/{{ post.id }}">
+            {{ post.title }}
+          </a>
         </h2>
         <h4>
-          <a ng-href="#/posts?category={{ post.category.id }}">{{ post.category.name }}</a> <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>
+          <a ng-href="#/posts?category={{ post.category.id }}">{{ post.category.name }}</a>
+          <span class="nsfw_label" ng-show="post.nsfw">NSFW</span>
         </h4>
       </div>
 
     </div>
 
-    <div ng-if="post.user.id == user.id" ng-click="delete_post($index)" aria-label="Delete">
+    <div ng-if="post.user.id == user.id" ng-click="delete_post($index)"
+         aria-label="Delete">
       <span class="delete icon-cancel-circle icomoon"></span>
     </div>
   </md-toolbar>
-  <div class="image" ng-switch-when="image">
-    <media></media>
-  </div>
+  <div ng-switch="post.type">
+    <div class="image" ng-switch-when="image">
+      <media></media>
+    </div>
 
-  <div class="youtube" ng-switch-when="youtube">
-    <media></media>
-  </div>
+    <div class="youtube" ng-switch-when="youtube">
+      <media></media>
+    </div>
 
-  <div class="video" ng-switch-when="video">
-    <media></media>
-  </div>
+    <div class="video" ng-switch-when="video">
+      <media></media>
+    </div>
 
-  <div class="link" ng-switch-when="link">
-  </div>
+    <div class="link" ng-switch-when="link">
+    </div>
 
-  <div class="text" ng-switch-default>
+    <div class="text" ng-switch-default>
+    </div>
   </div>
   <!--Metadata-->
   <div layout="horizontal" layout-align="center" class="metadata">
@@ -44,7 +56,7 @@
       <a ng-href="#/posts/{{ post.id }}">{{ post.comment_set.length }}
         Comments</a>
     </md-button>
-      <span ng-bind="post.submitted | DTSince" class="non-button"></span>
+    <span ng-bind="post.submitted | DTSince" class="non-button"></span>
 
   </div>
 

@@ -59,6 +59,7 @@ angular.module('post_controllers', [])
             result.nsfw_show = false;
             $scope.posts.push(result);
           });
+          console.log('posts', $scope.posts);
           page = post_page;
           $scope.busy = false;
         });
