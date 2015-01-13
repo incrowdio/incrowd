@@ -35,6 +35,7 @@ RUN apt-get update && \
         libsqlite3-dev \
         libxml2-dev \
         make \
+        nano \
         npm \
         nginx-full \
         python \
