@@ -7,7 +7,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
-from pusher import Config, Pusher
+import pusher
 
 from website.models import UserSerializer
 
@@ -39,33 +39,24 @@ def pusher_auth(request):
     channel_name = request.POST.get('channel_name')
     socket_id = request.POST.get('socket_id')
 
-    # Convert datetime to string. Pusher doesn't take an encoder
-    # anymore.
-    user_info = UserSerializer(request.user).data
-    user_info['last_updated'] = str(user_info.get('last_updated', ''))
-    for vote in user_info.get('user_votes', []):
-        vote['day'] = str(vote['day'])
-
     channel_data = {
         'user_id': request.user.id,
-        'user_info': user_info
+        'user_info': UserSerializer(request.user).data
     }
+    logger.info("{} {} {} {} {} {} ".format(
+        channel_name,
+        socket_id,
+        channel_data,
+        settings.PUSHER_APP_ID,
+        settings.PUSHER_KEY,
+        settings.PUSHER_SECRET))
 
-    conf = Config(
-        app_id=settings.PUSHER_APP_ID,
-        key=settings.PUSHER_KEY,
-        secret=settings.PUSHER_SECRET)
+    p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
+                      key=settings.PUSHER_KEY,
+                      secret=settings.PUSHER_SECRET)
+    p.encoder = DjangoJSONEncoder
 
-    auth = conf.authenticate_subscription(
-        channel=channel_name,
-        socket_id=socket_id,
-        custom_data=channel_data
-    )
-
-
-    # # p.encoder = DjangoJSONEncoder
-    # auth = p.trigger([settings.PUSHER_CHANNEL], unicode(message_type), data)
-    # auth = p[channel_name].authenticate(socket_id, channel_data)
+    auth = p[channel_name].authenticate(socket_id, channel_data)
     json_data = json.dumps(auth)
 
     return HttpResponse(json_data)

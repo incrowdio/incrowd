@@ -9,24 +9,10 @@ from django.conf import settings
 # from google.appengine.api import channel
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
-from pusher import Config, Pusher
+import pusher
 
 
 logger = logging.getLogger(__name__)
-
-try:
-    p = Pusher(config=Config(
-        app_id=settings.PUSHER_APP_ID,
-        key=settings.PUSHER_KEY,
-        secret=settings.PUSHER_SECRET))
-
-    logger.debug(
-        'Created pusher with app_id {}, key {}, sending with channel {}'
-        ''.format(settings.PUSHER_APP_ID, settings.PUSHER_KEY,
-                  settings.PUSHER_CHANNEL))
-except Exception:
-    p = None
-    logger.exception('Could not configure Pusher')
 
 
 def random_key(length=64):
@@ -79,12 +65,13 @@ def get_all_connected(user=None):
 
 
 def send_all(message_type, message, user=None):
-    if p is None:
-        logger.info("Pusher not configured, not sending")
-        return
     data = JSONRenderer().render(message)
+    p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
+                      key=settings.PUSHER_KEY,
+                      secret=settings.PUSHER_SECRET)
+    # p.channel_type = pusher.GoogleAppEngineChannel
+    logger.info("Sending {}:{}".format(message_type, data))
     try:
-        logger.info("Sending {}:{}".format(message_type, data))
-        p.trigger([settings.PUSHER_CHANNEL], unicode(message_type), data)
-    except Exception as e:
-        logger.exception('Unable to send requests to push: {}'.format(str(e)))
+        p[settings.PUSHER_CHANNEL].trigger(message_type, data)
+    except Exception:
+        logger.warning('Unable to send requests to push')
