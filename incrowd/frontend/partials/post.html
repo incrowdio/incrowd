@@ -13,7 +13,7 @@
             {{ post.title }}
             <span class="icon-link icomoon link"></span>
           </a>
-          <a ng-href="#/posts/{{ post.id }}">
+          <a ng-if="post.type != 'link'" ng-href="#/posts/{{ post.id }}">
             {{ post.title }}
           </a>
         </h2>
