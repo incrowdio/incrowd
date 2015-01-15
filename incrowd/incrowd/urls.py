@@ -11,7 +11,7 @@ from website.api import PostList, PostDetail, PostCommentList, CategoryList, \
     CommentDetail, CategoryTopAPI
 from poll.api import SubmissionList, PollDetail, PollList, \
     VoteDetail, VoteList, SubmissionDetail
-from chat_server.api import ChatMessageList
+from chat_server.api import ChatMessageList, ChatMessageDetail
 from push.views import pusher_auth
 
 admin.autodiscover()
@@ -104,6 +104,9 @@ v1_chat_urls = patterns(
     url(r'^chat/messages/$',
         ChatMessageList.as_view(),
         name='chat-messages'),
+    url(r'^chat/messages/(?P<pk>\d+)/$',
+        ChatMessageDetail.as_view(),
+        name='chat-detail'),
 )
 
 v1_vote_urls = patterns(

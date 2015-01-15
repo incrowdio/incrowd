@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 class ChatMessageList(generics.ListCreateAPIView):
     model = ChatMessage
     serializer_class = ChatMessageSerializer
-    queryset = ChatMessage.objects.all()
 
     paginate_by = 50
     paginate_by_param = 'messages'
@@ -19,3 +18,8 @@ class ChatMessageList(generics.ListCreateAPIView):
     def pre_save(self, obj):
         obj.user = self.request.user
         super(ChatMessageList, self).pre_save(obj)
+
+
+class ChatMessageDetail(generics.RetrieveUpdateDestroyAPIView):
+    model = ChatMessage
+    serializer_class = ChatMessageSerializer

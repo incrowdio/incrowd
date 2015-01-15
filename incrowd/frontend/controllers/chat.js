@@ -2,6 +2,7 @@ angular.module('chat', [])
   .controller('ChatCtrl', function ($scope, $rootScope, $timeout, $http, $location, Chat, BACKEND_SERVER) {
     Chat.messages_ready.then(function (messages) {
       $scope.messages = Chat.messages;
+      console.log('chat', $scope.messages)
       $timeout(function () {
         var message_div = $('#sidebar_chat_container');
         console.log('scrolling on load', message_div);
@@ -50,6 +51,14 @@ angular.module('chat', [])
       else {
         return previous_message.chat_class
       }
+    };
+
+    $scope.delete_message = function (index) {
+      var message = $scope.messages[index];
+      $http.delete(BACKEND_SERVER + 'chat/messages/' + message.id + '\/').success(function () {
+        // Delete post
+        $scope.messages.splice(index, 1);
+      })
     };
 
     $rootScope.$on('chat', function () {

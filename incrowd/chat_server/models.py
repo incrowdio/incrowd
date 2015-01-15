@@ -63,8 +63,8 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChatMessage
-        fields = ('message', 'sent', 'user', 'username', 'attachment_type',
-                  'attachment_url')
+        fields = ('id', 'message', 'sent', 'user', 'username',
+                  'attachment_type', 'attachment_url')
 
     def get_username(self, obj):
         return obj.user.username
