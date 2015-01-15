@@ -22,7 +22,7 @@ def ping_filter(message, users, sending_user, notify_text, notify_type,
                 link=notify_url)
             note.save()
             logger.info("Created notification for user {} from {}"
-                        .format(note))
+                        .format(note.user, note.from_user))
     return message
 
 
