@@ -44,3 +44,12 @@ class Imgur(ContentType):
 class Link(ContentType):
     def detect(self, url, content_type):
         return 'link'
+
+
+class GifV(ContentType):
+    def detect(self, url, content_type):
+        url_data = urlparse.urlparse(url)
+        if ((url_data.netloc == 'imgur.com' or
+                url_data.netloc == 'i.imgur.com')
+                and url[-5:] == '.gifv'):
+            return 'gifv'

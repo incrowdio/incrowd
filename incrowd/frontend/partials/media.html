@@ -11,4 +11,11 @@
       <img ng-show="post.nsfw_show || !post.nsfw" ng-src="{{ post.url }}">
     </a>
   </div>
+  <div ng-switch-when="gifv" class="flex-video">
+    <div class="nsfw_show" ng-click="toggleNSFW(post)" ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
+      <p>Click</p><p>to show</p>
+    </div>
+      <iframe style="overflow:hidden;" width="420px" height="315px" frameborder="0" allowfullscreen
+              ng-show="nsfw_show || !nsfw" allowfullscreen="" frameborder="0" scrolling="no" ng-src="{{ trustSrc('' + post.url + '#embed') }}"></iframe>
+  </div>
 </div>

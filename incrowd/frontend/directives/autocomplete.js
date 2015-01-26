@@ -52,10 +52,10 @@ angular.module('autocomplete', [] )
 
             isNewSearchNeeded = function(newTerm, oldTerm) {
                 return newTerm.length >= $scope.minLength && newTerm != oldTerm
-            }
+            };
 
             $scope.processResults = function(responseData, str) {
-                console.log('PROCESS')
+                console.log('PROCESS');
                 if (responseData && responseData.length > 0) {
                     $scope.results = [];
 
@@ -99,7 +99,7 @@ angular.module('autocomplete', [] )
                             description: description,
                             image: image,
                             originalObject: responseData[i]
-                        }
+                        };
 
                         $scope.results[$scope.results.length] = resultRow;
                     }
@@ -109,11 +109,11 @@ angular.module('autocomplete', [] )
                 } else {
                     $scope.results = [];
                 }
-            }
+            };
 
             $scope.searchTimerComplete = function(str) {
                 // Begin the search
-                console.log('BEGINGING SEARCH')
+                console.log('BEGINGING SEARCH');
                 if (str.length >= $scope.minLength) {
                     if ($scope.localData) {
                         var searchFields = $scope.searchFields.split(",");
@@ -136,7 +136,7 @@ angular.module('autocomplete', [] )
                         $scope.processResults(matches, str);
 
                     } else {
-                        console.log('calling out')
+                        console.log('calling out');
                         $http.get(BACKEND_SERVER + 'categories/?search=' + str, {}).
                             success(function(responseData, status, headers, config) {
                                 $scope.searching = false;
@@ -147,7 +147,7 @@ angular.module('autocomplete', [] )
                             });
                     }
                 }
-            }
+            };
 
             $scope.hideResults = function() {
                 $scope.hideTimer = $timeout(function() {
@@ -158,23 +158,23 @@ angular.module('autocomplete', [] )
             $scope.resetHideResults = function() {
                 if($scope.hideTimer) {
                     $timeout.cancel($scope.hideTimer);
-                };
+                }
             };
 
             $scope.hoverRow = function(index) {
                 $scope.currentIndex = index;
-            }
+            };
 
             $scope.keyPressed = function(event) {
-                console.log('KEYPRESS')
+                console.log('KEYPRESS');
                 if (!(event.which == 38 || event.which == 40 || event.which == 13)) {
                     if (!$scope.searchStr || $scope.searchStr == "") {
-                        console.log('empty search')
+                        console.log('empty search');
                         $scope.showDropdown = false;
                         $scope.lastSearchTerm = null
                     } else if (isNewSearchNeeded($scope.searchStr, $scope.lastSearchTerm)) {
-                        console.log('new search needed')
-                        $scope.lastSearchTerm = $scope.searchStr
+                        console.log('new search needed');
+                        $scope.lastSearchTerm = $scope.searchStr;
                         $scope.showDropdown = true;
                         $scope.currentIndex = -1;
                         $scope.results = [];
@@ -184,7 +184,7 @@ angular.module('autocomplete', [] )
                         }
 
                         $scope.searching = true;
-                        console.log('searching = true')
+                        console.log('searching = true');
 
                         $scope.searchTimer = $timeout(function() {
                             $scope.searchTimerComplete($scope.searchStr);
@@ -193,7 +193,7 @@ angular.module('autocomplete', [] )
                 } else {
                     event.preventDefault();
                 }
-            }
+            };
 
             $scope.selectResult = function(result) {
                 if ($scope.matchClass) {
@@ -204,7 +204,7 @@ angular.module('autocomplete', [] )
                 $scope.showDropdown = false;
                 $scope.results = [];
                 //$scope.$apply();
-            }
+            };
 
             var inputField = elem.find('input');
 

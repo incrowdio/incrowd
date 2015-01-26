@@ -68,7 +68,7 @@ angular.module('notify', [])
 
     // Listen to Channel updates for notifications
     $rootScope.$on('notify', function (event, message) {
-      console.log('new notification', message)
+      console.log('new notification', message);
       if (message.user == User.me.id) {
         Notifications.notifications.push(message);
         $rootScope.$apply();
@@ -76,4 +76,4 @@ angular.module('notify', [])
     });
 
     return Notifications
-  })
+  });

@@ -20,7 +20,8 @@ from website import utils
 logger = logging.getLogger(__name__)
 
 POST_TYPES = (('link', 'link'), ('image', 'image'),
-              ('video', 'video'), ('youtube', 'youtube'), ('text', 'text'))
+              ('video', 'video'), ('youtube', 'youtube'), ('text', 'text'),
+              ('gifv', 'gifv'))
 
 EMAIL_PREFERENCES = (('no', 'None'), ('posts', 'New Posts Only'),
                      ('all', 'Posts and Comments'))
@@ -76,7 +77,11 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         new = self.id is None
 
+        if 'imgur.com' in self.url:
+            self.url = utils.imgur_preprocessor(self.url)
+
         self.type = utils.detect_post_type(self.url)
+        logger.info('Post is of type: {}'.format(self.type))
 
         super(Post, self).save(*args, **kwargs)
 
@@ -93,7 +98,7 @@ class Post(models.Model):
             post_type = 'video'
         elif self.type == 'text':
             post_type = 'text post'
-        elif self.type in ['imgur', 'image']:
+        elif self.type in ['imgur', 'image', 'gifv']:
             post_type = 'image'
         elif self.type == 'link':
             post_type = 'link'

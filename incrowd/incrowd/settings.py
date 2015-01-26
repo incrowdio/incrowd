@@ -210,11 +210,17 @@ PUSHER_PRESENCE = ''
 # Mime Types
 MIME_IMAGES = [
     'image/gif',
+    'image/gifv',
     'image/jpeg',
     'image/pjpeg',
     'image/png',
     'image/svg+xml',
-    'image/example'
+    'image/example',
+]
+
+MIME_GIFV = [
+    # NOTE(pcsforeducation) imgur gifv :/
+    'text/html'
 ]
 
 MIME_AUDIO = [

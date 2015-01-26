@@ -59,3 +59,4 @@ frontend/bower_components
 frontend/.tmp
 cliques/production_settings.py
 config/
+app/

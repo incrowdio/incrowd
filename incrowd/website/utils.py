@@ -2,6 +2,7 @@ import importlib
 import json
 import logging
 import re
+import urlparse
 
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
@@ -21,6 +22,9 @@ content_types = {
     ],
     'link': [
         'website.content_types.Link'
+    ],
+    'gifv': [
+        'website.content_types.GifV'
     ]
 }
 
@@ -45,6 +49,22 @@ def find_urls(text):
                       '(?:%[0-9a-fA-F][0-9a-fA-F]))+', text)
 
 
+def imgur_preprocessor(url):
+    url_data = urlparse.urlparse(url)
+
+    logger.info('imgurl preprocessor')
+    logger.info((url_data.netloc == 'imgur.com' or
+                 url_data.netloc == 'i.imgur.com'))
+    logger.info(url[-4:] == '.gif')
+
+    if ((url_data.netloc == 'imgur.com' or
+                 url_data.netloc == 'i.imgur.com') and url[-4:] == '.gif'):
+        # Switch to gifv
+        url += 'v'
+        logger.info('new url {}'.format(url))
+    return url
+
+
 def detect_link_type(url):
     """Given a link, get the HEAD and match to known types"""
     logger.info("Detecting content type of {}".format(url))
@@ -60,7 +80,11 @@ def detect_link_type(url):
         return 'link'
 
     # Find list of content detectors based on mime
-    if content_type in settings.MIME_IMAGES:
+    if ('text/html' in content_type and
+                'imgur.com' in url and
+                url[-5:] == '.gifv'):
+        key = 'gifv'
+    elif content_type in settings.MIME_IMAGES:
         key = 'image'
     elif content_type in settings.MIME_VIDEO or 'youtube.com' in url:
         key = 'video'
@@ -72,6 +96,7 @@ def detect_link_type(url):
 
     # Go through content detectors in order, returning if any matches
     for content_type in content_types[key]:
+        logger.info('testing with')
         cls = get_class_from_string(content_type)()
         detected_type = cls.detect(url, content_type)
         if detected_type:
@@ -111,7 +136,7 @@ def render_to_json(request, data):
     # count = 0
     # for message in messages_list:
     # msgs[count] = {'message': message.message, 'level': message.level}
-    #     count += 1
+    # count += 1
     # data['messages'] = msgs
     return HttpResponse(
         json.dumps(data, ensure_ascii=False, cls=DjangoJSONEncoder),

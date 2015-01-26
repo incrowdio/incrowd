@@ -6,7 +6,7 @@ angular.module('auth', [])
     };
     $scope.login = function (credentials) {
       Auth.setCredentials($rootScope, BACKEND_SERVER, credentials);
-      console.log('credentials set', $rootScope.loggedIn)
+      console.log('credentials set', $rootScope.loggedIn);
       //$window.location.href = $window.location.href.replace('/#/login', '/#/posts');
       //$window.location.reload();
     };
@@ -208,4 +208,4 @@ angular.module('auth', [])
       token = null;
     };
     return this;
-  })
+  });

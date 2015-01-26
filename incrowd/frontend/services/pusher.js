@@ -38,4 +38,4 @@ angular.module('pusher_service', [])
     console.log('channel members', Notifications.presence.members);
 
     return Notifications;
-  })
+  });

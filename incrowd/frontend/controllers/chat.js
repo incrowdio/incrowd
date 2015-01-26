@@ -2,7 +2,7 @@ angular.module('chat', [])
   .controller('ChatCtrl', function ($scope, $rootScope, $timeout, $http, $location, Chat, BACKEND_SERVER) {
     Chat.messages_ready.then(function (messages) {
       $scope.messages = Chat.messages;
-      console.log('chat', $scope.messages)
+      console.log('chat', $scope.messages);
       $timeout(function () {
         var message_div = $('#sidebar_chat_container');
         console.log('scrolling on load', message_div);

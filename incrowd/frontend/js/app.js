@@ -117,7 +117,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
   .config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
       'self',
-      'http://**.youtube.com/**'
+      'http://**.youtube.com/**',
+      'http://i.imgur.com/**'
     ]);
   })
 

@@ -50,7 +50,7 @@ angular.module('post_controllers', [])
           }
         })
         .then(function (res) {
-          console.log('add pages', post_page, res)
+          console.log('add pages', post_page, res);
           res.data.results.forEach(function (result) {
             result.youtube = youtube_url_to_id(result.url);
             if (result.youtube) {
@@ -212,6 +212,18 @@ angular.module('post_controllers', [])
       },
       replace: true,
       templateUrl: 'partials/image.html'
+    }
+  })
+
+  .directive('gifv', function () {
+    return {
+      restrict: 'EA',
+      scope: {
+        url: '=url',
+        nsfw: '='
+      },
+      replace: true,
+      templateUrl: 'partials/gifv.html'
     }
   })
 
@@ -530,4 +542,4 @@ function NewPostCtrl($scope, $rootScope, $http, $location, $mdDialog, BACKEND_SE
     });
   };
 
-};
+}
