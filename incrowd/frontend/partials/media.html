@@ -1,21 +1,31 @@
 <div ng-switch="post.type" class="embed">
   <div ng-switch-when="youtube" class="flex-video">
     <iframe style="overflow:hidden;" width="420px" height="315px"
-            ng-src="{{ trustSrc('https://youtube.com/embed/' + post.youtube + '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3') }}" frameborder="0" allowfullscreen></iframe>
+            ng-src="{{ trustSrc('https://youtube.com/embed/' + post.youtube + '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3') }}"
+            frameborder="0" allowfullscreen></iframe>
   </div>
   <div ng-switch-when="image">
-    <div class="nsfw_show" ng-click="toggleNSFW(post)" ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
-      <p>Click</p><p>to show</p>
+    <div class="nsfw_show" ng-click="toggleNSFW(post)"
+         ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
+      <p>Click</p>
+
+      <p>to show</p>
     </div>
     <a href="#/posts/{{ post.id }}">
       <img ng-show="post.nsfw_show || !post.nsfw" ng-src="{{ post.url }}">
     </a>
   </div>
   <div ng-switch-when="gifv" class="flex-video">
-    <div class="nsfw_show" ng-click="toggleNSFW(post)" ng-hide="post.nsfw_show || !post.nsfw" src="/img/nsfw.jpg">
-      <p>Click</p><p>to show</p>
+    <div class="nsfw_show" ng-click="toggleNSFW(post)"
+         ng-if="!post.nsfw_show && post.nsfw" src="/img/nsfw.jpg">
+      <p>Click</p>
+
+      <p>to show</p>
     </div>
-      <iframe style="overflow:hidden;" width="420px" height="315px" frameborder="0" allowfullscreen
-              ng-show="nsfw_show || !nsfw" allowfullscreen="" frameborder="0" scrolling="no" ng-src="{{ trustSrc('' + post.url + '#embed') }}"></iframe>
+    <iframe ng-if="post.nsfw_show || !post.nsfw"
+            style="overflow:hidden;" width="420px"
+            height="315px"
+            allowfullscreen="" frameborder="0" scrolling="no"
+            ng-src="{{ trustSrc('' + post.url + '#embed') }}"></iframe>
   </div>
 </div>
