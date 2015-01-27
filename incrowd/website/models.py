@@ -125,7 +125,7 @@ class Post(models.Model):
 
         http://www.slashertraxx.com/#/posts/{id}
 
-        To unsubscribe, go to http://slashertraxx.com/users/
+        To unsubscribe, go to http://slashertraxx.com/#/users
         '''.format(**{
             'username': self.user.username,
             'post_type': post_type,
@@ -284,7 +284,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'username', 'profile_pic', 'email', 'first_name',
             'last_name', 'poll_votes', 'user_votes', 'last_updated',
-            'location', 'tagline'
+            'location', 'tagline', 'email_settings'
         )
 
     def get_user_votes(self, obj):

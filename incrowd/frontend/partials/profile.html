@@ -4,8 +4,8 @@
       <div class="md-toolbar-tools title_container">
         <h2 class="username">{{ profile.username }}</h2>
         <h6 class="user_fullname"
-            ng-if="profile.first_name || profile.last_name">({{
-          profile.first_name }} {{ profile.last_name }})</h6>
+            ng-if="profile.first_name || profile.last_name">
+          ({{ profile.first_name }} {{ profile.last_name }})</h6>
 
       </div>
 
@@ -31,6 +31,13 @@
       <span editable-url="profile.profile_pic" e-name="pic"
             e-placeholder="Profile Pic URL">{{ profile.profile_pic }}</span>
     </div>
+    <h5 ng-if="profileForm.$visible">Email Notifications
+      <select editable-select="profile.email_settings"
+              e-ng-options="s.value as s.text for s in statuses"
+              >
+        {{ showStatus(user) }}
+      </select>
+    </h5>
     <div class="edit">
       <!-- button to show form -->
       <md-button class="md-raised md-primary"
@@ -54,5 +61,6 @@
             </md-button>
         </span>
     </div>
+
   </form>
 </md-card>
