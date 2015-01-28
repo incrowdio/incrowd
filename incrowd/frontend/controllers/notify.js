@@ -1,5 +1,5 @@
 angular.module('notify', [])
-  .controller('NotificationCtrl', function ($scope, $rootScope, $http, $location, Notification, BACKEND_SERVER) {
+  .controller('NotificationCtrl', function ($scope, $rootScope, $http, $location, Notification) {
     $scope.notifications = [];
     $scope.notifications = Notification.notifications;
     $scope.remove_all = function () {
@@ -13,7 +13,25 @@ angular.module('notify', [])
     Notification.clear_for_url($location.url());
 
   })
-  .factory('Notification', function ($http, $rootScope, $timeout, $location, User, BACKEND_SERVER) {
+  .factory('favicoService', [
+    function () {
+      var favico = new Favico({
+        animation: 'pop'
+      });
+
+      var badge = function (num) {
+        favico.badge(num);
+      };
+      var reset = function () {
+        favico.reset();
+      };
+
+      return {
+        badge: badge,
+        reset: reset
+      };
+    }])
+  .factory('Notification', function ($http, $rootScope, $timeout, $location, User, BACKEND_SERVER, favicoService) {
     var Notifications = {};
     Notifications.notifications = [];
 
@@ -23,6 +41,7 @@ angular.module('notify', [])
         $http.delete(BACKEND_SERVER + 'notifications/' + item.id + '\/');
       }
       Notifications.notifications.splice(0, Notifications.notifications.length + 1);
+      Notifications.update_favicon();
     };
 
     Notifications.remove_notification = function (item) {
@@ -31,6 +50,7 @@ angular.module('notify', [])
           for (var i = 0; i < Notifications.notifications.length; i++) {
             if (Notifications.notifications[i].id == item.id) {
               Notifications.notifications.splice(i, 1);
+              Notifications.update_favicon();
               break;
             }
           }
@@ -53,6 +73,15 @@ angular.module('notify', [])
       });
     };
 
+    Notifications.update_favicon = function () {
+      if (Notifications.notifications.length == 0) {
+        favicoService.reset();
+      }
+      else {
+        favicoService.badge(Notifications.notifications.length);
+      }
+    };
+
     // Get the first page of results
     $http.get(BACKEND_SERVER + 'notifications\/').success(function (results) {
       results.results.forEach(function (n) {
@@ -64,6 +93,7 @@ angular.module('notify', [])
           Notifications.notifications.push(n);
         }
       });
+      Notifications.update_favicon();
     });
 
     // Listen to Channel updates for notifications
@@ -71,9 +101,12 @@ angular.module('notify', [])
       console.log('new notification', message);
       if (message.user == User.me.id) {
         Notifications.notifications.push(message);
+        Notifications.update_favicon();
         $rootScope.$apply();
       }
     });
+
+    Notifications.update_favicon();
 
     return Notifications
   });
