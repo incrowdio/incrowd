@@ -124,8 +124,8 @@ case "$1" in
         ;;
     restart)
         log_daemon_msg "Restarting $NAME"
-        do_stop
         if [ "$PULL_ON_STARTUP" = true ]; then do_pull; fi
+        do_stop
         if [ "$DB_SYNC_ON_STARTUP" = true ]; then do_sync; fi
         do_start
         ;;
