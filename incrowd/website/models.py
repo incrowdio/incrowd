@@ -77,7 +77,7 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         new = self.id is None
 
-        if 'imgur.com' in self.url:
+        if self.url and 'imgur.com' in self.url:
             self.url = utils.imgur_preprocessor(self.url)
 
         self.type = utils.detect_post_type(self.url)
