@@ -110,6 +110,11 @@ module.exports = function (grunt) {
             },
             {
               expand: true,
+              src: ['favicon.ico'],
+              dest: 'build/'
+            },
+            {
+              expand: true,
               src: ['config.xml'],
               dest: 'build/'
             },
