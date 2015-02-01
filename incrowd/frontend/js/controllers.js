@@ -52,11 +52,6 @@ angular.module('post_controllers', [])
         .then(function (res) {
           console.log('add pages', post_page, res);
           res.data.results.forEach(function (result) {
-            result.youtube = youtube_url_to_id(result.url);
-            if (result.youtube) {
-              console.log('youtube', result.youtube);
-            }
-            result.nsfw_show = false;
             $scope.posts.push(result);
           });
           console.log('posts', $scope.posts);
@@ -77,6 +72,16 @@ angular.module('post_controllers', [])
 
     $scope.toggleNSFW = function (post) {
       post.nsfw_show = !post.nsfw_show;
+    };
+
+    $scope.youtubeURL = function (url) {
+      console.log('trusting ' + url);
+      var base = 'https://youtube.com/embed/';
+      var options = '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3';
+      var code = youtube_url_to_id(url);
+      var youtube_url = base + code + options;
+      console.log('final url ' + youtube_url)
+      return $sce.trustAsResourceUrl(youtube_url);
     };
 
     $scope.trustSrc = function (src) {
@@ -465,6 +470,7 @@ function removeChatIfAlreadyExists(chat, array) {
 }
 
 function youtube_url_to_id(url) {
+  console.log('converting ' + url + ' to youtube id');
   if (!url) {
     return;
   }
@@ -476,6 +482,7 @@ function youtube_url_to_id(url) {
   if (ampersandPosition != -1) {
     vid = vid.substring(0, ampersandPosition);
   }
+  console.log('converted ' + url + ' to ' + vid);
   return vid
 }
 
