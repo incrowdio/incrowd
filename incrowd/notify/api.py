@@ -1,5 +1,8 @@
-from notify.models import Notification, NotificationSerializer
+from __future__ import unicode_literals
+
 from rest_framework import viewsets
+
+from notify.models import Notification, NotificationSerializer
 
 
 class NotificationViewSet(viewsets.ModelViewSet):

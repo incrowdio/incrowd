@@ -1,7 +1,8 @@
+from __future__ import unicode_literals
 import logging
+
 from django.db.models import Count
 from rest_framework import renderers
-
 from rest_framework import generics, status
 from rest_framework.decorators import api_view, permission_classes, \
     authentication_classes

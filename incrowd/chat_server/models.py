@@ -1,12 +1,13 @@
+from __future__ import unicode_literals
 import logging
 import random
 
 from django.db import models
 from django.conf import settings
+from rest_framework import serializers
 
 from notify import utils as notify_utils
 from notify.models import send_all
-from rest_framework import serializers
 from website.models import UserProfile
 from website import utils as web_utils
 

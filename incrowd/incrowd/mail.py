@@ -1,8 +1,10 @@
-from email.MIMEBase import MIMEBase
+from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
 from django.core.mail import EmailMultiAlternatives
+
+from email.MIMEBase import MIMEBase
 from google.appengine.api import mail as aeemail
 from google.appengine.runtime import apiproxy_errors
 

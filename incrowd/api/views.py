@@ -1,11 +1,15 @@
+from __future__ import unicode_literals
 import logging
+
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, authentication_classes, \
     permission_classes
 from rest_framework.permissions import AllowAny
+
 from website.models import UserProfile
 from website.utils import render_to_json
+
 
 logger = logging.getLogger(__name__)
 

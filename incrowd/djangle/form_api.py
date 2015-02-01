@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 
 class FormAPI(object):
     def __init__(self):

@@ -1,7 +1,7 @@
+from __future__ import unicode_literals
 import json
 
 from django.http import HttpResponse
-from django.utils import functional
 
 from djangle import form_api
 

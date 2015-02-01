@@ -1,12 +1,16 @@
+from __future__ import unicode_literals
+import logging
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseNotFound, HttpResponse, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from website.models import Post, UserProfile
 from django.conf import settings
 from django.utils.importlib import import_module
-import logging
+
+from website.models import Post, UserProfile
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,10 +1,13 @@
-from api.views import get_token, get_cookie
+from __future__ import unicode_literals
+
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.contrib import admin
+
+from api.views import get_token, get_cookie
 from notify.api import NotificationViewSet
 from push.api import PushSessionList
 from website.views import presence
-from django.contrib import admin
 from invite_only.api import InviteCodeView, InviteCodeDetail
 from website.api import PostList, PostDetail, PostCommentList, CategoryList, \
     CategoryDetail, UserList, UserDetail, CommentList, \
@@ -13,6 +16,7 @@ from poll.api import SubmissionList, PollDetail, PollList, \
     VoteDetail, VoteList, SubmissionDetail
 from chat_server.api import ChatMessageList, ChatMessageDetail
 from push.views import pusher_auth
+
 
 admin.autodiscover()
 

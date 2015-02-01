@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import json
 import logging
 
@@ -7,9 +8,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
-import pusher
 
+import pusher
 from website.models import UserSerializer
+
 
 logger = logging.getLogger()
 

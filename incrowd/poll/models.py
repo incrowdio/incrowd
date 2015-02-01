@@ -1,8 +1,12 @@
+from __future__ import unicode_literals
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django import forms
 from rest_framework import serializers
+
 from website import utils
+
 
 FREQUENCY_CHOICES = (('daily', 'daily'), ('once', 'once'))
 

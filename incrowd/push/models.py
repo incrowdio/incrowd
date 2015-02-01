@@ -1,11 +1,11 @@
+from __future__ import unicode_literals
 import datetime
-import json
 import logging
 import random
 
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.conf import settings
+
 # from google.appengine.api import channel
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers

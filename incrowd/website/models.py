@@ -1,18 +1,18 @@
+from __future__ import unicode_literals
 import logging
 import urlparse
 
-from djangle import form_api
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.db import models
 from django import forms
+from rest_framework import serializers
 
+from djangle import form_api
 from notify.models import notify_users
 from notify import utils as notify_utils
 from poll.models import VoteSerializer
 from push.models import send_all
-from rest_framework import serializers
 from website.content_types import YouTube
 from website import utils
 

@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from rest_framework import generics
 
 from poll.models import Poll, Submission, Vote, PollSerializer, \

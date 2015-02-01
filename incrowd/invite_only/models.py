@@ -1,10 +1,13 @@
+from __future__ import unicode_literals
+import random
+from urllib import urlencode
+import logging
+
 from django.core.mail import send_mail
 from django.db import models
 from django import forms
-import random
 from django.conf import settings
-from urllib import urlencode
-import logging
+
 
 logger = logging.getLogger(__name__)
 

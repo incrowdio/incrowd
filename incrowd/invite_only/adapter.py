@@ -1,6 +1,10 @@
-from allauth.account.adapter import DefaultAccountAdapter
-from invite_only.models import InviteCode
+from __future__ import unicode_literals
 import logging
+
+from allauth.account.adapter import DefaultAccountAdapter
+
+from invite_only.models import InviteCode
+
 
 logger = logging.getLogger(__name__)
 

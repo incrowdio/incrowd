@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import importlib
 import json
 import logging
@@ -7,7 +8,9 @@ import urlparse
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
+
 import urllib3
+
 
 logger = logging.getLogger(__name__)
 
