@@ -12,6 +12,7 @@ angular.module('auth', [])
     };
     $scope.logout = function () {
       Auth.clearCredentials();
+      $state.go('login');
     };
     $scope.loggedIn = $rootScope.loggedIn;
     if ($scope.loggedIn === true) {
