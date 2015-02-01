@@ -23,7 +23,7 @@ var app = angular.module('incrowd', [
 
 app.config(function ($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise('/posts');
+  $urlRouterProvider.otherwise('/login');
 
   $stateProvider
     .state('posts', {
@@ -296,8 +296,14 @@ app.run(function ($rootScope, $http, $location, $state) {
     // now, redirect only not authenticated and on auth required states
     var no_auth_states = ['login', 'signup'];
     if ($rootScope.loggedIn !== true && no_auth_states.indexOf(toState) == -1) {
-      e.preventDefault(); // stop current execution
+      // user is not authenticated. stow the state they wanted before you
+      // send them to the signin state, so you can return them when you're done
+      $rootScope.returnToState = $rootScope.toState;
+      $rootScope.returnToStateParams = $rootScope.toStateParams;
+
+      // now, send them to the signin state so they can log in
       $state.go('login'); // go to login
+      e.preventDefault();
     }
   });
 });

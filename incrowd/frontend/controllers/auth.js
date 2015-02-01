@@ -1,5 +1,5 @@
 angular.module('auth', [])
-  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, httpInterceptor, authorization, api, AuthService, Auth, BACKEND_SERVER) {
+  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, httpInterceptor, api, Auth, BACKEND_SERVER) {
     $scope.credentials = {
       username: '',
       password: ''
@@ -12,20 +12,28 @@ angular.module('auth', [])
     };
     $scope.logout = function () {
       Auth.clearCredentials();
-      $location.path('/login').replace();
     };
     $scope.loggedIn = $rootScope.loggedIn;
+    if ($scope.loggedIn === true) {
+      $state.go('posts');
+    }
   })
 
   .factory('httpInterceptor', function httpInterceptor($q, $window, $location, $state) {
     return function (promise) {
-//      console.log('http intercepted');
       var success = function (response) {
         return response;
       };
 
       var error = function (response) {
         if (response.status === 401) {
+          // user is not authenticated. stow the state they wanted before you
+          // send them to the signin state, so you can return them when you're done
+          $rootScope.returnToState = $rootScope.toState;
+          $rootScope.returnToStateParams = $rootScope.toStateParams;
+
+          // now, send them to the signin state so they can log in
+          $state.go('signin');
           $state.go('login');
         }
 
@@ -36,37 +44,20 @@ angular.module('auth', [])
     };
   })
 
-  .factory('authorization', function ($http) {
-    var url = 'http://127.0.0.1:8080';
-
-    return {
-      login: function (credentials) {
-        return $http.post(url + '/api/token\/', credentials);
-      }
-    };
-  })
+  //.factory('authorization', function ($http) {
+  //  var url = 'http://127.0.0.1:8080';
+  //
+  //  return {
+  //    login: function (credentials) {
+  //      return $http.post(url + '/api/token\/', credentials);
+  //    }
+  //  };
+  //})
 
   .factory('api', function ($http, $cookies) {
     return {
       init: function (token) {
         $http.defaults.headers.common['X-Access-Token'] = token || $cookies.token;
-      }
-    };
-  })
-
-  .factory('AuthService', function ($http, $cookies, Session) {
-    return {
-      login: function (credentials) {
-        // Get the CSRF token :(
-        return $http.get('http://127.0.0.1:8080/api/cookie\/').then(
-          $http
-            .post('http://127.0.0.1:8080/auth/login\/', credentials)
-            .then(function (res) {
-              Session.create(res.id, res.username, res.token);
-            }));
-      },
-      isAuthenticated: function () {
-        return !!Session.userId;
       }
     };
   })
