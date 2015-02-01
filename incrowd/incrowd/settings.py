@@ -37,7 +37,6 @@ SECRET_KEY = '4wd(bfk2m5qj2k0p7(w6)(q$+o040_+_9y$z^_h%ua^(=v2lb2'
 DEBUG = True
 DEBUG_TOOLBAR = False
 
-
 TEMPLATE_DEBUG = True
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -92,13 +91,13 @@ MIDDLEWARE_CLASSES = (
 CORS_ORIGIN_ALLOW_ALL = True
 
 # if ENV in ['localprod', 'local', 'codeship', 'travis']:
-#     INSTALLED_APPS += [
-        # 'debug_toolbar',
-        # 'appengine_toolkit'
-    # ]
-    # DEBUG_TOOLBAR_PATCH_SETTINGS = False
-    # MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.'
-    # 'DebugToolbarMiddleware',)
+# INSTALLED_APPS += [
+# 'debug_toolbar',
+# 'appengine_toolkit'
+# ]
+# DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.'
+# 'DebugToolbarMiddleware',)
 
 ROOT_URLCONF = 'incrowd.urls'
 
@@ -291,6 +290,6 @@ LOGGING = {
 }
 
 try:
-    from config.production_settings import *
+    from config.production_settings import *  # NOQA
 except Exception:
     pass

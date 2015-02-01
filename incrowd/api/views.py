@@ -30,4 +30,3 @@ def get_token(request):
 def get_cookie(request):
     # A way for Angular to get the CSRF cookie
     return render_to_json(request, {'user_id': request.user.id})
-
