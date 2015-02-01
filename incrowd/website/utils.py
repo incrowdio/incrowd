@@ -99,7 +99,6 @@ def detect_link_type(url):
 
     # Go through content detectors in order, returning if any matches
     for content_type in content_types[key]:
-        logger.info('testing with')
         cls = get_class_from_string(content_type)()
         detected_type = cls.detect(url, content_type)
         if detected_type:
