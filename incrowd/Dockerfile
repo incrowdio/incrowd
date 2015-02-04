@@ -56,6 +56,7 @@ ADD dev_requirements.txt /home/docker/code/dev_requirements.txt
 ADD requirements.txt /home/docker/code/requirements.txt
 
 # run pip install
+RUN pip install -r /home/docker/code/requirements.txt
 RUN pip install -r /home/docker/code/dev_requirements.txt
 
 EXPOSE 8000

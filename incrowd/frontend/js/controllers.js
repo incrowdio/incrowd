@@ -300,27 +300,43 @@ angular.module('post_controllers', [])
     }
   })
 
-
-  .controller('InviteCtrl', function ($scope, $http, $location, $state, BACKEND_SERVER) {
-    var success_func = function (data, status, headers, config) {
-      $state.go('posts');
-      $scope.$apply();
-    };
-    var error_func = function (data, status, headers, config) {
-      $scope.status = status + ' ' + headers;
-    };
-    $scope.invite_submit = function () {
-      console.log('submitting invite request', $scope.formData);
-      $http({
+  .factory('InviteFactory', function ($http, $q, $rootScope, BACKEND_SERVER) {
+    var factory = {};
+    factory.create_invite = function (formData) {
+      var deferred = $q.defer();
+      // jQuery params don't handle empty form very well
+      if (!formData) {
+        formData = {};
+      }
+      return $http({
         url: BACKEND_SERVER + 'invites\/',
         method: "POST",
-        data: $.param($scope.formData),
+        data: $.param(formData),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
           'Authorization': 'Token ' + localStorage.getItem('token')
         }
-      }).success(success_func).error(error_func);
-    }
+      }).then(function (data, status, headers, config) {
+        console.log('scope invite', data.data);
+        deferred.resolve(data.data);
+      });
+
+    };
+    return factory;
+  })
+
+  .controller('InviteCtrl', function ($scope, InviteFactory) {
+    $scope.invite = {'invite_url': 'a'};
+    $scope.invite_submit = function () {
+      console.log('scope invite', $scope.invite);
+      console.log('submitting invite request', $scope.formData);
+      var create_invite = InviteFactory.create_invite($scope.formData);
+      create_invite.then(function(invite) {
+        console.log('callback invite', invite);
+        $scope.invite = invite;
+      })
+    };
+    $scope.invite = {'invite_url': 'b'};
   })
 
   .controller('TabCtrl', function ($scope, $location, $mdSidenav, $http, Config, BACKEND_SERVER, Notification) {

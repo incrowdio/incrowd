@@ -5,20 +5,22 @@
     </md-toolbar>
     <md-content class="md-padding">
       <md-subheader class="md-primary">
-        The only way people can join your group is by being invited.
+        <h3>The only way people can join your group is by being invited.</h3>
+        <h1>Invite: {{ invite }}</h1>
       </md-subheader>
 
       <form ng-submit="invite_submit()" ng-controller="InviteCtrl"
             class="md-padding">
-        <md-text-float label="Email" ng-model="formData.invited_email"
+        <md-text-float label="Email (Optional)" ng-model="formData.invited_email"
                        class="long" focus-me="focus_input" type="email">
         </md-text-float>
-        <md-text-float label="Name" ng-model="formData.invited_name"
+        <md-text-float label="Name (Optional)" ng-model="formData.invited_name"
                        class="long" focus-me="focus_input">
         </md-text-float>
         <md-button class="md-raised md-primary" type="submit"> Invite
         </md-button>
       </form>
     </md-content>
+
   </md-card>
 </div>
