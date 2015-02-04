@@ -187,6 +187,10 @@ md-dialog {
     margin-right: 20px;
 }
 
+.comment_form md-input-container {
+    padding-bottom: 0;
+}
+
 .comment_form textarea {
     width: 100%;
     margin-bottom: 15px;

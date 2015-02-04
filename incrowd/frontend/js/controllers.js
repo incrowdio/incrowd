@@ -74,13 +74,12 @@ angular.module('post_controllers', [])
       post.nsfw_show = !post.nsfw_show;
     };
 
+    // TODO(pcsforeudcation) refactor to directive
     $scope.youtubeURL = function (url) {
-      console.log('trusting ' + url);
       var base = 'https://youtube.com/embed/';
       var options = '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3';
       var code = youtube_url_to_id(url);
       var youtube_url = base + code + options;
-      console.log('final url ' + youtube_url)
       return $sce.trustAsResourceUrl(youtube_url);
     };
 
@@ -149,6 +148,15 @@ angular.module('post_controllers', [])
         });
 
       $scope.formData = "";
+    };
+
+    // TODO(pcsforeudcation) refactor to directive
+    $scope.youtubeURL = function (url) {
+      var base = 'https://youtube.com/embed/';
+      var options = '?autoplay=0&autohide=1&modestbranding=1&rel=0&showinfo=0&autohide=1&iv_load_policy=3';
+      var code = youtube_url_to_id(url);
+      var youtube_url = base + code + options;
+      return $sce.trustAsResourceUrl(youtube_url);
     };
 
     $scope.trustSrc = function (src) {
@@ -331,7 +339,7 @@ angular.module('post_controllers', [])
       console.log('scope invite', $scope.invite);
       console.log('submitting invite request', $scope.formData);
       var create_invite = InviteFactory.create_invite($scope.formData);
-      create_invite.then(function(invite) {
+      create_invite.then(function (invite) {
         console.log('callback invite', invite);
         $scope.invite = invite;
       })

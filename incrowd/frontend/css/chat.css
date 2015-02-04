@@ -118,8 +118,9 @@ chatinput {
     padding-right: 16px;
 }
 
-.chat_input md-input-group {
+.chat_input md-input-container {
     margin-top: 0;
+    padding-bottom: 8px;
 }
 
 .chat_fullscreen .connected_users {

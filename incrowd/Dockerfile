@@ -40,13 +40,13 @@ RUN apt-get update && \
         nginx-full \
         python \
         python-dev \
-        python-pip \
+        python-setuptools \
         sqlite3 \
-        supervisor
+        supervisor && \
+        sudo easy_install -U pip && \
+        pip install uwsgi
 
 RUN npm install -g bower grunt-cli
-
-RUN pip install uwsgi
 
 # Need symlink for bower to work with node
 RUN ln -s /usr/bin/nodejs /usr/bin/node

@@ -8,16 +8,11 @@
   <div layout="row">
     <div class="comment_form" flex="100">
       <form ng-submit="new_comment_submit()">
-        <div class="text_field">
-          <!--<md-input-group class="md-default-theme">-->
-            <!--<label for="">Add comment</label>-->
-            <!--<md-input ng-model="formData.text"-->
-                      <!--type="textarea" class="long multi-line"></md-input>-->
-          <!--</md-input-group>-->
-          <md-text-float label="Add comment" ng-model="formData.text"
-                         class="long multi-line"
-                         focus-me="focus_input"></md-text-float>
-        </div>
+        <md-input-container flex>
+          <label>Add comment</label>
+          <textarea ng-model="formData.text" columns="1" rows="1"
+                    focus-me="focus_input"></textarea>
+        </md-input-container>
         <md-button class="md-raised md-primary" type="submit">
           Comment
         </md-button>
