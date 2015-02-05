@@ -4,8 +4,8 @@
 .submission_entry .image {
     display: block;
     margin: auto;
-    max-height: 400px;
-    width: inherit;
+    height: 400px;
+    max-width: 100%;
 }
 
 .metadata .md-button {

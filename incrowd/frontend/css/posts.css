@@ -44,16 +44,16 @@
 }
 
 .post_list .post img {
-    max-height: 400px;
-    width: inherit;
+    height: 400px;
+    max-width: 100%;
 }
 
 .post img {
-    max-height: 600px;
+    height: 600px;
     display: block;
     margin: auto;
     margin-bottom: 15px;
-    width: inherit;
+    max-width: 100%;
 }
 
 .youtube,

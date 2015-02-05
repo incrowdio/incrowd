@@ -1,9 +1,9 @@
-inCrowd
+inCrowd 
 =======
 
 A private, invite-only social network focused on small groups.
 
-[![Build Status](https://travis-ci.org/pcsforeducation/cliques.svg?branch=master)](https://travis-ci.org/pcsforeducation/cliques)
+[![Build Status](https://api.shippable.com/projects/54d31f855ab6cc13528ae4fa/badge?branchName=master)](https://app.shippable.com/projects/54d31f855ab6cc13528ae4fa/builds/latest)
 ![Docker Status](http://dockeri.co/image/incrowd/incrowd)
 
 Deploying

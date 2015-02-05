@@ -1,0 +1,17 @@
+language: python
+
+python:
+  - 2.7
+
+build_image: shippableimages/ubuntu1404_python
+
+env:
+  - ENV=travis
+before_script:
+  - mysql -e 'create database incrowd;'
+install:
+  - apt-get -y -q update
+  - apt-get -y -q install libmysqlclient-dev libsqlite3-dev python-dev build-essential  mysql-client
+  - pip install -r incrowd/dev_requirements.txt --use-mirrors
+script:
+  - make test

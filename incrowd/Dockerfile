@@ -12,56 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ubuntu:trusty
 
-maintainer josh@servercobra.com
+from incrowdio/incrowd-docker-base
 
-ENV DJANGO_SETTINGS_MODULE incrowd.settings
-ENV DEBIAN_FRONTEND noninteractive
-ENV INITRD No
-ENV SETTINGS_MODE testing
-# TODO(pcsforeducation) make this dynamic
-ENV DOCKER_HOST_IP 172.17.42.1
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository -y ppa:nginx/stable && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        curl \
-        git-core \
-        libmysqlclient-dev \
-        libsqlite3-dev \
-        libxml2-dev \
-        make \
-        nano \
-        npm \
-        nginx-full \
-        python \
-        python-dev \
-        python-setuptools \
-        sqlite3 \
-        supervisor && \
-        sudo easy_install -U pip && \
-        pip install uwsgi
-
-RUN npm install -g bower grunt-cli
-
-# Need symlink for bower to work with node
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-
-# install our code
-ADD dev_requirements.txt /home/docker/code/dev_requirements.txt
-ADD requirements.txt /home/docker/code/requirements.txt
-
-# run pip install
-RUN pip install -r /home/docker/code/requirements.txt
-RUN pip install -r /home/docker/code/dev_requirements.txt
-
+SETTINGS_MODE "testing"
 EXPOSE 8000
-
-ENV INCROWD_PATH "/home/docker/code"
 
 VOLUME /home/docker/code
 WORKDIR /home/docker/code
