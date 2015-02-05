@@ -3,11 +3,16 @@
     <h2>New Submission</h2>
 
     <form ng-submit="new_submission_submit()">
-      <md-text-float label="Title" ng-model="submission.title"
-                     class="long" focus-me="focus_input"></md-text-float>
-
-      <md-text-float label="URL" ng-model="submission.url"
-                     class="long" focus-me="focus_input"></md-text-float>
+      <md-input-container>
+        <label>Title</label>
+        <input ng-model="submission.title"
+               class="long" focus-me="focus_input">
+      </md-input-container>
+      <md-input-container>
+        <label>URL</label>
+        <input label="URL" ng-model="submission.url"
+               class="long" focus-me="focus_input">
+      </md-input-container>
       <md-button class="md-raised md-primary" type="submit">
         Submit
       </md-button>
@@ -22,12 +27,13 @@
             {{ submission.title }}
           </h2>
         </div>
-        <div ng-if="submission.user == user.id" ng-click="delete_submission($index)">
+        <div ng-if="submission.user == user.id"
+             ng-click="delete_submission($index)">
           <span class="delete icon-cancel-circle icomoon"></span>
         </div>
       </div>
     </md-toolbar>
-    <div class="card_content">
+    <md-card-content>
       <div class="image">
         <img class="post_list image" ng-src="{{ submission.url }}">
       </div>
@@ -44,7 +50,7 @@
           Vote
         </md-button>
       </div>
-    </div>
+    </md-card-content>
 
   </md-card>
 </div>

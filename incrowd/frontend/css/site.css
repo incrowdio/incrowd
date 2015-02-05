@@ -188,3 +188,8 @@ md-content.md-padding.content {
     padding-top: 10px;
     font-size: 135%;
 }
+
+/*Override troublesome Material rule*/
+md-card > img {
+    width:inherit;
+}

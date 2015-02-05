@@ -5,7 +5,7 @@
     display: block;
     margin: auto;
     max-height: 400px;
-    max-width: 100%;
+    width: inherit;
 }
 
 .metadata .md-button {

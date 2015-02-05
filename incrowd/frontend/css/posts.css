@@ -45,6 +45,7 @@
 
 .post_list .post img {
     max-height: 400px;
+    width: inherit;
 }
 
 .post img {
@@ -52,7 +53,7 @@
     display: block;
     margin: auto;
     margin-bottom: 15px;
-    max-width: 100%;
+    width: inherit;
 }
 
 .youtube,

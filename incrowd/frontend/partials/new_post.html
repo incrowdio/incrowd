@@ -1,21 +1,27 @@
 <md-dialog aria-label="New Post" ng-controller="NewPostCtrl">
   <h2>New Post</h2>
-    <form ng-submit="new_post_submit()">
-      <md-text-float label="What's up?" ng-model="post.title"
-                     class="long" focus-me="focus_input"></md-text-float>
 
-      <md-text-float label="URL" ng-model="post.url"
-                     class="long"></md-text-float>
-      <select ng-model="post.category" ng-options="category.id as category.name for category in categories">
-        <option value="">-- choose category --</option>
-      </select>
-      <md-checkbox ng-model="post.nsfw" aria-label="NSFW">
-        NSFW?
-      </md-checkbox>
+  <form ng-submit="new_post_submit()">
+    <md-input-container>
+      <label>What's up?</label>
+      <input ng-model="post.title"
+             class="long" focus-me="focus_input">
+    </md-input-container>
+    <md-input-container>
+      <label>URL</label>
+      <input ng-model="post.url" class="long">
+    </md-input-container>
+    <select ng-model="post.category"
+            ng-options="category.id as category.name for category in categories">
+      <option value="">-- choose category --</option>
+    </select>
+    <md-checkbox ng-model="post.nsfw" aria-label="NSFW">
+      NSFW?
+    </md-checkbox>
 
-      <md-button class="md-raised md-primary" type="submit">
-        Submit
-      </md-button>
-    </form>
-    </div>
+    <md-button class="md-raised md-primary" type="submit">
+      Submit
+    </md-button>
+  </form>
+  </div>
 </md-dialog>

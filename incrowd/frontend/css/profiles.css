@@ -33,8 +33,7 @@
     max-height: 400px;
     display: block;
     margin: 0 auto 10px auto;
-    max-width: 100%;
-
+    width: inherit;
 }
 
 .profile .md-button {
