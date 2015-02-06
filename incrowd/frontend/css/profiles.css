@@ -62,8 +62,10 @@
     overflow: hidden;
 }
 
-.profile-circular img {
-    max-width: 100%;
+.profile-circular img,
+.post .profile-circular img {
+      height: 48px;
+      width: 48px;
 }
 
 .profile-pic {

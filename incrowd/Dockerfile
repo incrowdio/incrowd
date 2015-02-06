@@ -13,9 +13,9 @@
 # limitations under the License.
 
 
-from incrowdio/incrowd-docker-base
+from incrowd/incrowd-docker-base
 
-SETTINGS_MODE "testing"
+ENV SETTINGS_MODE "testing"
 EXPOSE 8000
 
 VOLUME /home/docker/code
