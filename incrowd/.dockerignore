@@ -16,3 +16,6 @@ db.sqlite3
 dev_data.json
 app/
 config/
+bin/
+include/
+lib/

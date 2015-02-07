@@ -44,12 +44,12 @@
 }
 
 .post_list .post img {
-    height: 400px;
+    max-height: 400px;
     max-width: 100%;
 }
 
 .post img {
-    height: 600px;
+    max-height: 600px;
     display: block;
     margin: auto;
     margin-bottom: 15px;
