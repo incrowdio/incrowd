@@ -190,7 +190,6 @@ SITE_ID = 1
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-# Tell nose to measure coverage on the 'foo' and 'bar' apps
 NOSE_ARGS = [
     '--with-xunit',
     '--xunit-file=../shippable/testresults/nosetests.xml'
