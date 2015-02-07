@@ -124,14 +124,14 @@ if ENV == 'prod':
         }
     }
 
-elif ENV == 'travis':
+elif ENV == 'shippable':
     # Running in development, so use a local MySQL database.
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'incrowd',
-            'USER': 'root',
-            'HOST': '127.0.0.1',
+            'USER': 'shippable',
+            'HOST': '172.17.42.1',  # Access MySQL on a Docker host
         }
     }
     EMAIL_SENDER = 'josh@slashertraxx.com'
@@ -200,6 +200,7 @@ REST_FRAMEWORK = {
 }
 
 # Pusher
+PUSHER_ENABLE = False
 PUSHER_APP_ID = ''
 PUSHER_KEY = ''
 PUSHER_SECRET = ''

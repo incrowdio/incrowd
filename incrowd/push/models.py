@@ -65,6 +65,8 @@ def get_all_connected(user=None):
 
 
 def send_all(message_type, message, user=None):
+    if not settings.PUSHER_ENABLE:
+        return
     data = JSONRenderer().render(message)
     p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
                       key=settings.PUSHER_KEY,

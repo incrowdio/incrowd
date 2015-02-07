@@ -10,7 +10,7 @@ docker_dev: check_docker frontend_deps django_db docker_server
 
 clean: clean_www clean_app clean_build
 
-test: test_django
+test: pep8 test_django
 
 #########################
 # Dev tools
@@ -44,9 +44,19 @@ docker_server:
 		cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" python manage.py runserver 0.0.0.0:8000; \
 	fi
 
+pep8:
+	flake8 api
+	flake8 chat_server
+	flake8 incrowd
+	flake8 fantasy_football
+	flake8 invite_only
+	flake8 notify
+	flake8 poll
+	flake8 push
+	flake8 website
+
 test_django:
-	tox -epep8
-	#tox -edjango
+	python manage.py test
 
 # Install tools if you don't wanna use Docker
 install_ubuntu:

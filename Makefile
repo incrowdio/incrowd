@@ -8,7 +8,7 @@ docker: docker_build docker_run
 
 clean: clean_www clean_app clean_build
 
-test: test_django
+test: pep8 test_django
 
 #########################
 # Dev tools
@@ -21,9 +21,20 @@ docker_build:
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
 
+pep8:
+	cd incrowd && flake8 api
+	cd incrowd && flake8 chat_server
+	cd incrowd && flake8 incrowd
+	cd incrowd && flake8 fantasy_football
+	cd incrowd && flake8 invite_only
+	cd incrowd && flake8 notify
+	cd incrowd && flake8 poll
+	cd incrowd && flake8 push
+	cd incrowd && flake8 website
+
 test_django:
-	cd incrowd && tox -epep8
-	cd incrowd && tox -edjango
+	pip freeze && cd incrowd && pip freeze
+	cd incrowd && python manage.py test
 
 # Install tools if you don't wanna use Docker
 install_ubuntu:
