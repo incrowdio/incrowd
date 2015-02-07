@@ -125,6 +125,7 @@ if ENV == 'prod':
     }
 
 elif ENV == 'shippable':
+    INSTALLED_APPS += ['django_nose',]
     # Running in development, so use a local MySQL database.
     DATABASES = {
         'default': {
@@ -137,6 +138,7 @@ elif ENV == 'shippable':
     EMAIL_SENDER = 'josh@slashertraxx.com'
 
 else:
+    INSTALLED_APPS += ['django_nose',]
     # Running in development, so use sqlite for simplicity
     DATABASES = {
         'default': {
@@ -185,6 +187,14 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
 SITE_ID = 1
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'foo' and 'bar' apps
+NOSE_ARGS = [
+    '--with-xunit',
+    '--xunit-file=shippable/testresults/nosetests.xml'
+]
 
 # API
 REST_FRAMEWORK = {

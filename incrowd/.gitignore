@@ -60,3 +60,5 @@ frontend/.tmp
 cliques/production_settings.py
 config/
 app/
+shippable/
+man/

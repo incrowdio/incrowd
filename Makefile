@@ -33,7 +33,6 @@ pep8:
 	cd incrowd && flake8 website
 
 test_django:
-	pip freeze && cd incrowd && pip freeze
 	cd incrowd && python manage.py test
 
 # Install tools if you don't wanna use Docker

@@ -8,6 +8,8 @@ build_image: incrowd/incrowd-shippable
 env:
   - ENV=shippable
 before_script:
+  - mkdir -p shippable/testresults
   - mysql  -h172.17.42.1 -ushippable -e 'create database if not exists incrowd;'
 script:
   - make test
+commit_container: incrowd/incrowd
