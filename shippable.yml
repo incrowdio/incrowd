@@ -12,4 +12,5 @@ before_script:
   - mysql  -h172.17.42.1 -ushippable -e 'create database if not exists incrowd;'
 script:
   - make test
-commit_container: incrowd/incrowd
+after_success:
+  - curl -X POST "http://oakcrane.incrowd.io/git/webhook/" -H "Content-Type: application/json" -d '{"token":"$OAKCRANE_TOKEN","branch":"$BRANCH","repository":{"url": "https://github.com/incrowdio/incrowd.git"}}'
