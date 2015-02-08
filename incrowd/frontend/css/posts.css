@@ -197,14 +197,6 @@ md-dialog {
     margin-bottom: 15px;
 }
 
-.non-button {
-    color: rgba(0, 0, 0, 0.8);
-    font-family: RobotoDraft, Roboto, 'Helvetica Neue', sans-serif;
-    font-size: 14px;
-    padding: 6px;
-    margin: 5px 10px;
-}
-
 .multi-line input {
     word-break: break-word;
     height: 56px;
@@ -268,4 +260,12 @@ post div.green {
 
 .flex-video {
     position: relative;
+}
+
+.comments-button {
+    max-height: 30px;
+}
+
+.posted-button {
+    cursor: default;
 }

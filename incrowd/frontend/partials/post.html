@@ -57,13 +57,10 @@
     </div>
     <!--Metadata-->
     <div layout="horizontal" layout-align="center" class="metadata">
-
-      <md-button class="md-raised md-primary post_comments">
-        <a ng-href="#/posts/{{ post.id }}">{{ post.comment_set.length }}
-          Comments</a>
-      </md-button>
-      <span ng-bind="post.submitted | DTSince" class="non-button"></span>
-
+      <a href="#/posts/{{ post.id }}"
+         class="md-button md-default-theme md-raised md-primary comments-button">{{ post.comment_set.length }}
+        Comments</a>
+      <span class="md-button md-default-theme posted-button" ng-bind="post.submitted | DTSince"></span>
     </div>
   </md-card-content>
   <!--End Metadata-->

@@ -115,7 +115,7 @@ angular.module('post_controllers', [])
     add_pages(1);
   })
 
-  .controller('PostDetailCtrl', function ($scope, $rootScope, $http, $sce, $stateParams, $location, BACKEND_SERVER) {
+  .controller('PostDetailCtrl', function ($scope, $rootScope, $http, $sce, $stateParams, $state, $location, BACKEND_SERVER) {
     $scope.postId = $stateParams.postId;
     $scope.formData = {};
 
