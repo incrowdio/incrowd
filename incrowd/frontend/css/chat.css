@@ -192,3 +192,7 @@ chatinput {
 .chat_background_alternate {
     background-color: #eee;
 }
+
+md-input-container .md-input {
+    flex: 1 1 -moz-available;
+}
