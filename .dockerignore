@@ -16,3 +16,6 @@ incrowd/db.sqlite3
 incrowd/dev_data.json
 incrowd/app/
 incrowd/config/
+incrowd/bin/
+incrowd/include/
+incrowd/lib/
