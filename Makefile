@@ -119,6 +119,17 @@ clean_build:
 install_ci:
 	npm install -g bower grunt grunt-cli
 
+build_testing:
+	docker build -t incrowd/incrowd:testing .
+
+push_testing:
+	docker push incrowd/incrowd:testing
+
+build_prod:
+	docker build -t incrowd/incrowd .
+
+push_prod:
+	docker push incrowd/incrowd
 
 #########################
 # Misc
