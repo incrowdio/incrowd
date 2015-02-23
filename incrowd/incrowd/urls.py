@@ -147,7 +147,7 @@ notification_detail = NotificationViewSet.as_view({
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-
+    url(r'^api/v1/auth/', include('djoser.urls')),
     url(r'^api/v1/cron/poll/$', 'poll.views.cron'),
     url(r'^api/v1/cron/fantasy/$', 'fantasy_football.views.cron'),
 

@@ -9,9 +9,16 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import json
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# Site settings
+EMAIL_SENDER = 'incrowd@incrowd.io'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DOMAIN = 'incrowd.io'
+SITE_NAME = 'inCrowd'
 
 # Determine which environment we're running in.
 if os.environ.get('SETTINGS_MODE') == 'prod':
@@ -23,10 +30,6 @@ elif os.environ.get('TRAVIS'):
 else:
     ENV = 'local'
 
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -36,6 +39,7 @@ SECRET_KEY = '4wd(bfk2m5qj2k0p7(w6)(q$+o040_+_9y$z^_h%ua^(=v2lb2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 DEBUG_TOOLBAR = False
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 TEMPLATE_DEBUG = True
 
@@ -70,6 +74,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djangle',
+    'djoser',
     'invite_only',
     'chat_server',
     'poll',
@@ -135,7 +140,6 @@ elif ENV == 'shippable':
             'HOST': '172.17.42.1',  # Access MySQL on a Docker host
         }
     }
-    EMAIL_SENDER = 'josh@slashertraxx.com'
 
 else:
     INSTALLED_APPS += ['django_nose']
@@ -146,9 +150,8 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
         }
     }
-    EMAIL_SENDER = 'josh@slashertraxx.com'
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    # EMAIL_BACKEND = 'djangoappengine.mail.EmailBackend'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -206,6 +209,15 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
+}
+
+DJOSER = {
+    'DOMAIN': DOMAIN,
+    'SITE_NAME': SITE_NAME,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'LOGIN_AFTER_ACTIVATION': True,
+    'SEND_ACTIVATION_EMAIL': True,
 }
 
 # Pusher
@@ -302,4 +314,14 @@ LOGGING = {
 try:
     from config.production_settings import *  # NOQA
 except Exception:
+    pass
+
+
+# Load environment overrides
+try:
+    env = os.environ.get('DJANGO_ENV', '{}')
+    for key, value in json.loads(env).items():
+        print("Overring setting: {} to {}".format(key, value))
+        vars()[key] = value
+except ValueError:
     pass

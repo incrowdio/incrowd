@@ -111,6 +111,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
         }
       }
     })
+  .state('users.reset_password', {
+      url: '/users/reset_password',
+      templateUrl: 'templates/reset_password.html',
+      controller: 'ProfileCtrl'
+    })
 })
 
   // Allow loading of YouTube
@@ -287,15 +292,17 @@ app.run(function ($rootScope, $http, $location, $state) {
   // Watch state changes, check if authed, if not, redirect to login
   $rootScope.$on('$stateChangeStart', function (e, toState, toParams,
       fromState, fromParams) {
+    console.log('state change start')
 
+    console.log('Going to ', toState.name)
     var isLogin = toState.name === "login";
     if (isLogin) {
       return; // no need to redirect
     }
 
     // now, redirect only not authenticated and on auth required states
-    var no_auth_states = ['login', 'signup'];
-    if ($rootScope.loggedIn !== true && no_auth_states.indexOf(toState) == -1) {
+    var no_auth_states = ['login', 'signup', 'user.reset_password'];
+    if ($rootScope.loggedIn !== true && no_auth_states.indexOf(toState.name) == -1) {
       // user is not authenticated. stow the state they wanted before you
       // send them to the signin state, so you can return them when you're done
       $rootScope.returnToState = $rootScope.toState;
