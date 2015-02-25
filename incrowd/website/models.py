@@ -4,8 +4,7 @@ import urlparse
 
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
-from django.db import models
-from django import forms
+from django.db import models, IntegrityError
 from rest_framework import serializers
 
 from djangle import form_api
@@ -28,6 +27,69 @@ EMAIL_PREFERENCES = (('no', 'None'), ('posts', 'New Posts Only'),
 
 CATEGORY_COLORS = (('red', 'Red'), ('blue', 'Blue'), ('purple', 'Purple'),
                    ('orange', 'Orange'), ('green', 'Green'))
+REGISTRATION_CHOICES = (('invite', 'Invite By Current User'),
+                        ('open', 'Open to Everyone'))
+
+
+class Crowd(models.Model):
+    name = models.CharField(
+        max_length=64, help_text='The title of the site')
+    private = models.BooleanField(
+        default=True, help_text='Determine if all posts require auth to see')
+    registration_type = models.CharField(
+        max_length=32, choices=REGISTRATION_CHOICES,
+        help_text='How new users can be added')
+    maximum_size = models.IntegerField(
+        default=100, help_text='The maximum number of users in the crowd')
+    web_root = models.CharField(
+        max_length=255, default='/',
+        help_text='Where the frontend files are served from, should end '
+                  'in a slash. Use "/" unless you are hosting the frontend '
+                  'files elsewhere (like Amazon S3)')
+    id = models.CharField(max_length=32, editable=False, unique=True,
+                          primary_key=True, db_index=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.pk = utils.generate_pk(32)
+        success = False
+        failures = 0
+        while not success:
+            try:
+                super(Crowd, self).save(*args, **kwargs)
+            except IntegrityError:
+                failures += 1
+                if failures > 5:
+                    raise
+                else:
+                    # looks like a collision, try another random value
+                    self.auto_pseudoid = utils.generate_pk(32)
+            else:
+                success = True
+
+    def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
+        return "<{0}, {1}>".format(Crowd, self.__unicode__())
+
+
+class Theme(models.Model):
+    name = models.CharField(max_length=32)
+    web_root = models.CharField(
+        max_length=255, help_text='Path from web_root where files are stored, '
+                                  'should not start with a slash, should end '
+                                  'with one.')
+    update_url = models.URLField(blank=True, null=True, default=None,
+                                 help_text='Path to the the archive containing'
+                                           ' the theme, for auto updating.')
+    crowd = models.ForeignKey('Crowd')
+
+    def __unicode__(self):
+        return self.name
+
+    def __repr__(self):
+        return "<{0}, {1}>".format(Theme, self.__unicode__())
 
 
 class UserProfile(AbstractUser):
@@ -47,12 +109,20 @@ class UserProfile(AbstractUser):
         help_text="The URL when you click 'My Team'. e.g. 'http://games.espn."
                   "go.com/ffl/clubhouse?leagueId=1268962&teamId=8"
                   "&seasonId=2014'")
+    crowd = models.ForeignKey('Crowd')
 
     class Meta:
         ordering = ['last_updated']
 
+    def __unicode__(self):
+        return self.username
+
+    def __repr__(self):
+        return "<{0}, {1}>".format(UserProfile, self.__unicode__())
+
 
 class Category(models.Model):
+    crowd = models.CharField(max_length=32)
     created_by = models.ForeignKey(UserProfile)
     name = models.CharField(max_length=255)
     color = models.CharField(max_length=64, choices=CATEGORY_COLORS)
@@ -65,6 +135,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    crowd = models.CharField(max_length=32)
     submitted = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(UserProfile)
@@ -167,10 +238,11 @@ class Post(models.Model):
         # ordering = ["-submitted"]
 
 
-notification_text = "{user} commented on your post: {title}"
+notification_text = "{user} commented on: {title}"
 
 
 class Comment(models.Model):
+    crowd = models.CharField(max_length=32)
     user = models.ForeignKey(UserProfile)
     text = models.TextField()
     submitted = models.DateTimeField(auto_now_add=True)
@@ -233,39 +305,6 @@ class Comment(models.Model):
         return "<{0}, {1}>".format(Post, self.__unicode__())
 
 
-class PostForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__()
-        self.fields['title'].label = "Title (*)"
-        self.fields['url'].label = "Link"
-        self.fields['category'].label = "Category"
-
-    def save(self, commit=True):
-        instance = super(PostForm, self).save(commit=False)
-
-        instance.save(commit)
-        return instance
-
-    class Meta:
-        model = Post
-        fields = ['title', 'url', 'category']
-
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['text']
-
-
-class ProfileUpdateForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ProfileUpdateForm, self).__init__()
-
-    class Meta:
-        model = UserProfile
-        fields = ['email', 'email_settings']
-
-
 def send(recipient_list, subject, body):
     from_email = "josh@slashertraxx.com"
     logging.info("Sending invite mail from {} to {}, subject: {}, "
@@ -275,16 +314,14 @@ def send(recipient_list, subject, body):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    posts = serializers.HyperlinkedIdentityField(
-        'posts', view_name='userpost-list', lookup_field='username')
-    user_votes = serializers.SerializerMethodField('get_user_votes')
+    user_votes = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
         fields = (
             'id', 'username', 'profile_pic', 'email', 'first_name',
             'last_name', 'poll_votes', 'user_votes', 'last_updated',
-            'location', 'tagline', 'email_settings'
+            'location', 'tagline', 'email_settings', 'crowd'
         )
 
     def get_user_votes(self, obj):
@@ -293,27 +330,27 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    url = serializers.URLField(source='url', required=False)
+    url = serializers.URLField(required=False)
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
-                  'category', 'comment_set', 'nsfw')
+                  'category', 'comment_set', 'nsfw', 'crowd')
         depth = 1
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
     # Take performance hit serializing comments for details
     # TODO(pcsforeducation) fix this and combine with PostSerializer
-    url = serializers.URLField(source='url', required=False)
+    url = serializers.URLField(required=False)
     user = UserSerializer(read_only=True)
     comment_set = serializers.SerializerMethodField('get_comment_set')
 
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
-                  'category', 'comment_set', 'nsfw')
+                  'category', 'comment_set', 'nsfw', 'crowd')
         depth = 1
 
     def get_comment_set(self, obj):
@@ -328,7 +365,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'user', 'text', 'submitted', 'edited', 'post',
-                  'username', 'attachment_url', 'attachment_type')
+                  'username', 'attachment_url', 'attachment_type', 'crowd')
 
     def get_username(self, obj):
         return obj.user.username
@@ -337,7 +374,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'created_by', 'name', 'color')
+        fields = ('id', 'created_by', 'name', 'color', 'crowd')
 
 
 class CategoryTopSerializer(serializers.ModelSerializer):
@@ -348,7 +385,7 @@ class CategoryTopSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'created_by', 'name', 'color', 'post_count')
+        fields = ('id', 'created_by', 'name', 'color', 'post_count', 'crowd')
 
 
 form_api.api.register('posts', PostSerializer)

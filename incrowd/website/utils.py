@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 import importlib
 import json
 import logging
+import random
 import re
+import string
 import urlparse
 
 from django.conf import settings
@@ -144,3 +146,8 @@ def render_to_json(request, data):
         json.dumps(data, ensure_ascii=False, cls=DjangoJSONEncoder),
         content_type=request.is_ajax() and "application/json" or "text/html"
     )
+
+
+def generate_pk(length=32):
+    return ''.join(random.SystemRandom().choice(
+        'abcdef' + string.digits) for _ in range(length))

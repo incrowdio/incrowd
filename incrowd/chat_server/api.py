@@ -1,16 +1,16 @@
 from __future__ import unicode_literals
 import logging
 
-from rest_framework import generics
+from rest_framework import viewsets
 
 from .models import ChatMessage, ChatMessageSerializer
 
 logger = logging.getLogger(__name__)
 
 
-class ChatMessageList(generics.ListCreateAPIView):
-    model = ChatMessage
+class ChatMessageViewSet(viewsets.ModelViewSet):
     serializer_class = ChatMessageSerializer
+    queryset = ChatMessage.objects.all()
 
     paginate_by = 50
     paginate_by_param = 'messages'
@@ -18,9 +18,4 @@ class ChatMessageList(generics.ListCreateAPIView):
 
     def pre_save(self, obj):
         obj.user = self.request.user
-        super(ChatMessageList, self).pre_save(obj)
-
-
-class ChatMessageDetail(generics.RetrieveUpdateDestroyAPIView):
-    model = ChatMessage
-    serializer_class = ChatMessageSerializer
+        super(ChatMessageViewSet, self).pre_save(obj)
