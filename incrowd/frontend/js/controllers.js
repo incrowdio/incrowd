@@ -128,7 +128,7 @@ angular.module('post_controllers', [])
       console.log("submitting", $scope.formData, this);
 
       $http({
-        url: BACKEND_SERVER + 'posts\/' + $scope.postId + '/comments\/',
+        url: BACKEND_SERVER + 'comments\/',
         method: "POST",
         data: $.param($scope.formData),
         headers: {

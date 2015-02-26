@@ -67,11 +67,18 @@ class Crowd(models.Model):
             else:
                 success = True
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def __repr__(self):
-        return "<{0}, {1}>".format(Crowd, self.__unicode__())
+        return "<{0}, {1}>".format(Crowd, self.__str__())
+
+
+class CrowdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Crowd
+        fields = ('id', 'name', 'private', 'registration_type', 'maximum_size',
+                  'web_root')
 
 
 class Theme(models.Model):
@@ -122,7 +129,7 @@ class UserProfile(AbstractUser):
 
 
 class Category(models.Model):
-    crowd = models.CharField(max_length=32)
+    crowd = models.ForeignKey('Crowd')
     created_by = models.ForeignKey(UserProfile)
     name = models.CharField(max_length=255)
     color = models.CharField(max_length=64, choices=CATEGORY_COLORS)
@@ -135,7 +142,7 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    crowd = models.CharField(max_length=32)
+    crowd = models.ForeignKey('Crowd')
     submitted = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(UserProfile)
@@ -242,7 +249,7 @@ notification_text = "{user} commented on: {title}"
 
 
 class Comment(models.Model):
-    crowd = models.CharField(max_length=32)
+    crowd = models.ForeignKey('Crowd')
     user = models.ForeignKey(UserProfile)
     text = models.TextField()
     submitted = models.DateTimeField(auto_now_add=True)
@@ -329,9 +336,20 @@ class UserSerializer(serializers.ModelSerializer):
                               read_only=True).data
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    crowd = CrowdSerializer(read_only=True)
+    post_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ('id', 'created_by', 'name', 'color', 'post_count', 'crowd')
+
+
 class PostSerializer(serializers.ModelSerializer):
     url = serializers.URLField(required=False)
     user = UserSerializer(read_only=True)
+    crowd = CrowdSerializer(read_only=True)
+    category = CategorySerializer(read_only=True)
 
     class Meta:
         model = Post
@@ -346,6 +364,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     url = serializers.URLField(required=False)
     user = UserSerializer(read_only=True)
     comment_set = serializers.SerializerMethodField('get_comment_set')
+    crowd = CrowdSerializer(read_only=True)
 
     class Meta:
         model = Post
@@ -360,7 +379,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    username = serializers.SerializerMethodField('get_username')
+    username = serializers.SerializerMethodField()
+    crowd = CrowdSerializer(read_only=True)
 
     class Meta:
         model = Comment
@@ -369,23 +389,6 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def get_username(self, obj):
         return obj.user.username
-
-
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ('id', 'created_by', 'name', 'color', 'crowd')
-
-
-class CategoryTopSerializer(serializers.ModelSerializer):
-    post_count = serializers.IntegerField(
-        source='post_count',
-        read_only=True
-    )
-
-    class Meta:
-        model = Category
-        fields = ('id', 'created_by', 'name', 'color', 'post_count', 'crowd')
 
 
 form_api.api.register('posts', PostSerializer)

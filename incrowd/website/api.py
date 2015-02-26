@@ -13,7 +13,7 @@ from rest_framework import filters, viewsets
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
     UserSerializer, PostSerializer, PostDetailSerializer, CommentSerializer, \
-    CategorySerializer, CategoryTopSerializer
+    CategorySerializer
 
 
 logger = logging.getLogger(__name__)
@@ -71,34 +71,12 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering = ('-submitted',)
     ordering_fields = ('submitted',)
 
-    def create(self, request, *args, **kwargs):
-        # TODO(pcsforeducation) this is a mess
-        data = dict(request.DATA)
-
-        # Get the category
-        category_pk = int(data['category'][0])
-        try:
-            data['category'] = Category.objects.get(id=category_pk)
-        except Category.DoesNotExist:
-            return Response({'error': 'category does not exist'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        data['title'] = data['title'][0]
-        if data.get('url'):
-            data['url'] = data['url'][0]
-        data['user'] = request.user
-        try:
-            self.object = Post(**data)
-            self.pre_save(self.object)
-            self.object.save()
-        except Exception:
-            logger.exception('invalid form')
-            return Response({'errors': 'Invalid form'},
-                            status=status.HTTP_400_BAD_REQUEST)
-        self.post_save(self.object, created=True)
-        serializer = self.get_serializer(instance=self.object)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED,
-                        headers=headers)
+    def perform_create(self, serializer):
+        category = Category.objects.get(id=serializer.initial_data.get(
+            'category'))
+        serializer.save(user=self.request.user,
+                        crowd=self.request.user.crowd,
+                        category=category)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -115,6 +93,10 @@ class CommentViewSet(viewsets.ModelViewSet):
     filter_fields = ('user', 'user__username', 'submitted', 'post__id')
     ordering = ('-submitted',)
     ordering_fields = ('submitted',)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user,
+                        crowd=self.request.user.crowd)
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
