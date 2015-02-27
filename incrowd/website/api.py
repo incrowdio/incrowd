@@ -13,7 +13,7 @@ from rest_framework import filters, viewsets
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
     UserSerializer, PostSerializer, PostDetailSerializer, CommentSerializer, \
-    CategorySerializer
+    CategorySerializer, Crowd, CrowdSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -106,3 +106,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
     ordering = ('-post_count',)
     ordering_fields = ('post_count',)
+
+
+class CrowdViewSet(viewsets.ModelViewSet):
+    serializer_class = CrowdSerializer
+    queryset = Crowd.objects.all()
