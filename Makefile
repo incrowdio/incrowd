@@ -2,7 +2,7 @@ all: clean test www
 
 prod: clean test www_prod link_libs
 
-upload: prod deploy
+upload: docker_upload
 
 docker: docker_build docker_run
 
@@ -19,8 +19,8 @@ docker_build:
 	docker build -t incrowd .
 
 docker_upload:
-	docker build -t incrowd/incrowd .
-	docker push incrowd/incrowd
+	docker build -t incrowd/incrowd:testing .
+	docker push incrowd/incrowd:testing
 
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash

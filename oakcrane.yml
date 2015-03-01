@@ -1,6 +1,7 @@
 before_script:
   - docker pull incrowd/incrowd-shippable
+  - cd $REPO_PATH/incrowd && make docker_build
 script:
   - echo "testing oakcrane"
-  - cd $REPO_PATH/incrowd && make docker_test
-  - cd $REPO_PATH && make docker_upload
+  - cd $REPO_PATH/incrowd && make docker_run_test
+  - cd $REPO_PATH && make upload

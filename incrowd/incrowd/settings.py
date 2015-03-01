@@ -195,7 +195,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 NOSE_ARGS = [
     '--with-xunit',
-    '--xunit-file=../shippable/testresults/nosetests.xml'
+    '--xunit-file=nosetests.xml'
 ]
 
 # API

@@ -38,7 +38,8 @@ class Crowd(models.Model):
         default=True, help_text='Determine if all posts require auth to see')
     registration_type = models.CharField(
         max_length=32, choices=REGISTRATION_CHOICES,
-        help_text='How new users can be added')
+        help_text='How new users can be added',
+        default='invite')
     maximum_size = models.IntegerField(
         default=100, help_text='The maximum number of users in the crowd')
     web_root = models.CharField(
