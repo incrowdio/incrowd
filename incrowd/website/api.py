@@ -2,14 +2,14 @@ from __future__ import unicode_literals
 import logging
 
 from django.db.models import Count
-from rest_framework import renderers
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, \
     authentication_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import filters, viewsets
 
+from incrowd import permissions as incrowd_perms
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
     UserSerializer, PostSerializer, PostDetailSerializer, CommentSerializer, \
@@ -51,6 +51,9 @@ class UserViewSet(viewsets.ModelViewSet):
     paginate_by = 25
     paginate_by_param = 'page_size'
     max_paginate_by = 100
+
+    permission_classes = (incrowd_perms.IsOwnerOrReadOnly,
+                          incrowd_perms.IsPrivate)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -111,3 +114,5 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 class CrowdViewSet(viewsets.ModelViewSet):
     serializer_class = CrowdSerializer
     queryset = Crowd.objects.all()
+
+    permission_classes = (incrowd_perms.IsSuperUser,)
