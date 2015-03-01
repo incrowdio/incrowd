@@ -12,7 +12,7 @@ from rest_framework import filters, viewsets
 from incrowd import permissions as incrowd_perms
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
-    UserSerializer, PostSerializer, PostDetailSerializer, CommentSerializer, \
+    UserSerializer, PostSerializer, CommentSerializer, \
     CategorySerializer, Crowd, CrowdSerializer
 
 
