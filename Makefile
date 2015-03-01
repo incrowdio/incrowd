@@ -18,6 +18,10 @@ test: pep8 test_django
 docker_build:
 	docker build -t incrowd .
 
+docker_upload:
+	docker build -t incrowd/incrowd .
+	docker push incrowd/incrowd
+
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
 

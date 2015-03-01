@@ -12,6 +12,8 @@ clean: clean_www clean_app clean_build
 
 test: pep8 test_django
 
+docker_test: docker_build docker_test
+
 #########################
 # Dev tools
 #########################
@@ -35,6 +37,9 @@ docker_build:
 
 docker_run:
 	docker run -i -v `pwd`:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
+
+docker_test:
+	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash make test
 
 docker_server:
 	if [ -e config/newrelic.ini ]; then \
