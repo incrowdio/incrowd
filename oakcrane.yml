@@ -5,3 +5,6 @@ script:
   - echo "testing oakcrane"
   - cd $REPO_PATH/incrowd && make docker_run_test
   - cd $REPO_PATH && make upload
+after_success:
+  - cd /home/oakcrane/incrowd-ansible && make
+   
