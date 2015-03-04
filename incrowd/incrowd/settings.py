@@ -211,6 +211,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
 
+# Only supported push module is pusher
+PUSH_MODULE = 'pusher'
+
 DJOSER = {
     'DOMAIN': DOMAIN,
     'SITE_NAME': SITE_NAME,

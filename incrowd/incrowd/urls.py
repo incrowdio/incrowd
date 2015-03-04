@@ -4,11 +4,9 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 
-from api.views import get_token, get_cookie
-from push.api import PushSessionList
+from incrowd.views import get_token, get_cookie
 from website.views import presence
 from invite_only.api import InviteCodeView, InviteCodeDetail
-from push.views import pusher_auth
 
 import website.urls
 import notify.urls
@@ -17,13 +15,6 @@ import poll.urls
 
 admin.autodiscover()
 
-
-v1_push_urls = patterns(
-    '',
-    url(r'^push/$',
-        PushSessionList.as_view(),
-        name='push-session-list'),
-)
 
 
 v1_invite_urls = patterns(
@@ -54,16 +45,15 @@ urlpatterns = patterns(
     url(r'^api/v1/', include(notify.urls.router.urls)),
     url(r'^api/v1/', include(chat_server.urls.router.urls)),
     url(r'^api/v1/', include(poll.urls.router.urls)),
+    url(r'^api/v1/', include('push.urls')),
 
     url(r'^api/v1/register', 'website.api.register'),
-    url(r'^api/v1/', include(v1_push_urls)),
     url(r'^api/v1/', include(v1_invite_urls)),
     url('^api/v1/presence/$', presence),
-    url('^api/v1/check_in/$', 'push.views.check_in'),
 
     url(r'^api/v1/token/', get_token),
     url(r'^api/cookie/', get_cookie),
-    url(r'^api/v1/pusher/auth$', pusher_auth),
+
 )
 
 if settings.DEBUG_TOOLBAR:

@@ -4,7 +4,7 @@ import logging
 from django.db import models
 from rest_framework import serializers
 
-from push.models import send_all
+from push.views import send_all
 
 
 logger = logging.getLogger(__name__)
