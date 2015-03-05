@@ -16,7 +16,7 @@ test: pep8 test_django
 
 
 docker_build:
-	docker build -t incrowd .
+	cd incrowd && docker build -t incrowd .
 
 docker_upload:
 	docker build -t incrowd/incrowd:testing .

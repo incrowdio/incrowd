@@ -5,13 +5,11 @@ import logging
 import operator
 import random
 
-from django.contrib.auth import get_user_model
 from django.http import HttpResponse, HttpResponseRedirect, \
     HttpResponseNotFound
 from django.utils.timezone import utc
-from django.views.generic import CreateView, DetailView
 
-from poll.models import Vote, Submission, SubmissionForm, Poll
+from poll.models import Vote, Submission, Poll
 from website.models import Post, UserProfile, Comment, notify_users
 
 
@@ -115,34 +113,19 @@ def _post_winning_submission(poll, submission_id):
         type='comment',
         level='info')
 
-
-class PollDetailView(DetailView):
-    model = Poll
-    slug_field = 'stub'
-    slug_url_kwarg = 'stub'
-    template_name = 'poll/submission.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(PollDetailView, self).get_context_data(**kwargs)
-        try:
-            context['vote'] = Vote.objects.get(user=self.request.user.id)
-        except Vote.DoesNotExist:
-            pass
-        context['form'] = SubmissionForm
-        return context
-
-
-class SubmissionFormView(CreateView):
-    model = Submission
-    success_url = '/'
-    fields = ['title', 'url']
-    # template_name = 'website/post.html'
-
-    def form_valid(self, form):
-        stub = self.kwargs.get('stub')
-        user_model = get_user_model()
-        form.instance.user = user_model.objects.get(id=self.request.user.id)
-        form.instance.poll = Poll.objects.get(stub=stub)
-        self.object = form.save()
-        self.success_url = "/poll/{}/".format(stub)
-        return super(SubmissionFormView, self).form_valid(form)
+#
+# class PollDetailView(DetailView):
+#     model = Poll
+#     slug_field = 'stub'
+#     slug_url_kwarg = 'stub'
+#     template_name = 'poll/submission.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(PollDetailView, self).get_context_data(**kwargs)
+#         try:
+#             context['vote'] = Vote.objects.get(user=self.request.user.id)
+#         except Vote.DoesNotExist:
+#             pass
+#         context['form'] = SubmissionForm
+#         return context
+#

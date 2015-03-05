@@ -2,7 +2,6 @@ from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
 from django.db import models
-from django import forms
 from rest_framework import serializers
 
 from website import utils
@@ -21,6 +20,7 @@ class Poll(models.Model):
     # In hours, when old submissions that haven't won will be removed
     submission_removal = models.IntegerField(default=7 * 24)
     winning_text = models.CharField(max_length=255, blank=True, null=True)
+    crowd = models.ForeignKey('website.Crowd')
 
     def __unicode__(self):
         return self.title
@@ -34,6 +34,7 @@ class Submission(models.Model):
     poll = models.ForeignKey(Poll, related_name='poll_submissions')
     user = models.ForeignKey('website.UserProfile',
                              related_name='user_submissions')
+    crowd = models.ForeignKey('website.Crowd')
 
     def save(self, *args, **kwargs):
         if Submission.objects.filter(user=self.user).count() > 4:
@@ -46,13 +47,8 @@ class Submission(models.Model):
         return "{}: {}".format(self.user, self.title)
 
 
-class SubmissionForm(forms.ModelForm):
-    class Meta:
-        model = Submission
-        fields = ['title', 'url']
-
-
 class Vote(models.Model):
+    crowd = models.ForeignKey('website.Crowd')
     submission = models.ForeignKey(Submission, related_name='submission_votes')
     user = models.ForeignKey('website.UserProfile',
                              related_name='user_votes')
@@ -70,25 +66,27 @@ class Vote(models.Model):
 
 
 class SubmissionSerializer(serializers.ModelSerializer):
-    # poll = serializers.WritableField(source='poll', required=False)
+    crowd = serializers.CharField(max_length=64, read_only=True)
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'submitted', 'poll', 'id')
+        fields = ('title', 'url', 'submitted', 'poll', 'id', 'crowd')
 
 
 class PollSerializer(serializers.ModelSerializer):
+    crowd = serializers.CharField(max_length=64, read_only=True)
     class Meta:
         model = Poll
         fields = ('title', 'stub', 'bot_name', 'category',
                   'frequency', 'submission_removal', 'winning_text',
-                  'poll_submissions', 'id')
+                  'poll_submissions', 'id', 'crowd')
 
         depth = 1
 
 
 class VoteSerializer(serializers.ModelSerializer):
+    crowd = serializers.CharField(max_length=64, read_only=True)
     day = serializers.Field(source='day')
 
     class Meta:
         model = Vote
-        fields = ('submission', 'user', 'day', 'id')
+        fields = ('submission', 'user', 'day', 'id', 'crowd')
