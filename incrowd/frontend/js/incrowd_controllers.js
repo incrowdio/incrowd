@@ -494,7 +494,6 @@ function removeChatIfAlreadyExists(chat, array) {
 }
 
 function youtube_url_to_id(url) {
-  console.log('converting ' + url + ' to youtube id');
   if (!url) {
     return;
   }
@@ -506,8 +505,7 @@ function youtube_url_to_id(url) {
   if (ampersandPosition != -1) {
     vid = vid.substring(0, ampersandPosition);
   }
-  console.log('converted ' + url + ' to ' + vid);
-  return vid
+   return vid
 }
 
 function DialogController($scope, $mdDialog) {
