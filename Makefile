@@ -23,7 +23,7 @@ docker_upload:
 	docker push incrowd/incrowd:testing
 
 docker_run:
-	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
+	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
 
 pep8:
 	cd incrowd && flake8 api
