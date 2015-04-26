@@ -6,6 +6,8 @@ upload: prod deploy
 
 docker: docker_build docker_run
 
+dev: docker_build run_dev
+
 clean: clean_www clean_app clean_build
 
 test: pep8 test_django
@@ -20,6 +22,9 @@ docker_build:
 
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
+
+run_dev:
+	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_server"
 
 pep8:
 	cd incrowd && flake8 api

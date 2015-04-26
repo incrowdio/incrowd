@@ -135,6 +135,9 @@ class CommentList(generics.ListCreateAPIView):
     model = Comment
     serializer_class = CommentSerializer
 
+    def pre_save(self, obj):
+        obj.user = self.request.user
+
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     model = Comment

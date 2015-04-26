@@ -22,3 +22,6 @@ class NotificationViewSet(viewsets.ModelViewSet):
         """
         user = self.request.user
         return Notification.objects.filter(user=user)
+
+
+def

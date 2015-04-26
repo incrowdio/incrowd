@@ -19,3 +19,5 @@ incrowd/config/
 incrowd/bin/
 incrowd/include/
 incrowd/lib/
+incrowd/man/
+incrowd/shippable/
