@@ -22,6 +22,11 @@ angular.module('profile')
           if (user.id == scope.id) {
             scope.profile_pic = user.profile_pic;
             scope.username = user.username;
+            element.css({
+                'background-image': 'url(' + user.profile_pic +')',
+                'background-size' : 'cover'
+            });
+            element.addClass('profile-pic');
           }
         });
       }

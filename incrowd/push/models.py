@@ -16,7 +16,7 @@ PUSH_CHOICES = (('website', 'pusher'),
 
 
 def random_key(length=64):
-    return ''.join(random.choice('0123456789ABCDEF') for i in range(length))
+    return ''.join(random.choice('0123456789ABCDEF') for _ in range(length))
 
 
 class PushSession(models.Model):
@@ -63,7 +63,7 @@ def get_all_connected(user=None):
         last_update__gt=timeout_dt)
     if user:
         sessions = sessions.filter(user=user)
-    logger.debug("Conencted users: {}".format(sessions))
+    logger.debug("Connected users: {}".format(sessions))
     return sessions
 
 

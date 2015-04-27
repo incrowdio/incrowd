@@ -41,24 +41,29 @@ RUN apt-get update && \
         python \
         python-dev \
         python-pip \
-        supervisor
+        supervisor && \
+    npm install -g bower grunt-cli && \
+    ln -s /usr/bin/nodejs /usr/bin/node
+
 
 # Get NPM installs done early, they take time and should be cached
 # Plus, they're only for the build system
-WORKDIR /tmp/
+WORKDIR /home/docker
 
-ADD incrowd/frontend/package.json /tmp/package.json
+# Delay adding the whole root to speed up subsequent builds via caching
+# Instead, install npm, bower, and pip dependencies and cache them
+ADD incrowd/frontend/package.json /home/docker/package.json
 
-RUN npm install -g bower grunt-cli && npm install
+RUN npm install
+
+ADD incrowd/frontend/bower.json /home/docker/bower.json
+
+RUN bower --allow-root --config.interactive=false install
 
 WORKDIR /home/docker/code
 
 RUN pip install uwsgi
 
-# Need symlink for bower to work with node
-RUN ln -s /usr/bin/nodejs /usr/bin/node
-
-# Delay adding the whole root to speed up subsequent builds via caching
 ADD incrowd/requirements.txt /home/docker/code/requirements.txt
 
 # run pip install
@@ -91,6 +96,7 @@ ADD docker_configs/uwsgi.params /etc/nginx/uwsgi.params
 ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
+# Everything after this point won't be cached on builds
 ADD incrowd/ /home/docker/code
 
 # Prepare Django
@@ -99,9 +105,9 @@ RUN python manage.py collectstatic --noinput --link
 # install frontend dependencies
 WORKDIR /home/docker/code/frontend
 
-RUN mv /tmp/node_modules /home/docker/code/frontend/node_modules && npm install
+RUN mv /home/docker/node_modules /home/docker/code/frontend/node_modules
 
-RUN bower --allow-root --config.interactive=false install
+RUN mv /home/docker/bower_components /home/docker/code/frontend/bower_components
 
 WORKDIR /home/docker/code
 

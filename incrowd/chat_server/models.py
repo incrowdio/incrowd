@@ -59,8 +59,8 @@ class ChatMessage(models.Model):
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
-    username = serializers.SerializerMethodField('get_username')
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    username = serializers.SerializerMethodField()
 
     class Meta:
         model = ChatMessage

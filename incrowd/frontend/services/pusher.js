@@ -7,7 +7,7 @@ angular.module('pusher_service', [])
         headers: {'Authorization': 'Token ' + localStorage.getItem('token')},
 
       },
-      authEndpoint: '/api/v1/pusher/auth'
+      authEndpoint: BACKEND_SERVER + 'api/v1/pusher/auth'
     });
     Notifications.channel = Notifications.pusher.subscribe(PUSHER_CHANNEL);
     Notifications.presence = Notifications.pusher.subscribe(PUSHER_PRESENCE);

@@ -2,7 +2,7 @@ all: clean test www
 
 prod: clean test www_prod link_libs
 
-upload: prod deploy
+upload: docker_upload
 
 docker: docker_build docker_run
 
@@ -18,10 +18,14 @@ test: pep8 test_django
 
 
 docker_build:
-	docker build -t incrowd .
+	cd incrowd && docker build -t incrowd .
+
+docker_upload:
+	docker build -t incrowd/incrowd:testing .
+	docker push incrowd/incrowd:testing
 
 docker_run:
-	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash
+	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
 
 run_dev:
 	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_server"
@@ -124,6 +128,17 @@ clean_build:
 install_ci:
 	npm install -g bower grunt grunt-cli
 
+build_testing:
+	docker build -t incrowd/incrowd:testing .
+
+push_testing:
+	docker push incrowd/incrowd:testing
+
+build_prod:
+	docker build -t incrowd/incrowd .
+
+push_prod:
+	docker push incrowd/incrowd
 
 #########################
 # Misc

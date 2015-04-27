@@ -54,13 +54,16 @@
     width: 100%;
 }
 
-.profile-circular {
+.profile-pic {
     display: inline-block;
     width: 48px;
-    min-width: 48px;
     height: 48px;
+    min-width: 48px;
     border-radius: 50%;
-    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
 }
 
 .profile-circular img,
@@ -70,8 +73,7 @@
 }
 
 .profile-pic {
-    height: 48px;
-    width: 48px;
+
 }
 
 .chat_message .md-tile-left,

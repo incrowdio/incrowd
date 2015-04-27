@@ -3,7 +3,7 @@
     <md-item ng-repeat="message in messages" ng-class="chatBackground(message, messages[$index - 1])">
       <md-item-content ng-class="chatHighlight(message)">
         <div class="md-tile-left">
-          <profile-pic id="message.user" displayUsername></profile-pic>
+          <profile-pic layout="vertical" id="message.user" displayUsername></profile-pic>
         </div>
         <div class="md-tile-content chat_message">
           <span class="text" compile="message.message | ChatMessageFilter"></span>

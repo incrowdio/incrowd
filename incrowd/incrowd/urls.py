@@ -4,124 +4,18 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 
-from api.views import get_token, get_cookie
-from notify.api import NotificationViewSet
-from push.api import PushSessionList
+from incrowd.views import get_token, get_cookie
 from website.views import presence
 from invite_only.api import InviteCodeView, InviteCodeDetail
-from website.api import PostList, PostDetail, PostCommentList, CategoryList, \
-    CategoryDetail, UserList, UserDetail, CommentList, \
-    CommentDetail, CategoryTopAPI
-from poll.api import SubmissionList, PollDetail, PollList, \
-    VoteDetail, VoteList, SubmissionDetail
-from chat_server.api import ChatMessageList, ChatMessageDetail
-from push.views import pusher_auth
 
+import website.urls
+import notify.urls
+import chat_server.urls
+import poll.urls
 
 admin.autodiscover()
 
-v1_post_urls = patterns(
-    '',
-    url(r'^posts/$',
-        PostList.as_view(),
-        name='post-list'),
-    url(r'^posts/(?P<pk>\d+)/$',
-        PostDetail.as_view(),
-        name='post-detail'),
-    url(r'^posts/(?P<pk>\d+)/comments/$',
-        PostCommentList.as_view(),
-        name='post-comment-list'),
-)
 
-v1_comment_urls = patterns(
-    '',
-    url(r'^comments/$',
-        CommentList.as_view(),
-        name='comment-list'),
-    url(r'^comments/(?P<pk>\d+)/$',
-        CommentDetail.as_view(),
-        name='comment-detail')
-)
-
-v1_poll_urls = patterns(
-    '',
-    url(r'^polls/$',
-        PollList.as_view(),
-        name='poll-list'),
-    url(r'^polls/(?P<stub>[A-Za-z0-9_]+)/$',
-        PollDetail.as_view(),
-        name='poll-detail'),
-    url(r'^polls/(?P<stub>[A-Za-z0-9_]+)/submissions/$',
-        SubmissionList.as_view(),
-        name='submission-list'),
-)
-
-v1_submission_urls = patterns(
-    '',
-    url(r'^submissions/$',
-        SubmissionList.as_view(),
-        name='poll-list'),
-    url(r'^submissions/(?P<pk>\d+)/$',
-        SubmissionDetail.as_view(),
-        name='poll-detail'),
-)
-
-v1_push_urls = patterns(
-    '',
-    url(r'^push/$',
-        PushSessionList.as_view(),
-        name='push-session-list'),
-)
-
-v1_category_urls = patterns(
-    '',
-    url(r'^categories/$',
-        CategoryList.as_view(),
-        name='category-list'),
-    url(r'^categories/(?P<pk>\d+)/$',
-        CategoryDetail.as_view(),
-        name='category-detail'),
-)
-
-v1_user_urls = patterns(
-    '',
-    url(r'^users/$',
-        UserList.as_view(),
-        name='user-list'),
-    url(r'^users/(?P<username>[A-Za-z0-9_]+)/$',
-        UserDetail.as_view(),
-        name='user-detail'),
-    # url(r'^register/$',
-    # UserCreate.as_view(),
-    # name='user-create'),
-)
-
-v1_notification_urls = patterns(
-    '',
-    url(r'^notifications/$',
-        NotificationViewSet.as_view(),
-        name='notifications')
-)
-
-v1_chat_urls = patterns(
-    '',
-    url(r'^chat/messages/$',
-        ChatMessageList.as_view(),
-        name='chat-messages'),
-    url(r'^chat/messages/(?P<pk>\d+)/$',
-        ChatMessageDetail.as_view(),
-        name='chat-detail'),
-)
-
-v1_vote_urls = patterns(
-    '',
-    url(r'^votes/$',
-        VoteList.as_view(),
-        name='vote-list'),
-    url(r'^votes/(?P<pk>\d+)/$',
-        VoteDetail.as_view(),
-        name='vote-detail')
-)
 
 v1_invite_urls = patterns(
     '',
@@ -133,21 +27,11 @@ v1_invite_urls = patterns(
         name='invite-details'),
 )
 
-notification_list = NotificationViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-notification_detail = NotificationViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
 
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
-
+    url(r'^api/v1/auth/', include('djoser.urls')),
     url(r'^api/v1/cron/poll/$', 'poll.views.cron'),
     url(r'^api/v1/cron/fantasy/$', 'fantasy_football.views.cron'),
 
@@ -157,29 +41,18 @@ urlpatterns = patterns(
     # API
     url(r'^api/api-auth/', include('rest_framework.urls',
                                    namespace='rest_framework')),
-    url(r'^api/v1/', include(v1_post_urls)),
-    url(r'^api/v1/', include(v1_comment_urls)),
-    url(r'^api/v1/', include(v1_user_urls)),
+    url(r'^api/v1/', include(website.urls.router.urls)),
+    url(r'^api/v1/', include(notify.urls.router.urls)),
+    url(r'^api/v1/', include(chat_server.urls.router.urls)),
+    url(r'^api/v1/', include(poll.urls.router.urls)),
+    url(r'^api/v1/', include('push.urls')),
+
     url(r'^api/v1/register', 'website.api.register'),
-    url(r'^api/v1/', include(v1_poll_urls)),
-    url(r'^api/v1/', include(v1_submission_urls)),
-    url(r'^api/v1/', include(v1_chat_urls)),
-    url(r'^api/v1/', include(v1_category_urls)),
-    url(r'^api/v1/categories/top/$', CategoryTopAPI.as_view(),
-        name='top-categories'),
-    url(r'^api/v1/', include(v1_vote_urls)),
-    url(r'^api/v1/', include(v1_push_urls)),
     url(r'^api/v1/', include(v1_invite_urls)),
-    # TODO(JoshNang) match other api urls.
-    url('^api/v1/notifications/$', notification_list),
-    url('^api/v1/notifications/(?P<pk>\d+)/$',
-        notification_detail),
     url('^api/v1/presence/$', presence),
-    url('^api/v1/check_in/$', 'push.views.check_in'),
 
     url(r'^api/v1/token/', get_token),
     url(r'^api/cookie/', get_cookie),
-    url(r'^api/v1/pusher/auth$', pusher_auth),
 
 )
 

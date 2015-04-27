@@ -5,7 +5,7 @@ angular.module('poll', [])
       $scope.submission['poll'] = $scope.poll.id;
       console.log("submitting poll", $scope.submission, this, $scope.poll);
       $http({
-        url: BACKEND_SERVER + 'polls\/' + $scope.pollStub + '/submissions\/',
+        url: BACKEND_SERVER + 'submissions\/',
         method: "POST",
         data: $.param($scope.submission),
         headers: {
