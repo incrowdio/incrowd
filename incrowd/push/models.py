@@ -5,14 +5,14 @@ import random
 
 from django.db import models
 from django.conf import settings
-
-# from google.appengine.api import channel
 from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
 import pusher
 
-
 logger = logging.getLogger(__name__)
+
+PUSH_CHOICES = (('website', 'pusher'),
+                ('ionic', 'ionic'))
 
 
 def random_key(length=64):
@@ -26,6 +26,9 @@ class PushSession(models.Model):
     session_key = models.CharField(max_length=255, default=None,
                                    db_index=True, unique=True)
     ended = models.DateTimeField(blank=True, null=True, default=None)
+    # Whether to send via Ionic, GCM/APN directly, or to the website
+    push_type = models.CharField(max_length=64, choices=PUSH_CHOICES,
+                                 default='pusher')
 
     def save(self, *args, **kwargs):
         super(PushSession, self).save(*args, **kwargs)
@@ -77,3 +80,8 @@ def send_all(message_type, message, user=None):
         p[settings.PUSHER_CHANNEL].trigger(message_type, data)
     except Exception:
         logger.warning('Unable to send requests to push')
+
+
+class IonicRegistrationSerializer(serializers.Serializer):
+    user_id = models.IntegerField()
+    tokens = models.CharField()
