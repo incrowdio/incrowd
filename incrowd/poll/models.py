@@ -6,7 +6,6 @@ from rest_framework import serializers
 
 from website import utils
 
-
 FREQUENCY_CHOICES = (('daily', 'daily'), ('once', 'once'))
 
 
@@ -67,6 +66,7 @@ class Vote(models.Model):
 
 class SubmissionSerializer(serializers.ModelSerializer):
     crowd = serializers.CharField(max_length=64, read_only=True)
+
     class Meta:
         model = Submission
         fields = ('title', 'url', 'submitted', 'poll', 'id', 'crowd')
@@ -74,6 +74,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
 class PollSerializer(serializers.ModelSerializer):
     crowd = serializers.CharField(max_length=64, read_only=True)
+
     class Meta:
         model = Poll
         fields = ('title', 'stub', 'bot_name', 'category',

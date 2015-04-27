@@ -11,7 +11,7 @@ from djangle import form_api
 from notify.models import notify_users
 from notify import utils as notify_utils
 from poll.models import VoteSerializer
-from push.views import send_all
+from push.utils import send_all
 from website.content_types import YouTube
 from website import utils
 

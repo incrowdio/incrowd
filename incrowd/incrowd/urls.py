@@ -16,7 +16,6 @@ import poll.urls
 admin.autodiscover()
 
 
-
 v1_invite_urls = patterns(
     '',
     url(r'^invites/$',
