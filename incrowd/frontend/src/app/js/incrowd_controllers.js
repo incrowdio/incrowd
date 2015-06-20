@@ -117,15 +117,15 @@ angular.module('post_controllers', [])
 
   .controller('PostDetailCtrl', function ($scope, $rootScope, $http, $sce, $stateParams, $state, $location, BACKEND_SERVER) {
     $scope.postId = $stateParams.postId;
-    $scope.formData = {};
+    $scope.formData = {post_id: $stateParams.postId};
 
     $scope.toggleNSFW = function () {
       $scope.post.nsfw_show = !$scope.post.nsfw_show;
     };
 
     $scope.new_comment_submit = function () {
-      $scope.formData.post = $scope.postId;
-      console.log("submitting", $scope.formData, this);
+      //$scope.formData.post = $scope.postId;
+      console.log("submitting", $scope.formData);
 
       $http({
         url: BACKEND_SERVER + 'comments\/',

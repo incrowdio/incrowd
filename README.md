@@ -50,9 +50,22 @@ from the command line (taken from the [Docker documentation](https://docs.docker
 
 ### Setup MySQL
 
-inCrowd uses MySQL as the database to store users, posts, etc. It is generally
-easier to not put MySQL into its own Docker container, so we'll install that
-first.
+inCrowd uses MySQL as the database to store users, posts, etc. We'll use the EasyMySQL container
+for development purposes. We're doing to start the container with a root password, create
+the incrowd database, create an incrowd user with password 'incrowd, and finally mount
+a directory we've created on our system into the container to save the database (so you don't
+need to start from scratch every time).
+
+        docker run --name mysql -e MYSQL_ROOT_PASSWORD=password \
+            -e MYSQL_DATABASE=incrowd \
+            -e MYSQL_USER=incrowd \
+            -e MYSQL_PASSWORD=incrowd \
+            -v /home/josh/mysql:/var/lib/mysql \
+            -d mysql:5.7
+
+#### Alternative: Run on Linux
+
+Sometimes it's easier to run MySQL outside of Docker.
 
         sudo apt-get -y update
         
@@ -181,8 +194,15 @@ The default user name and password is "admin" and "pass".
 
 You can access the admin interface at http://$DOCKER_IP:8000/admin/.
 
+You can portfoward the backend boot2docker server so you can access it from the network,
+e.g. from a phone you're testing the app on. Run this command while boot2docker
+is shutdown: 
+    
+    VBoxManage modifyvm "boot2docker-vm" --natpf1 "tcp-port8000,tcp,,8000,,8000";
+
 Contributing
 ------------
 We follow the standard branch and PR or fork and PR model. Travis will test your code when you submit it, and CodeShip will test and deploy your code when it is merged to the master branch.
 
 Append "--skip-ci" to the bottom of commits in PRs to avoid having CodeShip build them (we only get 50 free builds a month, unlimited is $50/mo). Travis will still build and test your commits.
+

@@ -23,15 +23,15 @@ check_docker:
 
 # Install frontend dependencies
 frontend_deps:
-	cd $(INCROWD_PATH)/frontend && npm install
+#	cd $(INCROWD_PATH)/frontend && npm install
 	cd $(INCROWD_PATH)/frontend && bower --allow-root --config.interactive=false install
 
 # Initialize the DB
 django_db:
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py syncdb --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && python manage.py migrate --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && bash initial_db_load.sh
-
+#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py syncdb --noinput --no-initial-data
+#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py migrate --noinput --no-initial-data
+#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && bash initial_db_load.sh
+	echo 'skipping db'
 docker_build:
 	docker build -t incrowd .
 
@@ -44,13 +44,14 @@ docker_run_test:
 docker_server:
 	if [ -e config/newrelic.ini ]; then \
 		echo "Running with NewRelic"; \
+		#pip install -r requirements.txt; \
 		cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" NEW_RELIC_CONFIG_FILE=config/newrelic.ini newrelic-admin run-program python manage.py runserver 0.0.0.0:8000; \
 	else \
+		#pip install -r requirements.txt; \
 		cd $(INCROWD_PATH) && DJANGO_SETTINGS_MODULE="incrowd.settings" python manage.py runserver 0.0.0.0:8000; \
 	fi
 
 pep8:
-	flake8 api
 	flake8 chat_server
 	flake8 incrowd
 	flake8 fantasy_football
@@ -87,9 +88,10 @@ install_osx:
 dump_data:
 	python manage.py dumpdata  --natural \
                --indent=4 \
-               -e south \
                -e sessions \
                -e admin \
+               -e rest_framework \
+               -e authtoken.token \
                -e contenttypes \
                -e auth.Permission > getting_started_data.json
 

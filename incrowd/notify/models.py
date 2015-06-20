@@ -3,9 +3,7 @@ import logging
 
 from django.db import models
 from rest_framework import serializers
-
 from push.utils import send_all
-
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +32,8 @@ class Notification(models.Model):
             data = NotificationSerializer(instance=self)
             logger.info("sending notification {} to {}".format(data.data,
                                                                self.user))
-            send_all('notify', data.data, user=self.user)
+            send_all('notify', data.data, crowd=self.user.crowd,
+                     user=self.user)
 
     class Meta:
         ordering = ['-created_at']

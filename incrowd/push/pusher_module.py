@@ -31,15 +31,15 @@ def push_auth(request):
     return HttpResponse(json_data)
 
 
-def send_all(message_type, message, user=None):
+def send_all(message_type, message, crowd, user=None):
     if not settings.PUSHER_ENABLE:
         return
     data = JSONRenderer().render(message)
     p = pusher.Pusher(app_id=settings.PUSHER_APP_ID,
                       key=settings.PUSHER_KEY,
                       secret=settings.PUSHER_SECRET)
-    logger.info("Sending {}:{}".format(message_type, data))
+    logger.info("Sending via pusher {}:{}".format(message_type, data))
     try:
         p[settings.PUSHER_CHANNEL].trigger(message_type, data)
-    except Exception:
-        logger.warning('Unable to send requests to push')
+    except Exception as e:
+        logger.warning('Unable to send requests to push: {}'.format(e))

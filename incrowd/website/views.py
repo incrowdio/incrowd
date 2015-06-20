@@ -7,7 +7,6 @@ from django.http import HttpResponseNotFound, HttpResponse, \
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.conf import settings
-from django.utils.importlib import import_module
 
 from website.models import Post, UserProfile
 
@@ -32,21 +31,6 @@ def post(request, post_id):
     return render_to_response('post.html',
                               template_data,
                               context_instance=RequestContext(request))
-
-
-def warmup(request):
-    """
-    Provides default procedure for handling warmup requests on App
-    Engine. Just add this view to your main urls.py.
-    """
-    for app in settings.INSTALLED_APPS:
-        for name in ('urls', 'views', 'models'):
-            try:
-                import_module('%s.%s' % (app, name))
-            except ImportError:
-                pass
-    content_type = 'text/plain; charset=%s' % settings.DEFAULT_CHARSET
-    return HttpResponse("Warmup done.", content_type=content_type)
 
 
 def user_redirect(request):

@@ -3,12 +3,11 @@ import logging
 
 from django.conf import settings
 from django.http import HttpResponse
-from website.models import UserProfile
-from push.models import PushSession
+from push_notifications.models import APNSDevice, GCMDevice
 from rest_framework.decorators import api_view
-
-import pusher_module
 from rest_framework.response import Response
+import pusher_module
+from website.models import UserProfile
 
 logger = logging.getLogger()
 
@@ -27,50 +26,60 @@ def push_auth(request):
         return pusher_module.push_auth(request)
 
 
+# @permission_classes((AllowAny, ))
 @api_view(['POST'])
-def ionic_webhook(request):
-    logger.debug('Ionic webhook: {}'.format(request.data))
+def mobile_webhook(request):
+    logger.debug('Mobile webhook: {}'.format(request.data))
 
     if 'unregister' in request.data:
-        _unregister(request)
+        return _unregister(request)
     elif 'token_invalid' in request.data:
-        _invalidate(request)
+        return _invalidate(request)
     else:
-        _register(request)
+        return _register(request)
 
 
 def _register(request):
-    logger.info('Ionic register: {}'.format(request.data))
-    user_id = request.data.get('user_id')
+    logger.info('Mobile register: {}, user: {}'.format(
+        request.data, request.user.id))
+    user_id = request.user.id
     if not user_id:
-        logger.error('Ionic webhook missing a user id: {}'.format(
+        logger.error('Mobile webhook missing a user id: {}'.format(
             request.data))
-        return Response(status=400)
+        return Response('Mobile webhook missing a user id', status=400)
 
     try:
-        user = UserProfile.object.get(id=user_id)
+        user = UserProfile.objects.get(id=user_id)
     except UserProfile.DoesNotExist:
-        logger.exception('Ionic webhook sent an invalid user id: {}'.format(
+        logger.exception('Mobile webhook sent an invalid user id: {}'.format(
             request.data))
-        return Response(status=404)
+        return Response('Mobile webhook sent an invalid user id', status=404)
 
-    push = request.data.get('_push', {})
-    tokens = ','.join(push.get('android_tokens', []) +
-                      push.get('ios_tokens', []))
-    if tokens == '':
-        logger.error('Ionic webhook missing tokens: {}'.format(request.data))
-        return Response(status=400)
-
-    logger.info(
-        'Saving new push session for user {} with tokens {}'.format(user,
-                                                                    tokens))
-    PushSession(user=user_id, session_key=tokens, push_type='ionic').save()
+    logger.debug('device id {}'.format(request.data.get('device_id')))
+    try:
+        # Update or create a device for this user
+        if request.data.get('platform', 'android'):
+            device, created = GCMDevice.objects.get_or_create(
+                user=user, device_id=request.data.get('device_id'),
+                defaults={'registration_id': request.data['register']})
+        else:
+            device, created = APNSDevice.objects.get_or_create(
+                user=user, device_id=request.data.get('device_id'),
+                defaults={'registration_id': request.data['register']})
+        if created or device.registration_id != request.data['register']:
+            logger.info('Saving new mobile push for user {}'.format(user))
+            device.registration_id = request.data['register']
+            device.save()
+        else:
+            logger.debug('Not updating mobile push for user {}'.format(user))
+    except Exception as e:
+        logger.exception('Failed to create a push session: {}'.format(e))
     return Response(status=200)
 
 
 def _unregister(request):
-    logger.info('Ionic unregister: {}'.format(request.data))
+    logger.info('Mobile unregister: {}'.format(request.data))
 
 
 def _invalidate(request):
-    logger.info('Ionic invalidate: {}'.format(request.data))
+    logger.info('Mobile invalidate: {}'.format(request.data))
