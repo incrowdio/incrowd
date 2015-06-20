@@ -1,3 +1,4 @@
+
 inCrowd 
 =======
 
@@ -205,4 +206,3 @@ Contributing
 We follow the standard branch and PR or fork and PR model. Travis will test your code when you submit it, and CodeShip will test and deploy your code when it is merged to the master branch.
 
 Append "--skip-ci" to the bottom of commits in PRs to avoid having CodeShip build them (we only get 50 free builds a month, unlimited is $50/mo). Travis will still build and test your commits.
-
