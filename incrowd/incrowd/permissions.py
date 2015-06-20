@@ -19,9 +19,28 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.user == request.user
 
 
+class IsUserInCrowd(permissions.BasePermission):
+    """
+    Custom permission to only allow users in a crowd to create new objects in
+    that crowd. Allows superuser to post anywhere.
+
+    Not used until we have multiple crowds/user.
+    """
+    update_methods = ['POST', 'PUT', 'PATCH', 'DELETE']
+
+    def has_object_permission(self, request, view, obj):
+        if (request.method not in self.update_methods or
+                request.user and request.user.is_superuser):
+            return True
+        elif request.user.crowd == obj.crowd:
+            return True
+        else:
+            return False
+
+
 class IsPrivate(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an object to edit it.
+    Custom permission to keep private crowds private
     """
 
     def has_object_permission(self, request, view, obj):

@@ -4,6 +4,7 @@ import random
 
 from django.db import models
 from django.conf import settings
+from website.models import UserSerializer
 from rest_framework import serializers
 
 from notify import utils as notify_utils
@@ -51,15 +52,15 @@ class ChatMessage(models.Model):
             self.save()
             # Push
             data = ChatMessageSerializer(instance=self)
-            logger.info("sending chat to all: {}", data.data)
-            send_all('chat', data.data)
+            logger.info("sending chat to all: {}".format(data.data))
+            send_all('chat', data.data, self.user.crowd)
 
     class Meta:
         ordering = ['-sent']
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user = UserSerializer(read_only=True)
     username = serializers.SerializerMethodField()
 
     class Meta:

@@ -22,113 +22,24 @@ ENV INITRD No
 ENV SETTINGS_MODE prod
 # TODO(pcsforeducation) make this dynamic
 ENV DOCKER_HOST_IP 172.17.42.1
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends software-properties-common && \
-    add-apt-repository -y ppa:nginx/stable && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        curl \
-        git-core \
-        libmysqlclient-dev \
-        libsqlite3-dev \
-        libxml2-dev \
-        make \
-        nano \
-        npm \
-        nginx-full \
-        python \
-        python-dev \
-        python-pip \
-        supervisor && \
-    npm install -g bower grunt-cli && \
-    ln -s /usr/bin/nodejs /usr/bin/node
-
-
-# Get NPM installs done early, they take time and should be cached
-# Plus, they're only for the build system
-WORKDIR /home/docker
-
-# Delay adding the whole root to speed up subsequent builds via caching
-# Instead, install npm, bower, and pip dependencies and cache them
-ADD incrowd/frontend/package.json /home/docker/package.json
-
-RUN npm install
-
-ADD incrowd/frontend/bower.json /home/docker/bower.json
-
-RUN bower --allow-root --config.interactive=false install
+ENV INCROWD_PATH "/home/docker/code"
 
 WORKDIR /home/docker/code
 
-RUN pip install uwsgi
-
+ADD docker_configs/install.sh /home/docker/code/install.sh
 ADD incrowd/requirements.txt /home/docker/code/requirements.txt
-
-# run pip install
-RUN pip install -r /home/docker/code/requirements.txt
-
-# Clean up packages required for build
-RUN apt-get purge -y \
-    man \
-    vim-common \
-    vim-tiny \
-    libpython3.4-stdlib:amd64 \
-    python3.4-minimal \
-    eject \
-    locales \
-    software-properties-common \
-    python-pip \
-    python3
-
-# clean packages
-RUN apt-get -y clean && \
-    apt-get -y autoclean && \
-    apt-get -y autoremove && \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+RUN bash /home/docker/code/install.sh
 
 # Prepare services
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-RUN rm /etc/nginx/sites-enabled/default
-ADD docker_configs/incrowd.nginx /etc/nginx/sites-enabled/incrowd.conf
-ADD docker_configs/uwsgi.params /etc/nginx/uwsgi.params
 ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
 # Everything after this point won't be cached on builds
 ADD incrowd/ /home/docker/code
 
-# Prepare Django
-RUN python manage.py collectstatic --noinput --link
-
-# install frontend dependencies
-WORKDIR /home/docker/code/frontend
-
-RUN mv /home/docker/node_modules /home/docker/code/frontend/node_modules
-
-RUN mv /home/docker/bower_components /home/docker/code/frontend/bower_components
-
-WORKDIR /home/docker/code
-
-RUN INCROWD_PATH=/home/docker/code make www_prod
-
 # Finalize and clean up
-RUN rm -rf /home/docker/code/frontend/node_modules/ && \
-    rm -rf /home/docker/code/frontend/bower_components/ && \
-    rm -rf /home/docker/code/frontend/build && \
-    rm -rf /home/docker/code/frontend/.tmp && \
-    rm -rf /usr/local/lib/node_modules/ && \
-    rm -rf /root/.cache && \
-    rm -rf /root/.npm && \
-    rm -rf /tmp/* && \
-    rm -rf /var/tmp/*
-
 EXPOSE 80
-
-VOLUME ["/home/docker/code/config/", "/etc/nginx/sites-enabled", "/etc/nginx/certs"]
-
-ENV INCROWD_PATH "/home/docker/code"
+VOLUME ["/home/docker/code/config/"]
 
 cmd ["supervisord", "-n"]
 

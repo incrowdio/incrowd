@@ -9,7 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import filters, viewsets
 
-from incrowd import permissions as incrowd_perms
+from incrowd.permissions import IsOwnerOrReadOnly, IsPrivate, IsSuperUser
+from incrowd.viewsets import InCrowdModelViewSet
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
     UserSerializer, PostSerializer, CommentSerializer, \
@@ -42,7 +43,7 @@ def register(request, *args, **kwargs):
                         status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(InCrowdModelViewSet):
     lookup_field = 'username'
     serializer_class = UserSerializer
     queryset = UserProfile.objects.prefetch_related('user_votes').order_by(
@@ -52,11 +53,13 @@ class UserViewSet(viewsets.ModelViewSet):
     paginate_by_param = 'page_size'
     max_paginate_by = 100
 
-    permission_classes = (incrowd_perms.IsOwnerOrReadOnly,
-                          incrowd_perms.IsPrivate)
+    permission_classes = (IsOwnerOrReadOnly,
+                          IsPrivate)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,
+                       filters.OrderingFilter)
 
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostViewSet(InCrowdModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.select_related(
         'user').prefetch_related('user__user_votes').prefetch_related(
@@ -85,13 +88,13 @@ class PostViewSet(viewsets.ModelViewSet):
         obj.user = self.request.user
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class CommentViewSet(InCrowdModelViewSet):
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
 
     paginate_by = 100
     paginate_by_param = 'page_size'
-    max_paginate_by = 1000
+    # max_paginate_by = 1000
 
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter)
@@ -101,6 +104,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     ordering_fields = ('submitted',)
 
     def perform_create(self, serializer):
+        print 'CREATE', serializer.initial_data
         serializer.save(user=self.request.user,
                         crowd=self.request.user.crowd)
 
@@ -114,8 +118,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ('post_count',)
 
 
-class CrowdViewSet(viewsets.ModelViewSet):
+class CrowdViewSet(InCrowdModelViewSet):
     serializer_class = CrowdSerializer
     queryset = Crowd.objects.all()
 
-    permission_classes = (incrowd_perms.IsSuperUser,)
+    permission_classes = (IsSuperUser,)

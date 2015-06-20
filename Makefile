@@ -12,6 +12,8 @@ clean: clean_www clean_app clean_build
 
 test: pep8 test_django
 
+ci: docker_build_ci docker_run_tests integration
+
 #########################
 # Dev tools
 #########################
@@ -25,10 +27,19 @@ docker_upload:
 	docker push incrowd/incrowd:testing
 
 docker_run:
-	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
+	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
 
 run_dev:
-	docker run -i -v `pwd`/incrowd:/home/docker/code  -p 8000:8000 -t incrowd /bin/bash -c "make docker_server"
+	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_server"
+
+docker_shell:
+	docker run -i -v `pwd`/incrowd:/home/docker/code -t incrowd /bin/bash
+
+docker_build_ci:
+	docker build -t incrowd/incrowd:testing .
+
+docker_run_tests:
+	docker run -e DB_ADDR=$(DB_ADDR) -t incrowd/incrowd:testing /bin/bash -c "make test"
 
 pep8:
 	cd incrowd && flake8 api
@@ -42,7 +53,10 @@ pep8:
 	cd incrowd && flake8 website
 
 test_django:
-	cd incrowd && python manage.py test
+	cd incrowd && python manage.py test --noinput
+
+integration:
+	./tests/integration.sh
 
 # Install tools if you don't wanna use Docker
 install_ubuntu:
@@ -82,43 +96,6 @@ load_data:
 # Build/deploy tools
 #########################
 
-build_frontend_prod:
-	grunt --gruntfile frontend/Gruntfile.js prod
-
-build_frontend:
-	grunt --gruntfile frontend/Gruntfile.js
-
-www_prod: build_frontend_prod
-	grunt --gruntfile frontend/Gruntfile.js www
-
-www: build_frontend
-	grunt --gruntfile frontend/Gruntfile.js www
-
-# Link libs for AppEngine
-link_libs:
-	mkdir -p libs
-	bash install_libs.sh
-
-sync_appengine:
-	SETTINGS_MODE=prod source prod_exports && dev/bin/python manage.py syncdb
-	SETTINGS_MODE=prod source prod_exports && dev/bin/python manage.py migrate
-
-deploy:
-	cd frontend/ && npm install
-	cd frontend/ && bower install
-	appcfg.py update .
-
-rollback:
-	appcfg.py rollback .
-
-clean_www:
-	rm -rf www/*
-
-clean_app:
-	rm -rf cordova/www/*
-
-clean_build:
-	rm -rf frontend/build/*
 
 
 #########################

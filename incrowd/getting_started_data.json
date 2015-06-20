@@ -1,105 +1,112 @@
 [
 {
-    "pk": 1, 
-    "model": "sites.site", 
     "fields": {
-        "domain": "example.com", 
+        "domain": "example.com",
         "name": "example.com"
-    }
+    },
+    "model": "sites.site",
+    "pk": 1
 },
 {
-    "pk": 1, 
-    "model": "website.userprofile", 
     "fields": {
-        "username": "admin", 
-        "profile_pic": "https://storage.googleapis.com/cliquesio.appspot.com/default_profile.jpg", 
-        "first_name": "", 
-        "last_name": "", 
-        "last_updated": "2014-12-21T22:34:13.858Z", 
-        "groups": [], 
-        "tagline": null, 
-        "is_active": true, 
-        "fantasy_team_url": null, 
-        "is_superuser": true, 
-        "is_staff": true, 
-        "last_login": "2014-12-21T22:18:25.791Z", 
-        "location": null, 
-        "email_settings": "posts", 
-        "user_permissions": [], 
-        "poll_votes": 0, 
-        "password": "pbkdf2_sha256$10000$4t13EpaTIj18$4042s0rIsxyNoczqe/YIjSM0IV4F6VRQFEaCTb95Nvc=", 
-        "email": "admin@example.com", 
+        "web_root": "/",
+        "maximum_size": 100,
+        "name": "inCrowd",
+        "private": true,
+        "registration_type": "invite"
+    },
+    "model": "website.crowd",
+    "pk": "b1547a89d4d1484d69b47d1324983940"
+},
+{
+    "fields": {
+        "username": "admin",
+        "profile_pic": "https://storage.googleapis.com/cliquesio.appspot.com/default_profile.jpg",
+        "first_name": "",
+        "last_name": "",
+        "last_updated": "2014-12-21T22:34:13.858Z",
+        "groups": [],
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "tagline": null,
+        "is_active": true,
+        "fantasy_team_url": null,
+        "is_superuser": true,
+        "is_staff": true,
+        "last_login": "2015-05-17T01:46:15.264Z",
+        "location": null,
+        "email_settings": "posts",
+        "user_permissions": [],
+        "poll_votes": 0,
+        "password": "pbkdf2_sha256$20000$ZtRzQTDgzQCv$yS71lT2Bj0WsFpmbK9NaR1CW/65CB5FCKh6+PqJvqv4=",
+        "email": "admin@example.com",
         "date_joined": "2014-12-21T05:15:13.741Z"
-    }
+    },
+    "model": "website.userprofile",
+    "pk": 1
 },
 {
-    "pk": 1, 
-    "model": "website.category", 
     "fields": {
-        "color": "blue", 
-        "name": "Random", 
+        "color": "blue",
         "created_by": [
             "admin"
-        ]
-    }
+        ],
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "name": "Random"
+    },
+    "model": "website.category",
+    "pk": 1
 },
 {
-    "pk": 2, 
-    "model": "website.category", 
     "fields": {
-        "color": "purple", 
-        "name": "Personal", 
+        "color": "purple",
         "created_by": [
             "admin"
-        ]
-    }
+        ],
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "name": "Personal"
+    },
+    "model": "website.category",
+    "pk": 2
 },
 {
-    "pk": 3, 
-    "model": "website.category", 
     "fields": {
-        "color": "orange", 
-        "name": "Movies & TV", 
+        "color": "orange",
         "created_by": [
             "admin"
-        ]
-    }
+        ],
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "name": "Movies & TV"
+    },
+    "model": "website.category",
+    "pk": 3
 },
 {
-    "pk": 4, 
-    "model": "website.category", 
     "fields": {
-        "color": "green", 
-        "name": "Music", 
+        "color": "green",
         "created_by": [
             "admin"
-        ]
-    }
+        ],
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "name": "Music"
+    },
+    "model": "website.category",
+    "pk": 4
 },
 {
-    "pk": 1, 
-    "model": "website.post", 
     "fields": {
-        "category": 1, 
-        "edited": "2014-12-21T22:32:00.354Z", 
-        "title": "Welcome!", 
-        "url": null, 
-        "submitted": "2014-12-21T22:32:00.353Z", 
-        "nsfw": false, 
+        "category": 1,
+        "edited": "2015-05-17T01:46:54.483Z",
+        "crowd": "b1547a89d4d1484d69b47d1324983940",
+        "title": "Welcome!",
+        "url": "",
+        "submitted": "2014-12-21T22:32:00.353Z",
+        "nsfw": false,
         "user": [
             "admin"
-        ], 
+        ],
         "type": "text"
-    }
-},
-{
-    "pk": "64ac1f955de527e4bd9d2474abab3b057177234e", 
-    "model": "authtoken.token", 
-    "fields": {
-        "user": [
-            "admin"
-        ], 
-        "created": "2014-12-21T05:17:57.113Z"
-    }
+    },
+    "model": "website.post",
+    "pk": 1
 }
 ]

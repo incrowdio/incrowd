@@ -46,7 +46,7 @@ urlpatterns = patterns(
     url(r'^api/v1/', include(poll.urls.router.urls)),
     url(r'^api/v1/', include('push.urls')),
 
-    url(r'^api/v1/register', 'website.api.register'),
+    url(r'^api/v1/register/', 'website.api.register'),
     url(r'^api/v1/', include(v1_invite_urls)),
     url('^api/v1/presence/$', presence),
 

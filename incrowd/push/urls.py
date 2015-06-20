@@ -5,5 +5,5 @@ urlpatterns = patterns(
     '',
     url(r'check_in/$', 'push.views.check_in'),
     url(r'pusher/auth$', 'push.views.push_auth'),
-    url(r'ionic/$', 'push.views.ionic_webhook')
+    url(r'mobile/$', 'push.views.mobile_webhook')
 )

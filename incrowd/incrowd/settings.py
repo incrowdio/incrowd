@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import json
+
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -75,6 +76,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djangle',
     'djoser',
+    'push_notifications',
     'invite_only',
     'chat_server',
     'poll',
@@ -96,11 +98,9 @@ MIDDLEWARE_CLASSES = (
 CORS_ORIGIN_ALLOW_ALL = True
 
 # if ENV in ['localprod', 'local', 'codeship', 'travis']:
-# INSTALLED_APPS += [
-# 'debug_toolbar',
-# 'appengine_toolkit'
-# ]
-# DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# INSTALLED_APPS += ['django_nose']
+
+# DEBUG_TOLBAR_PATCH_SETTINGS = False
 # MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.'
 # 'DebugToolbarMiddleware',)
 
@@ -116,20 +116,15 @@ AUTHENTICATION_BACKENDS = (
     # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+PUSH_NOTIFICATIONS_SETTINGS = {
+    'GCM_API_KEY': '<your api key>',
+    'APNS_CERTIFICATE': '/path/to/your/certificate.pem',
+}
+
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-if ENV == 'prod':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'incrowd',
-            'USER': 'incrowd',
-            'PASSWORD': 'incrowd',
-            'HOST': os.environ.get('DOCKER_HOST_IP', '127.0.0.1'),
-        }
-    }
 
-elif ENV == 'shippable':
+if ENV == 'shippable':
     INSTALLED_APPS += ['django_nose']
     # Running in development, so use a local MySQL database.
     DATABASES = {
@@ -142,15 +137,19 @@ elif ENV == 'shippable':
     }
 
 else:
-    INSTALLED_APPS += ['django_nose']
     # Running in development, so use sqlite for simplicity
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+            'ENGINE': (os.environ.get('DB_PASSWORD') or
+                       'django.db.backends.mysql'),
+            'NAME': os.environ.get('DB_NAME') or 'incrowd',
+            'USER': os.environ.get('DB_USER') or 'incrowd',
+            'PASSWORD': os.environ.get('DB_PASSWORD') or 'incrowd',
+            'HOST': os.environ.get('DB_ADDR') or '192.168.59.103',
         }
     }
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+print DATABASES
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -211,6 +210,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',)
 }
 
+PUSH_DISABLED = False
 # Only supported push module is pusher
 PUSH_MODULE = 'pusher'
 
@@ -324,7 +324,7 @@ except Exception:
 try:
     env = os.environ.get('DJANGO_ENV', '{}')
     for key, value in json.loads(env).items():
-        print("Overring setting: {} to {}".format(key, value))
+        print('Overring setting: {} to {}'.format(key, value))
         vars()[key] = value
 except ValueError:
     pass

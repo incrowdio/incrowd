@@ -89,7 +89,7 @@ class InviteCodeSerializer(serializers.ModelSerializer):
     invited_by = UserSerializer(read_only=True)
     code = serializers.CharField(read_only=True)
     user = serializers.BooleanField(default=False)
-    invite_url = serializers.SerializerMethodField('get_invite_url')
+    invite_url = serializers.SerializerMethodField()
 
     def get_invite_url(self, obj):
         return obj.invite_url()
@@ -97,5 +97,5 @@ class InviteCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = InviteCode
         fields = ('id', 'invited_by', 'code', 'used', 'invited_email',
-                  'invited_name', 'invite_url')
+                  'invited_name', 'invite_url', 'user')
         depth = 1

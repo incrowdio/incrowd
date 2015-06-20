@@ -172,7 +172,7 @@ class Post(models.Model):
             self._new_post_email()
             data = PostSerializer(instance=self)
             logger.info("sending post to all: {}".format(data.data))
-            send_all('post', data.data)
+            send_all('post', data.data, self.user.crowd)
 
     def _new_post_email(self):
         # TODO(pcsforeducation) Make async
@@ -287,7 +287,7 @@ class Comment(models.Model):
             self._notify_users()
             data = CommentSerializer(instance=self)
             logger.info("sending comment to all: {}".format(data.data))
-            send_all('comment', data.data)
+            send_all('comment', data.data, self.user.crowd)
 
     def _notify_users(self):
         other_users = set(
@@ -354,12 +354,17 @@ class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     crowd = CrowdSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
+    comment_set = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
                   'category', 'comment_set', 'nsfw', 'crowd')
         depth = 1
+
+    def get_comment_set(self, obj):
+        return CommentSerializer(obj.comment_set.all(), many=True,
+                                 read_only=True).data
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
@@ -373,7 +378,7 @@ class PostDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
-                  'category', 'comment_set', 'nsfw', 'crowd')
+                  'category', 'nsfw', 'crowd')
         depth = 1
 
     def get_comment_set(self, obj):
@@ -385,6 +390,7 @@ class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     username = serializers.SerializerMethodField()
     crowd = CrowdSerializer(read_only=True)
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
 
     class Meta:
         model = Comment

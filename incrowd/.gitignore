@@ -63,3 +63,4 @@ app/
 shippable/
 man/
 leader/
+node_modules/
