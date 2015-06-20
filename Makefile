@@ -14,6 +14,8 @@ test: pep8 test_django
 
 ci: docker_build_ci docker_run_tests integration
 
+promote: docker_promote
+
 #########################
 # Dev tools
 #########################
@@ -23,8 +25,12 @@ docker_build:
 	cd incrowd && docker build -t incrowd .
 
 docker_upload:
-	docker build -t incrowd/incrowd:testing .
+	docker build incrowd/incrowd:testing .
 	docker push incrowd/incrowd:testing
+
+docker_promote:
+	docker build incrowd/incrowd
+	docker push incrowd/incrowd    
 
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
