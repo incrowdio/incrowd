@@ -25,7 +25,7 @@ docker_build:
 	cd incrowd && docker build -t incrowd .
 
 docker_upload:
-	docker build incrowd/incrowd:testing .
+	docker build -t incrowd/incrowd:testing .
 	docker push incrowd/incrowd:testing
 
 docker_promote:
