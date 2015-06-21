@@ -140,7 +140,7 @@ else:
     # Running in development, so use sqlite for simplicity
     DATABASES = {
         'default': {
-            'ENGINE': (os.environ.get('DB_PASSWORD') or
+            'ENGINE': (os.environ.get('DB_BACKEND') or
                        'django.db.backends.mysql'),
             'NAME': os.environ.get('DB_NAME') or 'incrowd',
             'USER': os.environ.get('DB_USER') or 'incrowd',

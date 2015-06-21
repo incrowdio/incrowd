@@ -31,7 +31,6 @@ ADD incrowd/requirements.txt /home/docker/code/requirements.txt
 RUN bash /home/docker/code/install.sh
 
 # Prepare services
-ADD docker_configs/incrowd.supervisor /etc/supervisor/conf.d/incrowd.conf
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
 # Everything after this point won't be cached on builds
@@ -41,5 +40,4 @@ ADD incrowd/ /home/docker/code
 EXPOSE 80
 VOLUME ["/home/docker/code/config/"]
 
-cmd ["supervisord", "-n"]
-
+cmd ["/usr/local/bin/uwsgi", "--ini", "/home/docker/code/uwsgi.ini"]
