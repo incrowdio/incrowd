@@ -24,14 +24,15 @@ check_docker:
 # Install frontend dependencies
 frontend_deps:
 #	cd $(INCROWD_PATH)/frontend && npm install
-	cd $(INCROWD_PATH)/frontend && bower --allow-root --config.interactive=false install
+#	cd $(INCROWD_PATH)/frontend && bower --allow-root --config.interactive=false install
 
 # Initialize the DB
 django_db:
-#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py syncdb --noinput --no-initial-data
-#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py migrate --noinput --no-initial-data
-#	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && bash initial_db_load.sh
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py syncdb --noinput --no-initial-data
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py migrate --noinput --no-initial-data
+	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && bash initial_db_load.sh
 	echo 'skipping db'
+
 docker_build:
 	docker build -t incrowd .
 

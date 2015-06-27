@@ -15,23 +15,11 @@
   ng\:form {
     display: block;
   }</style>
-  <!-- build:css css/incrowd.css -->
-  <link rel="stylesheet"
-        href="bower_components/angular-material/angular-material.css">
-  <link href="bower_components/angular-xeditable/dist/css/xeditable.css"
-        rel="stylesheet">
-  <link rel="stylesheet" href="css/material.css"/>
-  <link rel="stylesheet" href="css/incrowd-custom-theme.css"/>
-  <link rel="stylesheet" href="css/site.css"/>
-  <link rel="stylesheet" href="css/icomoon.css"/>
-  <link rel="stylesheet" href="css/posts.css"/>
-  <link rel="stylesheet" href="css/categories.css"/>
-  <link rel="stylesheet" href="css/comments.css"/>
-  <link rel="stylesheet" href="css/profiles.css"/>
-  <link rel="stylesheet" href="css/chat.css"/>
-  <link rel="stylesheet" href="css/notify.css"/>
-  <link rel="stylesheet" href="css/poll.css"/>
-  <link rel="stylesheet" href="css/autocomplete.css"/>
+  <!-- build:css(src) assets/incrowd.css -->
+  <!-- bower:css -->
+  <!-- endbower -->
+  <!-- inject:css -->
+  <!-- endinject -->
   <!-- endbuild -->
 </head>
 <body layout="vertical" ng-controller="UserCtrl">
@@ -121,28 +109,6 @@
   <chatinput></chatinput>
 
 </md-sidenav>
-</div>
-<!-- build:js js/angular.min.js
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<script src="bower_components/jquery-cookie/jquery.cookie.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-cookies/angular-cookies.js"></script>
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/angular-touch/angular-touch.js"></script>
-<script src="bower_components/angular-local-storage/angular-local-storage.js"></script>
-<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-<script src="bower_components/angular-aria/angular-aria.js"></script>
-<script src="bower_components/angular-animate/angular-animate.js"></script>
-<script src="bower_components/hammerjs/hammer.js"></script>
-<script src="bower_components/angular-material/angular-material.js"></script>
-<script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
-<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
-<script src="bower_components/angular-off-click/offClick.js"></script>
-<script src="bower_components/angular-elastic/elastic.js"></script>
-<script src="bower_components/favico.js/favico.js"></script>
-<script src="js/pusher.min.js"></script>
-<!-- endbuild -->
 
 <!-- build:js(src) scripts/vendor.js -->
 <!-- bower:js -->
@@ -150,33 +116,14 @@
 <!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js(src) scripts/app.js -->
-<script src="js/config.js"></script>
-
-<script src="controllers/auth.js"></script>
-<script src="services/pusher.js"></script>
-<script src="services/config.js"></script>
-<script src="services/user.js"></script>
-
-<script src="controllers/signup.js"></script>
-<script src="directives/djangle.js"></script>
-<script src="directives/autocomplete.js"></script>
-
-<script src="controllers/profile.js"></script>
-<script src="directives/profile.js"></script>
-
-<script src="controllers/chat.js"></script>
-
-<script src="controllers/notify.js"></script>
-
-<script src="controllers/poll.js"></script>
-
-<script src="js/app.js"></script>
-<script src="js/incrowd_controllers.js"></script>
-
-<!-- endbuild -->
-<!-- inject:partials -->
+<!-- build:js(.tmp) scripts/cache.js -->
+<!-- cache:js -->
 <!-- angular templates will be automatically converted in js and inserted here -->
+<!-- endinject -->
+<!-- endbuild -->
+
+<!-- build:js(src) scripts/app.js -->
+<!-- inject:js -->
 <!-- endinject -->
 <!-- endbuild -->
 <script>

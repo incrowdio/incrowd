@@ -2,13 +2,52 @@
 
 var gulp = require('gulp');
 var ngConstant = require('gulp-ng-constant');
+var gulpif = require('gulp-if');
 var print = require('gulp-print');
 var rename = require('gulp-rename');
+var wiredep = require('wiredep').stream;
 
 var paths = gulp.paths;
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
+});
+
+gulp.task('inject', ['partials', 'styles'], function () {
+  var injectStyles = gulp.src([
+    paths.tmp + '/serve/{app,components}/**/*.css',
+    paths.src + '/assets/css/*.css',
+    '!' + paths.tmp + '/serve/app/vendor.css'
+  ], {read: false});
+
+  var injectScripts = gulp.src([
+    paths.src + '/{app,components}/**/*.js',
+    '!' + paths.src + '/settings.js',
+    '!' + paths.src + '/{app,components}/**/*.spec.js',
+    '!' + paths.src + '/{app,components}/**/*.mock.js'
+  ]).pipe($.angularFilesort());
+
+  var injectOptions = {
+    ignorePath: [paths.src],
+    addRootSlash: false
+  };
+
+  var wiredepOptions = {
+    directory: 'src/lib',
+    exclude: [/bootstrap\.css/, /foundation\.css/]
+  };
+
+  return gulp.src(paths.src + '/*.html')
+    .pipe($.inject(injectStyles, injectOptions))
+    .pipe($.inject(injectScripts, injectOptions))
+    // Use relative here so it gets picked up a findable file in assets() in
+    // 'html'.
+    .pipe($.inject(gulp.src(paths.tmp + '/serve/templateCacheHtml.js',
+      {read: false}), {name: 'cache', addRootSlash: false, relative: true}))
+    .pipe(print())
+    .pipe(wiredep(wiredepOptions))
+    .pipe(gulp.dest(paths.tmp + '/serve'));
+
 });
 
 gulp.task('partials', ['markups'], function () {
@@ -21,62 +60,34 @@ gulp.task('partials', ['markups'], function () {
       spare: true,
       quotes: true
     }))
-    .pipe($.angularTemplatecache('/partials/templateCacheHtml.js', {
+    .pipe($.angularTemplatecache('/serve/templateCacheHtml.js', {
       module: 'incrowd'
     }))
-    .pipe(gulp.dest(paths.tmp + '/partials/'))
-    .pipe(gulp.dest(paths.dist + '/'));
+    .pipe(gulp.dest(paths.tmp + '/'));
 });
 
-gulp.task('minifyapp', [], function() {
-  gulp.src(paths.src + '/app/**/*.js')
-    .pipe(print());
-});
+gulp.task('html', ['inject'], function () {
 
-gulp.task('minifycss', [], function() {
-  gulp.src(paths.src + '/assets/**/*.css')
-    .pipe(print())
-});
-
-gulp.task('html', ['inject', 'partials'], function () {
-  var partialsInjectFile = gulp.src(paths.tmp + '/partials/templateCacheHtml.js', { read: false });
-  var partialsInjectOptions = {
-    starttag: '<!-- inject:partials -->',
-    ignorePath: paths.tmp + '/partials',
-    addRootSlash: false
-  };
-
-  var htmlFilter = $.filter('*.html');
-  var jsFilter = $.filter('/app/**/*.js');
-  var cssFilter = $.filter('/assets/**/*.css');
   var assets;
-
   return gulp.src(paths.tmp + '/serve/*.html')
-    .pipe(print())
-    .pipe($.inject(partialsInjectFile, partialsInjectOptions))
     .pipe(assets = $.useref.assets())
-    .pipe($.rev())
-    .pipe(jsFilter)
-
-    .pipe($.ngAnnotate())
-    .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
-    .pipe(jsFilter.restore())
-    .pipe(print())
-    .pipe(cssFilter)
-    .pipe($.csso())
-    .pipe(cssFilter.restore())
     .pipe(assets.restore())
+    .pipe(print(function (filepath) {
+      return "assets: " + filepath;
+    }))
+    .pipe($.rev())
+    //.pipe(gulpif('*.js', $.ngAnnotate()))
+    //.pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
+    //.pipe(gulpif('*.css', $.csso()))
     .pipe($.useref())
     .pipe($.revReplace())
-    .pipe(htmlFilter)
-    .pipe($.minifyHtml({
+    .pipe(gulpif('*.html', $.minifyHtml({
       empty: true,
       spare: true,
       quotes: true
-    }))
-    .pipe(htmlFilter.restore())
+    })))
     .pipe(gulp.dest(paths.dist + '/'))
-    .pipe($.size({ title: paths.dist + '/', showFiles: true }));
+    .pipe($.size({title: paths.dist + '/', showFiles: true}));
 });
 
 gulp.task('images', function () {
@@ -91,7 +102,7 @@ gulp.task('fonts', function () {
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
-gulp.task('config', function() {
+gulp.task('config', function () {
   gulp.src(paths.src + '/prod_settings.js')
     .pipe(print())
     .pipe(rename('settings.js'))
@@ -132,4 +143,4 @@ gulp.task('clean', function (done) {
   $.del([paths.dist + '/', paths.tmp + '/'], done);
 });
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc', 'config']);
+gulp.task('build', ['clean', 'html', 'images', 'fonts', 'misc', 'config']);
