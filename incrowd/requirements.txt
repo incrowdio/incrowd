@@ -5,7 +5,8 @@ django-mailgun==0.2.2
 django-nose==1.4
 Django==1.8.0
 djangorestframework==3.1
-django-push-notifications==1.2.1
+#django-push-notifications==1.2.1
+#-e git://github.com/jleclanche/django-push-notifications@7e5b806a1d65706e7f554456b3907a3ff980fb39#egg=django-push-notifications
 djoser==0.2.0
 MySQL-python==1.2.5
 newrelic==2.40.0.34
