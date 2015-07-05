@@ -1,0 +1,21 @@
+<md-list ng-controller="ChatCtrl" md-scroll-y layout="column"
+           class="chat_container chat_padding" >
+    <md-item ng-repeat="message in chats"
+             ng-class="{'chat_background_primary': chatBackground(message, chats[$index - 1]),
+                        'chat_background_alternate': chatBackground(message, chats[$index - 1]),
+                        'chat_last': $last}">
+      <md-item-content ng-class="chatHighlight(message)">
+        <div class="md-tile-left">
+          <profile-pic layout="vertical" id="message.user" displayUsername></profile-pic>
+        </div>
+        <div class="md-tile-content chat_message">
+          <span class="text" compile="message.message | ChatMessageFilter"></span>
+          <a class="chat_attachment" ng-if="message.attachment_url"
+             ng-href="{{ message.attachment_url }}">
+            <img scroll-chat-on-load ng-src="{{ message.attachment_url }}">
+          </a>
+          <p><a class="username" ng-href="#/user/{{message.username}}">{{message.username}}</a> | {{ message.sent | DTSince }}<span ng-if="message.user == user.id"> | <a href="" ng-click="delete_message($index)">delete</a></span></p>
+        </div>
+      </md-item-content>
+    </md-item>
+  </md-list>

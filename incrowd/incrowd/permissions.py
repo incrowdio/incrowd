@@ -32,7 +32,7 @@ class IsUserInCrowd(permissions.BasePermission):
         if (request.method not in self.update_methods or
                 request.user and request.user.is_superuser):
             return True
-        elif request.user.crowd == obj.crowd:
+        elif getattr(request.user, 'crowd', None) == obj.crowd:
             return True
         else:
             return False
@@ -49,7 +49,8 @@ class IsPrivate(permissions.BasePermission):
         print("Private", not (obj.crowd.private
                               and obj.crowd != request.user.crowd))
 
-        return not (obj.crowd.private and obj.crowd != request.user.crowd)
+        return not (obj.crowd.private and obj.crowd != 
+                    getattr(request.user, 'crowd', None))
 
 
 class IsSuperUser(permissions.BasePermission):

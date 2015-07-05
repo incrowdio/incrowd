@@ -3,16 +3,16 @@
  */
 @font-face {
     font-family: 'icomoon';
-    src: url('../fonts/icomoon.eot?-l8imuo');
-    src: url('../fonts/icomoon.eot?#iefix-l8imuo') format('embedded-opentype'),
-    url('../fonts/icomoon.woff?-l8imuo') format('woff'),
-    url('../fonts/icomoon.ttf?-l8imuo') format('truetype'),
-    url('../fonts/icomoon.svg?-l8imuo#icomoon') format('svg');
+    src: url('../fonts/icomoon.eot?-z3iv5n');
+    src: url('../fonts/icomoon.eot?#iefix-z3iv5n') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?-z3iv5n') format('truetype'),
+    url('../fonts/icomoon.woff?-z3iv5n') format('woff'),
+    url('../fonts/icomoon.svg?-z3iv5n#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
-.icomoon {
+[class^="icon-"], [class*=" icon-"] {
     font-family: 'icomoon';
     speak: none;
     font-style: normal;
@@ -26,168 +26,172 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-image:before {
-    content: "\e600";
+.icon-playlist_add:before {
+    content: "\e01e";
 }
 
-.icon-images:before {
-    content: "\e601";
+.icon-queue:before {
+    content: "\e01f";
 }
 
-.icon-camera:before {
-    content: "\e602";
+.icon-chat:before {
+    content: "\e046";
 }
 
-.icon-music:before {
-    content: "\e603";
+.icon-comment:before {
+    content: "\e048";
 }
 
-.icon-play:before {
-    content: "\e604";
+.icon-forum:before {
+    content: "\e04d";
 }
 
-.icon-profile:before {
-    content: "\e614";
+.icon-message:before {
+    content: "\e053";
 }
 
-.icon-tag:before {
-    content: "\e615";
+.icon-chat_bubble:before {
+    content: "\e054";
 }
 
-.icon-envelope:before {
-    content: "\e616";
+.icon-chat_bubble_outline:before {
+    content: "\e055";
 }
 
-.icon-location:before {
-    content: "\e617";
+.icon-textsms:before {
+    content: "\e061";
 }
 
-.icon-location2:before {
-    content: "\e618";
+.icon-add:before {
+    content: "\e069";
 }
 
-.icon-bell:before {
-    content: "\e605";
+.icon-add_circle:before {
+    content: "\e06b";
 }
 
-.icon-bubble:before {
-    content: "\e619";
+.icon-add_circle_outline:before {
+    content: "\e06c";
 }
 
-.icon-bubbles:before {
-    content: "\e61a";
+.icon-block:before {
+    content: "\e06f";
 }
 
-.icon-bubbles2:before {
-    content: "\e61b";
+.icon-clear:before {
+    content: "\e070";
 }
 
-.icon-bubble2:before {
-    content: "\e61c";
+.icon-create:before {
+    content: "\e074";
 }
 
-.icon-bubbles3:before {
-    content: "\e61d";
+.icon-remove:before {
+    content: "\e07f";
 }
 
-.icon-bubbles4:before {
-    content: "\e61e";
+.icon-send:before {
+    content: "\e087";
 }
 
-.icon-user:before {
-    content: "\e61f";
+.icon-insert_comment:before {
+    content: "\e0e6";
 }
 
-.icon-users:before {
-    content: "\e620";
+.icon-mode_comment:before {
+    content: "\e0ed";
 }
 
-.icon-user2:before {
-    content: "\e621";
+.icon-cancel:before {
+    content: "\e205";
 }
 
-.icon-users2:before {
-    content: "\e622";
+.icon-wc:before {
+    content: "\e241";
 }
 
-.icon-cog:before {
-    content: "\e606";
+.icon-group:before {
+    content: "\e245";
 }
 
-.icon-menu:before {
-    content: "\e607";
+.icon-group_add:before {
+    content: "\e246";
 }
 
-.icon-warning:before {
-    content: "\e608";
+.icon-notifications:before {
+    content: "\e24a";
 }
 
-.icon-notification:before {
-    content: "\e609";
+.icon-notifications_none:before {
+    content: "\e24b";
 }
 
-.icon-question:before {
-    content: "\e60a";
+.icon-notifications_off:before {
+    content: "\e24c";
 }
 
-.icon-info:before {
-    content: "\e60b";
+.icon-people:before {
+    content: "\e251";
 }
 
-.icon-info2:before {
-    content: "\e60c";
+.icon-person:before {
+    content: "\e253";
 }
 
-.icon-cancel-circle:before {
-    content: "\e60d";
+.icon-person_add:before {
+    content: "\e254";
 }
 
-.icon-checkmark-circle:before {
-    content: "\e60e";
+.icon-person_outline:before {
+    content: "\e255";
 }
 
-.icon-spam:before {
-    content: "\e60f";
+.icon-account_circle:before {
+    content: "\e268";
 }
 
-.icon-close:before {
-    content: "\e610";
+.icon-build:before {
+    content: "\e27e";
 }
 
-.icon-checkmark:before {
-    content: "\e611";
+.icon-face:before {
+    content: "\e290";
 }
 
-.icon-minus:before {
-    content: "\e612";
+.icon-highlight_remove:before {
+    content: "\e29c";
 }
 
-.icon-plus:before {
-    content: "\e613";
+.icon-search:before {
+    content: "\e2ca";
 }
 
-.icon-checkbox-checked:before {
-    content: "\e623";
+.icon-settings:before {
+    content: "\e2cb";
 }
 
-.icon-checkbox-unchecked:before {
-    content: "\e624";
+.icon-shop_two:before {
+    content: "\e2dd";
 }
 
-.icon-checkbox-partial:before {
-    content: "\e625";
+.icon-thumb_down:before {
+    content: "\e2ed";
 }
 
-.icon-radio-checked:before {
-    content: "\e626";
+.icon-thumb_up:before {
+    content: "\e2ee";
 }
 
-.icon-radio-unchecked:before {
-    content: "\e627";
+.icon-toc:before {
+    content: "\e2f0";
 }
 
-.icon-link:before {
-    content: "\e628";
+.icon-reorder:before {
+    content: "\e310";
+}
+
+.icon-http:before {
+    content: "\e313";
 }
 
 /*Override to use icomoon inside md-buttons*/

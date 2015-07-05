@@ -6,119 +6,117 @@ var app = angular.module('incrowd', [
   'ngMaterial',
   'infinite-scroll',
   'xeditable',
-  'autocomplete',
+  //'autocomplete',
   'offClick',
   //'luegg.directives',
   'monospaced.elastic',
+  'ngEmbed',
+  'djangoRESTResources',
+  'drf_auth.token',
+  'djangle',
+  'incrowdLib',
   'config',
-  'auth',
-  'pusher_service',
-  'signup',
-  'profile',
-  'chat',
-  'notify',
-  'poll',
-  'post_controllers'
-]);
+  'pusher_service'
+])
 
-app.config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider) {
 
-  $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/posts');
 
-  $stateProvider
-    .state('posts', {
-      url: '/posts',
-      templateUrl: 'templates/posts.html',
-      controller: 'PostListCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+    $stateProvider
+      .state('posts', {
+        url: '/posts',
+        templateUrl: 'templates/posts.html',
+        controller: 'PostListCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('post_details', {
-      url: '/posts/{postId}',
-      templateUrl: 'templates/post_detail.html',
-      controller: 'PostDetailCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('post_details', {
+        url: '/posts/{postId}',
+        templateUrl: 'templates/post_detail.html',
+        controller: 'PostDetailCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('login', {
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: 'AuthCtrl'
-    })
-    .state('chat', {
-      url: '/chat',
-      templateUrl: 'templates/chat.html',
-      controller: 'ChatCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('login', {
+        url: '/login',
+        templateUrl: 'templates/login.html',
+        controller: 'AuthCtrl'
+      })
+      .state('chat', {
+        url: '/chat',
+        templateUrl: 'templates/chat.html',
+        controller: 'ChatCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('polls', {
-      url: '/polls/:pollStub',
-      templateUrl: 'templates/poll.html',
-      controller: 'PollDetailCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('polls', {
+        url: '/polls/:pollStub',
+        templateUrl: 'templates/poll.html',
+        controller: 'PollDetailCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('notifications', {
-      url: '/notifications',
-      templateUrl: 'templates/notifications.html',
-      controller: 'NotificationCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('notifications', {
+        url: '/notifications',
+        templateUrl: 'templates/notifications.html',
+        controller: 'NotificationCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('signup', {
-      url: '/accounts/signup',
-      templateUrl: 'templates/signup.html',
-      controller: 'SignupCtrl'
-    })
-    .state('invite', {
-      url: '/invite',
-      templateUrl: 'templates/invite.html',
-      controller: 'InviteCtrl'
-    })
-    .state('users', {
-      url: '/users',
-      templateUrl: 'templates/profiles.html',
-      controller: 'ProfileCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('signup', {
+        url: '/accounts/signup',
+        templateUrl: 'templates/signup.html',
+        controller: 'SignupCtrl'
+      })
+      .state('invite', {
+        url: '/invite',
+        templateUrl: 'templates/invite.html',
+        controller: 'InviteCtrl'
+      })
+      .state('users', {
+        url: '/users',
+        templateUrl: 'templates/profiles.html',
+        controller: 'ProfileCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-    .state('users_details', {
-      url: '/user/:username',
-      templateUrl: 'templates/profiles.html',
-      controller: 'ProfileCtrl',
-      resolve: {
-        'UserData': function (User) {
-          return User.promise;
+      })
+      .state('users_details', {
+        url: '/user/:username',
+        templateUrl: 'templates/profiles.html',
+        controller: 'ProfileCtrl',
+        resolve: {
+          'UserData': function (Users) {
+            return Users.promise;
+          }
         }
-      }
-    })
-  .state('users.reset_password', {
-      url: '/users/reset_password',
-      templateUrl: 'templates/reset_password.html',
-      controller: 'ProfileCtrl'
-    })
-})
+      })
+      .state('users.reset_password', {
+        url: '/users/reset_password',
+        templateUrl: 'templates/reset_password.html',
+        controller: 'ProfileCtrl'
+      });
+  })
 
-  // Allow loading of YouTube
+// Allow loading of YouTube
   .config(function ($sceDelegateProvider) {
     $sceDelegateProvider.resourceUrlWhitelist([
       'self',
@@ -133,222 +131,106 @@ app.config(function ($stateProvider, $urlRouterProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
   }])
 
-  .factory('User', function ($http, $interval, $rootScope, BACKEND_SERVER) {
-    var Users = {};
-    Users.users = [];
-    Users.connected_users = [];
-    Users.me = '';
 
-    Users.add = function (user) {
-      for (var i = 0; i < Users.connected_users.length; i++) {
-        if (user.id == Users.connected_users[i].id) {
-          console.log('user already connected', user);
-          return;
-        }
-      }
-      console.log('adding user', user);
-      Users.connected_users.push(user);
-    };
+  .run(function ($rootScope, $http, $log, Auth, Users, Channel, Config) {
+    if (localStorage.getItem('token')) {
+      $http.defaults.headers.common.Authorization = 'Token ' + localStorage.getItem('token');
+      $rootScope.loggedIn = true;
+    } else {
+      $rootScope.loggedIn = false;
+    }
 
-    Users.remove = function (user) {
-      for (var i = 0; i < Users.connected_users.length; i++) {
-        if (user.id == Users.connected_users[i].id) {
-          console.log('removing', user);
-          Users.connected_users.splice(i, 1);
-          break;
-        }
-      }
-    };
-
-    Users.init = function () {
-      // Get data on startup
-      var username = localStorage.getItem('username');
-      Users.promise = $http({
-        url: BACKEND_SERVER + 'users/',
-        method: 'GET',
-        cache: true
-      })
-        .then(function (res) {
-          // Find us
-          res.data.results.forEach(function (user) {
-            if (user.username == username) {
-              Users.me = user;
-              console.log('ME!', user);
-            }
-          });
-          Users.users = res.data.results;
-          return Users
-        });
-
-      // Check in every 15 seconds.
-      var check_in = function () {
-        //var session_key = localStorage.getItem('session_key');
-        $http.post(BACKEND_SERVER + 'check_in\/').success(function (result) {
-          console.log('checked in', result);
-        });
-      };
-
-      $interval(function () {
-        check_in()
-      }, 60 * 1000);
-      check_in();
-
-      $rootScope.$on('pusher:member_added', function (event, data) {
-        console.log('adding user', event, data);
-        Users.add(data.info);
-        console.log('connected users', Users.connected_users);
-        $rootScope.$apply();
-      });
-      $rootScope.$on('pusher:member_removed', function (event, data) {
-        console.log('removing user', event, data);
-        Users.remove(data.info);
-        console.log('connected users', Users.connected_users);
-        $rootScope.$apply();
-      });
-      $rootScope.$on('pusher:subscription_succeeded', function (event, data) {
-        console.log('subscription data', data['members']);
-        if (data['members']) {
-          // NOTE(pcsforeducation) Stupid nonzero indexing..
-          for (var key in data['members']) {
-            if (data['members'][key]) {
-              Users.add(data['members'][key]);
-            }
-          }
-        }
-
-        // TODO(pcsforeducation) fix and use this for user
-        //console.log('me set', Channel.presence.members['me']['info']);
-        //Users.me = Channel.presence.members['me']['info'];
-        //$rootScope.$apply();
-      });
-
-    };
-
-    Users.init();
-    return Users;
-  });
-
-
-app.service('Config', function ($http, $q, Notification, BACKEND_SERVER) {
-  var conf = {};
-
-  // Create list of tabs to display
-  var tabs_deferred = $q.defer();
-  $http.get(BACKEND_SERVER + 'polls/')
-
-    .success(function (res, status, headers, config) {
-      var tabs = [];
-
-      tabs = [
-        {
-          'name': 'Posts',
-          'link': '#/posts',
-          'alert': ''
-        },
-        {
-          'name': 'Notifications',
-          'link': '#/notifications',
-          'alert': '',
-          'items': Notification.notifications
-        },
-        {
-          'name': 'Chat',
-          'link': '#/chat',
-          'alert': '',
-          'mobile_only': true
-        }];
-      var last_tabs = [
-        {
-          'name': 'Users',
-          'link': '#/users',
-          'alert': ''
-        }
-      ];
-      res.forEach(function (poll) {
-        tabs.push({
-          'name': poll.stub,
-          'link': '#/polls/' + poll.stub,
-          'alert': ''
-        });
-
-      });
-      tabs = tabs.concat(last_tabs);
-      tabs_deferred.resolve(tabs);
+    // Watch state changes, check if authed, if not, redirect to login
+    $rootScope.$on('$stateChangeStart', function (e, toState) {
+      $log.debug('state change start');
+      var noAuthStates = ['login', 'signup', 'user.reset_password'];
+      Auth.checkStateChange(e, toState, noAuthStates);
     });
-  conf.tabs = tabs_deferred.promise;
-  conf.alert_count = Notification.notifications;
 
-  return conf;
-});
-
-app.run(function ($rootScope, $http, $location, $state) {
-  if (localStorage.getItem('token')) {
-    $http.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token');
-    $rootScope.loggedIn = true;
-  } else {
-    $rootScope.loggedIn = false;
-  }
-
-  // Watch state changes, check if authed, if not, redirect to login
-  $rootScope.$on('$stateChangeStart', function (e, toState, toParams,
-      fromState, fromParams) {
-    console.log('state change start')
-
-    console.log('Going to ', toState.name)
-    var isLogin = toState.name === "login";
-    if (isLogin) {
-      return; // no need to redirect
-    }
-
-    // now, redirect only not authenticated and on auth required states
-    var no_auth_states = ['login', 'signup', 'user.reset_password'];
-    if ($rootScope.loggedIn !== true && no_auth_states.indexOf(toState.name) == -1) {
-      // user is not authenticated. stow the state they wanted before you
-      // send them to the signin state, so you can return them when you're done
-      $rootScope.returnToState = $rootScope.toState;
-      $rootScope.returnToStateParams = $rootScope.toStateParams;
-
-      // now, send them to the signin state so they can log in
-      $state.go('login'); // go to login
-      e.preventDefault();
-    }
+    // Set global ngEmbed config
+    $rootScope.ngembedOptions = {
+      link: true,      //convert links into anchor tags
+      linkTarget: '_self',   //_blank|_self|_parent|_top|framename
+      pdf: {
+        embed: true                 //to show pdf viewer.
+      },
+      image: {
+        embed: false                //to allow showing image after the text gif|jpg|jpeg|tiff|png|svg|webp.
+      },
+      audio: {
+        embed: true                 //to allow embedding audio player if link to
+      },
+      code: {
+        highlight: true,        //to allow code highlighting of code written in markdown
+        //requires highligh.js (https://highlightjs.org/) as dependency.
+        lineNumbers: false        //to show line numbers
+      },
+      basicVideo: false,     //to allow embedding of mp4/ogg format videos
+      gdevAuth: 'xxxxxxxx', // Google developer auth key for youtube data api
+      video: {
+        embed: false,    //to allow youtube/vimeo video embedding
+        width: null,     //width of embedded player
+        height: null,     //height of embedded player
+        ytTheme: 'dark',   //youtube player theme (light/dark)
+        details: false    //to show video details (like title, description etc.)
+      },
+      tweetEmbed: false,
+      tweetOptions: {
+        //The maximum width of a rendered Tweet in whole pixels. Must be between 220 and 550 inclusive.
+        maxWidth: 550,
+        //When set to true or 1 links in a Tweet are not expanded to photo, video, or link previews.
+        hideMedia: false,
+        //When set to true or 1 a collapsed version of the previous Tweet in a conversation thread
+        //will not be displayed when the requested Tweet is in reply to another Tweet.
+        hideThread: false,
+        //Specifies whether the embedded Tweet should be floated left, right, or center in
+        //the page relative to the parent element.Valid values are left, right, center, and none.
+        //Defaults to none, meaning no alignment styles are specified for the Tweet.
+        align: 'none',
+        //Request returned HTML and a rendered Tweet in the specified.
+        //Supported Languages listed here (https://dev.twitter.com/web/overview/languages)
+        lang: 'en'
+      },
+      twitchtvEmbed: true,
+      dailymotionEmbed: true,
+      tedEmbed: true,
+      dotsubEmbed: true,
+      liveleakEmbed: true,
+      soundCloudEmbed: true,
+      soundCloudOptions: {
+        height: 160, themeColor: 'f50000',   //Hex Code of the player theme color
+        autoPlay: false,
+        hideRelated: false,
+        showComments: true,
+        showUser: true,
+        showReposts: false,
+        visual: false,         //Show/hide the big preview image
+        download: false          //Show/Hide download buttons
+      },
+      spotifyEmbed: true,
+      codepenEmbed: true,        //set to true to embed codepen
+      codepenHeight: 300,
+      jsfiddleEmbed: true,        //set to true to embed jsfiddle
+      jsfiddleHeight: 300,
+      jsbinEmbed: true,        //set to true to embed jsbin
+      jsbinHeight: 300,
+      plunkerEmbed: true,        //set to true to embed plunker
+      githubgistEmbed: true,
+      ideoneEmbed: true,        //set to true to embed ideone
+      ideoneHeight: 300
+    };
   });
-});
 
+function DialogController($scope, $mdDialog) {
+  $scope.hide = function () {
+    $mdDialog.hide();
+  };
 
-app.run(function (User) {
-});
+  $scope.cancel = function () {
+    $mdDialog.cancel();
+  };
 
-app.run(function (Channel) {
-});
-
-app.run(function (Config) {
-
-});
-
-
-function urlify(text) {
-  var expression = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
-
-  var regex = new RegExp(expression);
-  var t = 'www.google.com';
-  return text.replace(regex, function (url) {
-    return '<a href="' + url + '">' + url + '</a>';
-  });
-  // or alternatively
-  // return text.replace(urlRegex, '<a href="$1">$1</a>')
+  $scope.answer = function (answer) {
+    $mdDialog.hide(answer);
+  };
 }
-
-function highlight(text, highlight_text) {
-  text = text.insert(text.indexOf(highlight_text) - 1, '<span class="highlight">');
-  return text.insert(text.indexOf(highlight_text) + highlight_text.length, '</span>');
-
-}
-
-// Add insert so we can add highlights easily.
-String.prototype.insert = function (index, string) {
-  if (index > 0)
-    return this.substring(0, index) + string + this.substring(index, this.length);
-  else
-    return string + this;
-};

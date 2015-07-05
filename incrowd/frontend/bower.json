@@ -1,7 +1,7 @@
 {
   "name": "incrowd",
   "version": "0.1.0",
-  "homepage": "https://github.com/pcsforeducation/incrowd",
+  "homepage": "https://github.com/incrowdio/incrowd",
   "authors": [
     "Josh Gachnang <josh@servercobra.com>"
   ],
@@ -30,11 +30,12 @@
     "angular-xeditable": "~0.1.8",
     "angular-pusher": "~0.0.13",
     "pusher": "~2.2.3",
-    "angular-material": "~0.7.1",
+    "angular-material": "~0.10.0",
     "angular-off-click": "~0.0.2",
     "angular-elastic": "~2.4.2",
     "angular-ui-router": "~0.2.13",
-    "favico.js": "~0.3.5"
+    "favico.js": "~0.3.5",
+    "ng-embed": "~2.0.2"
   },
   "description": "A small, private social network",
   "main": "js/app.js",

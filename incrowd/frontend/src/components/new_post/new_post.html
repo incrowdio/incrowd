@@ -1,0 +1,26 @@
+<md-dialog aria-label="New Post" ng-controller="NewPostCtrl">
+  <h2>New Post</h2>
+
+  <form ng-submit="new_post_submit()">
+    <md-input-container>
+      <label>What's up?</label>
+      <input ng-model="post.title"
+             class="long" focus-me="focus_input">
+    </md-input-container>
+    <md-input-container>
+      <label>URL</label>
+      <input ng-model="post.url" class="long">
+    </md-input-container>
+    <md-select placeholder="Category" ng-model="post.category">
+      <md-option ng-repeat="category in categories" value="category.id">{{category.name}}</md-option>
+    </md-select>
+    <md-checkbox ng-model="post.nsfw" aria-label="NSFW">
+      NSFW?
+    </md-checkbox>
+
+    <md-button class="md-raised md-primary" type="submit">
+      Submit
+    </md-button>
+  </form>
+  </div>
+</md-dialog>

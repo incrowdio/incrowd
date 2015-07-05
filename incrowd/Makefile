@@ -28,10 +28,9 @@ frontend_deps:
 
 # Initialize the DB
 django_db:
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py syncdb --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && python manage.py migrate --noinput --no-initial-data
-	cd $(INCROWD_PATH) && export DJANGO_SETTINGS_MODULE="incrowd.settings" && pip install -r requirements.txt && bash initial_db_load.sh
-	echo 'skipping db'
+	python manage.py syncdb --noinput --no-initial-data
+	python manage.py migrate --noinput --no-initial-data
+	bash initial_db_load.sh
 
 docker_build:
 	docker build -t incrowd .

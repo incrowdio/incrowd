@@ -23,9 +23,9 @@
 .content {
     height: 100%;
     display: block;
-    padding-left: 30px;
+    padding-left: 5px;
     padding-top: 15px;
-    padding-right: 30px;
+    padding-right: 5px;
 }
 
 /*Site wide config*/
@@ -179,14 +179,14 @@ html {
     overflow-x: scroll;
 }
 
-textarea,
-textarea:hover,
-textarea:focus,
-textarea:active {
-    border: 0;
-    outline: none;
-    outline-offset: 0;
-}
+/*textarea,*/
+/*textarea:hover,*/
+/*textarea:focus,*/
+/*textarea:active {*/
+    /*border: 0;*/
+    /*outline: none;*/
+    /*outline-offset: 0;*/
+/*}*/
 
 .textbox {
     vertical-align: middle;
@@ -220,17 +220,6 @@ textarea:active {
     width: 100%;
 }
 
-.areyouin {
-    padding: 20px 20px;
-    text-align: center;
-}
-
-.areyouin .tagline {
-    font-weight: bolder;
-    font-size: 150%;
-    color: #ff8800;
-}
-
 footer {
     width: 100%;
     left: 0;
@@ -257,4 +246,234 @@ footer input[type="text"] {
 
 .off-canvas-wrap {
     height: 100%;
+}
+
+/*!
+ * site.css
+ */
+@font-face {
+    font-family: 'Baumans';
+    src: url('../fonts/Baumans-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Droid Sans';
+    src: url('../fonts/DroidSans.ttf');
+}
+
+@font-face {
+    font-family: 'Play';
+    src: url('../fonts/Play-Regular.ttf');
+}
+
+h1.title a {
+    font-family: Baumans, Roboto;
+    text-decoration: none;
+    color: #eee;
+    /*font-size: 185%;*/
+}
+
+body {
+    background-color: #f2f2f2;;
+}
+
+#content {
+    background-color: #f2f2f2;
+}
+
+.title h1 {
+
+    /*margin: 7px 15px;*/
+}
+
+.title .icomoon {
+    font-size: 200%;
+}
+
+.title .alerts {
+    position: absolute;
+    left: 35px;
+    top: 35px;
+    border-radius: 48px;
+    background-color: #f44336;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/*Material Design*/
+.menu-item {
+    background: none;
+    border-width: 0;
+    cursor: pointer;
+    display: block;
+    color: #333;
+    font-size: inherit;
+    line-height: 40px;
+    max-height: 40px;
+    opacity: 1;
+    margin: 0;
+    outline: none;
+    padding: 0px 28px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    width: 100%;
+    z-index: 1;
+    -webkit-transition: 0.2s ease-in-out;
+    -webkit-transition-property: max-height, background-color, opacity;
+    -moz-transition: 0.2s ease-in-out;
+    -moz-transition-property: max-height, background-color, opacity;
+    transition: 0.2s ease-in-out;
+    transition-property: max-height, background-color, opacity;
+}
+
+.menu-item.ng-hide {
+    max-height: 0;
+    opacity: 0;
+}
+
+.menu-item:hover, .menu-item:focus {
+    color: #999;
+}
+
+.menu-item.menu-sub-item.active {
+    background-color: #eeeeee;
+    font-weight: bold;
+    color: #4285f4;
+}
+
+.menu-item.menu-title {
+    color: #333;
+    font-size: 16px;
+    padding-left: 16px;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.menu-item.menu-title.active {
+    font-weight: bold;
+}
+
+.menu-item.menu-title:hover,
+.menu-item.menu-title:focus {
+    color: #AAA;
+}
+
+.menu-icon {
+    background: none;
+    border: none;
+}
+
+.fab-button {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+}
+
+md-sidenav.chat-sidenav {
+    width: 504px;
+}
+
+.middle-toolbar {
+    z-index: 3;
+}
+
+.chat-content {
+    overflow-x: hidden;
+    padding-top: 0;
+}
+
+md-card {
+    padding: 0;
+    margin-bottom: 35px;
+}
+
+.card_content {
+    padding: 8px;
+}
+
+.md-toolbar-tools .delete {
+    cursor: pointer;
+    cursor: hand;
+    width: 21px;
+    font-size: 185%;
+    color: white;
+    margin-right: 13px;
+    margin-top: 12px;
+    float: right;
+}
+
+/*.delete:active,*/
+/*.delete:hover {*/
+/*color: #CC0000;*/
+/*}*/
+
+md-content.md-content-padding .main-content {
+    padding-top: 0;
+}
+
+md-sidenav {
+    overflow-x: hidden;
+    /*overflow-y: visible;*/
+}
+
+md-sidenav.nav-sidenav.md-locked-open {
+    background-color: #f2f2f2;
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+md-sidenav.nav-sidenav md-toolbar {
+    z-index: 3;
+}
+
+md-sidenav.nav-sidenav md-content {
+    background-color: #f2f2f2;
+}
+
+.main-toolbar {
+    z-index: 3;
+    height: 64px;
+}
+
+.menu {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.hide-tab {
+    display: none;
+}
+
+.notification_alert {
+    color: white;
+    background-color: red;
+    border-radius: 28px;
+    padding: 0 3px 0 6px;
+    margin-right: 5px;
+}
+
+/*md-content.md-padding.content {*/
+    /*padding-top: 20px;*/
+/*}*/
+
+.add-post-button {
+    padding-top: 4px;
+    font-size: 135%;
+}
+
+/*Override troublesome Material rule*/
+md-card > img {
+    width: inherit;
+}
+
+/*Override 2 row minimum for text areas*/
+md-input-container textarea.md-input {
+    min-height: 32px !important;
+    height: 32px !important;
+}
+
+.md-subheader .md-subheader-content {
+    z-index: 2;
 }

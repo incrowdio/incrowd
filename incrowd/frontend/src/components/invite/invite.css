@@ -1,0 +1,10 @@
+.areyouin {
+    padding: 20px 20px;
+    text-align: center;
+}
+
+.areyouin .tagline {
+    font-weight: bolder;
+    font-size: 150%;
+    color: #ff8800;
+}

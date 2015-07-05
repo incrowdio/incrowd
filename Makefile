@@ -102,6 +102,13 @@ load_data:
 # Build/deploy tools
 #########################
 
+serve_frontend:
+	cd incrowd/frontend && gulp serve
+
+#########################
+# Build/deploy tools
+#########################
+
 
 
 #########################
