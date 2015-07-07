@@ -109,7 +109,7 @@ def _post_winning_submission(poll, submission_id):
         user_ids=[winning_user.id],
         from_user=UserProfile.objects.get(username=poll.bot_name),
         text="Your {} submission won!".format(poll.title),
-        link="/post/{}/".format(post.id),
+        identifier=post.id,
         type='comment',
         level='info')
 

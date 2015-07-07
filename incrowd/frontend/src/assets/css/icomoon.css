@@ -3,11 +3,11 @@
  */
 @font-face {
     font-family: 'icomoon';
-    src: url('../fonts/icomoon.eot?-z3iv5n');
-    src: url('../fonts/icomoon.eot?#iefix-z3iv5n') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?-z3iv5n') format('truetype'),
-    url('../fonts/icomoon.woff?-z3iv5n') format('woff'),
-    url('../fonts/icomoon.svg?-z3iv5n#icomoon') format('svg');
+    src: url('../fonts/icomoon.eot?wlgoqn');
+    src: url('../fonts/icomoon.eot?#iefixwlgoqn') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?wlgoqn') format('truetype'),
+    url('../fonts/icomoon.woff?wlgoqn') format('woff'),
+    url('../fonts/icomoon.svg?wlgoqn#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -192,6 +192,10 @@
 
 .icon-http:before {
     content: "\e313";
+}
+
+.icon-menu:before {
+    content: "\e20e";
 }
 
 /*Override to use icomoon inside md-buttons*/

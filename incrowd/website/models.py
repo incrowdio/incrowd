@@ -276,7 +276,7 @@ class Comment(models.Model):
             self.text = notify_utils.ping_filter(
                 self.text, UserProfile.objects.all(), self.user,
                 'mentioned you in a comment', 'comment',
-                self.post.get_permalink())
+                self.post.id)
 
             message = utils.url_filter(self.text)
             for k in ('attachment_url', 'attachment_type'):
@@ -305,7 +305,7 @@ class Comment(models.Model):
                 'user': self.user.username,
                 'title': self.post.title
             }),
-            link=self.post.get_permalink(),
+            identifier=self.post.id,
             type='comment',
             level='info')
 

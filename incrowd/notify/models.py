@@ -21,8 +21,8 @@ class Notification(models.Model):
     type = models.CharField(max_length=64, choices=NOTIFICATION_TYPES)
     level = models.CharField(max_length=16, choices=NOTIFICATION_LEVELS,
                              default='info')
-    link = models.CharField(max_length=255, default=None,
-                            blank=True, null=True)
+    # The id of the object being notified about
+    identifier = models.CharField(max_length=64, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
@@ -48,11 +48,11 @@ class Notification(models.Model):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ('id', 'text', 'user', 'type', 'level', 'link',
+        fields = ('id', 'text', 'user', 'type', 'level', 'identifier',
                   'created_at')
 
 
-def notify_users(user_ids, from_user, text, link, type, level):
+def notify_users(user_ids, from_user, text, identifier, type, level):
     for user in user_ids:
         # NOTE(pcsforeducation) Redo this as bulk create, then call notify on
         # Each object. bulk_create doesn't call .save(), where push notify is.
@@ -60,6 +60,6 @@ def notify_users(user_ids, from_user, text, link, type, level):
                          from_user=from_user,
                          text=text,
                          type=type,
-                         link=link,
+                         identifier=identifier,
                          level=level)
         n.save()

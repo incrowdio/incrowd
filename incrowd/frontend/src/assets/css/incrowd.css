@@ -23,9 +23,7 @@
 .content {
     height: 100%;
     display: block;
-    padding-left: 5px;
-    padding-top: 15px;
-    padding-right: 5px;
+    padding: 10px 10px 15px 10px;
 }
 
 /*Site wide config*/
@@ -288,6 +286,7 @@ body {
 
 .title .icomoon {
     font-size: 200%;
+    font-weight: bolder;
 }
 
 .title .alerts {
@@ -460,7 +459,13 @@ md-sidenav.nav-sidenav md-content {
 
 .add-post-button {
     padding-top: 4px;
-    font-size: 135%;
+
+}
+
+.add-post-button .md-button-inner {
+    font-weight: bolder;
+    font-size: 48px;
+    margin-left: -2px;
 }
 
 /*Override troublesome Material rule*/
@@ -471,7 +476,7 @@ md-card > img {
 /*Override 2 row minimum for text areas*/
 md-input-container textarea.md-input {
     min-height: 32px !important;
-    height: 32px !important;
+    /*height: 32px !important;*/
 }
 
 .md-subheader .md-subheader-content {

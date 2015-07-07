@@ -106,14 +106,14 @@
     /*margin-top: -87px;*/
     width: 100%;
     z-index: 3;
-    position: fixed;
-    bottom: 0;
-    padding: 0 5px;
+    /*position: fixed;*/
+    /*bottom: 0;*/
+    /*padding: 0 5px;*/
     background-color: white;
 }
 
 chatinput {
-    height: 60px;
+    /*height: 60px;*/
     /*padding-left: 16px;*/
     padding-right: 16px;
 }
@@ -200,4 +200,13 @@ chatinput {
 
 .chat_last {
     margin-bottom: 58px;
+}
+
+chat avatar {
+    margin-right: 10px;
+}
+
+chat .text {
+    word-wrap: break-word;
+    font-size: 90%;
 }

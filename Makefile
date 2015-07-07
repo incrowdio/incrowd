@@ -4,11 +4,11 @@ prod: clean test www_prod link_libs
 
 upload: docker_upload
 
-docker: docker_build docker_run
+#docker: docker_build docker_run
 
-dev: docker_build run_dev
+shell: docker_build docker_shell
 
-clean: clean_www clean_app clean_build
+dev: docker_build docker_run
 
 test: pep8 test_django
 
@@ -20,33 +20,60 @@ promote: docker_promote
 # Dev tools
 #########################
 
-
+# Build dev container
 docker_build:
 	cd incrowd && docker build -t incrowd .
 
+# Push the container as a testing release
 docker_upload:
 	docker build -t incrowd/incrowd:testing .
 	docker push incrowd/incrowd:testing
 
+# Push the container as a release
 docker_promote:
-	docker build incrowd/incrowd
-	docker push incrowd/incrowd    
+	docker build -t incrowd/incrowd .
+	docker push incrowd/incrowd
 
+# Run the basic set up and run a dev server in the dev container
 docker_run:
 	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
 
-run_dev:
-	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_server"
-
+# Get a shell inside a dev container
 docker_shell:
 	docker run -i -v `pwd`/incrowd:/home/docker/code -t incrowd /bin/bash
 
+# Serve the frontend via gulp for dev
+serve:
+	cd incrowd/frontend && gulp serve
+
+# Dump current DB data that will be loaded when users first runs inCrowd
+create_getting_started:
+	python manage.py dumpdata  --natural \
+               --indent=4 \
+               -e sessions \
+               -e admin \
+               -e rest_framework \
+               -e authtoken.token \
+               -e contenttypes \
+               -e auth.Permission > getting_started_data.json
+
+# Load getting started data into database
+load_data:
+	python manage.py loaddata getting_started_data.json
+
+#########################
+# Testing tools
+#########################
+
+# Build testing container
 docker_build_ci:
 	docker build -t incrowd/incrowd:testing .
 
+# Run containers inside the testing container
 docker_run_tests:
 	docker run -e DB_ADDR=$(DB_ADDR) -t incrowd/incrowd:testing /bin/bash -c "make test"
 
+# Run Python style tests outside container
 pep8:
 	cd incrowd && flake8 api
 	cd incrowd && flake8 chat_server
@@ -58,82 +85,24 @@ pep8:
 	cd incrowd && flake8 push
 	cd incrowd && flake8 website
 
+# Run Django tests outside container
 test_django:
 	cd incrowd && python manage.py test --noinput
 
+# Run integration tests
 integration:
 	./tests/integration.sh
 
-# Install tools if you don't wanna use Docker
-install_ubuntu:
-	sudo apt-get install python-dev git python-pip mysql-server mysql libmysqlclient-dev mysql-python
-	sudo pip install tox
-	sudo npm install -g grunt-cli bower
-	tox -e dev
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py help
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py syncdb --noinput
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py migrate --noinput
-
-install_osx:
-	brew install git mysql tox
-	sudo easy_install pip
-	sudo npm install -g grunt-cli bower
-	mysql.server start
-	tox -e dev
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py help
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py syncdb --noinput
-	DJANGO_SETTINGS_MODULE="incrowd.settings" dev/bin/python manage.py migrate --noinput
-
-# Dump data that can be loaded
-dump_data:
-	python manage.py dumpdata  --natural \
-               --indent=4 \
-               -e south \
-               -e sessions \
-               -e admin \
-               -e contenttypes \
-               -e auth.Permission > getting_started_data.json
-
-# Load dev data
-load_data:
-	python manage.py loaddata getting_started_data.json
-
 #########################
-# Build/deploy tools
+# Frontend tools
 #########################
 
-serve_frontend:
-	cd incrowd/frontend && gulp serve
-
-#########################
-# Build/deploy tools
-#########################
-
-
+# TODO(pcsforeducation) Add the important gulp tasks here
 
 #########################
 # CI/CD tools
 #########################
 
+# Prepare to run frontend tests
 install_ci:
 	npm install -g bower grunt grunt-cli
-
-build_testing:
-	docker build -t incrowd/incrowd:testing .
-
-push_testing:
-	docker push incrowd/incrowd:testing
-
-build_prod:
-	docker build -t incrowd/incrowd .
-
-push_prod:
-	docker push incrowd/incrowd
-
-#########################
-# Misc
-#########################
-
-whoopee:
-	echo "Sorry, I'm not in the mood"
-

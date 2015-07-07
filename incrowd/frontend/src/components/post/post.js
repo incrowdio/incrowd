@@ -10,8 +10,6 @@ angular.module('incrowd')
       templateUrl: 'components/post/post.html',
       link: function (scope) {
         scope.user = $rootScope.me;
-        scope.formData = new Posts.Comments.resource(
-          {post: scope.post.id});
         scope.ngembedOptions = $rootScope.ngembedOptions;
 
         scope.toggleNSFW = function (post) {
@@ -56,12 +54,6 @@ angular.module('incrowd')
         console.log('end of pages');
       }
 
-    };
-
-    $scope.newPostDialog = function () {
-      $mdDialog.show({
-        templateUrl: 'partials/new_post.h;tml'
-      });
     };
   })
 

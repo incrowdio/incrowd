@@ -1,6 +1,15 @@
 /*!
- * notifiy.css
+ * notification.css
  */
+
+.notification {
+    font-size: 125%;
+}
+
+.notification-icon {
+    margin-right: 5px;
+}
+
 .notifications_button {
     margin-top: 5px;
     margin-left: 15px;

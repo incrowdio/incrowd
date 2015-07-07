@@ -15,7 +15,7 @@
           </a>
         </h2>
       </div>
-      <div ng-if="post.user.id == user.id" ng-click="delete_post($index)"
+      <div ng-if="post.user.id == user.id" ng-click="delete_post(post.id)"
            aria-label="Delete" flex="15">
         <span class="delete icon-cancel icomoon"></span>
       </div>

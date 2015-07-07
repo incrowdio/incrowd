@@ -1,24 +1,12 @@
-<md-content class="md-padding" ng-controller="NotificationCtrl"
-            ng-init="initialize()">
-  <md-card class="notification" ng-repeat="notification in notifications">
-    <md-toolbar>
-      <h3 class="md-toolbar-tools">
-        <a href="#{{ notification.link }}"
-           ng-click="remove_notification(notification)">
-          {{ notification.text }}
-        </a>
-      </h3>
-      <span class="delete icon-cancel-circle icomoon"
-            ng-click="remove_notification(notification)"></span>
-    </md-toolbar>
-  </md-card>
+<md-card>
+  <md-list class="notification-list" ng-controller="NotificationCtrl">
+    <notification ng-repeat="notification in notifications" notification="notification"></notification>
+    <md-list-item ng-if="notifications.length == 0">
+      No notifications!
+    </md-list-item>
+    <md-button ng-click="remove_all()" ng-if="notifications.length > 0"
+               class="md-raised md-warn clear_notifications">Clear Notifications
+    </md-button>
 
-  <md-button ng-click="remove_all()" ng-if="notifications.length > 0"
-             class="md-raised md-warn clear_notifications">Clear Notifications
-  </md-button>
-  <md-card ng-if="notifications.length == 0" class="card">
-    <md-toolbar>
-      <h3 class="md-toolbar-tools">No notifications!</h3>
-    </md-toolbar>
-  </md-card>
-</md-content>
+  </md-list>
+</md-card>

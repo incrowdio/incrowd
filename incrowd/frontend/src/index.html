@@ -60,7 +60,7 @@
 <div layout="column" layout-fill tabIndex="-1" role="main">
   <md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
     <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
-      <span ng-click="toggleLeft()" class="icon-menu reorder menu"></span>
+      <span hide-gt-md ng-click="toggleLeft()" class="icon-menu icomoon reorder menu"></span>
       <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
       <a href="#/">SlasherTraxx</a>
     </h1>
@@ -68,13 +68,13 @@
     <md-button
         class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
         tabindex="-1"
-        ng-controller="PostListCtrl"
+        ng-controller="NewPostCtrl"
         ng-click="newPostDialog($event)"
         aria-label="New Post">
       <md-tooltip>
         New Post
       </md-tooltip>
-      <span class="md-button-inner icon-plus icomoon"
+      <span class="md-button-inner icon-add icomoon"
             ng-click="show($event)"></span>
 
       <div class="md-ripple-container"></div>
@@ -104,7 +104,7 @@
   <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
     <chat></chat>
   </md-content>
-  <chatinput></chatinput>
+  <chat-input></chat-input>
 
 </md-sidenav>
 

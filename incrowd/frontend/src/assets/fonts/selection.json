@@ -604,6 +604,36 @@
 		{
 			"icon": {
 				"paths": [
+					"M128 256h768v86h-768v-86zM128 554v-84h768v84h-768zM128 768v-86h768v86h-768z"
+				],
+				"attrs": [
+					{}
+				],
+				"isMulticolor": false,
+				"tags": [
+					"menu"
+				],
+				"defaultCode": 57870,
+				"grid": 24
+			},
+			"attrs": [
+				{}
+			],
+			"properties": {
+				"order": 47,
+				"id": 526,
+				"prevSize": 24,
+				"code": 57870,
+				"name": "menu",
+				"ligatures": "menu"
+			},
+			"setIdx": 1,
+			"setId": 2,
+			"iconIdx": 526
+		},
+		{
+			"icon": {
+				"paths": [
 					"M704 256q-36 0-61-25t-25-61 25-60 61-24 61 24 25 60-25 61-61 25zM320 256q-36 0-61-25t-25-61 25-60 61-24 61 24 25 60-25 61-61 25zM768 938h-128v-256h-128l108-324q22-60 82-60h4q60 0 82 60l108 324h-128v256zM234 938v-320h-64v-234q0-34 26-60t60-26h128q34 0 60 26t26 60v234h-64v320h-172z"
 				],
 				"attrs": [
@@ -1285,7 +1315,8 @@
 			},
 			"showSelector": false,
 			"showMetrics": false,
-			"showMetadata": false
+			"showMetadata": false,
+			"resetPoint": 58880
 		},
 		"imagePref": {
 			"prefix": "icon-",
@@ -1295,6 +1326,7 @@
 			"bgColor": 16777215
 		},
 		"historySize": 100,
-		"showCodes": false
+		"showCodes": false,
+		"showLiga": false
 	}
 }

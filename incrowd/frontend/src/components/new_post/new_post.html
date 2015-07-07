@@ -4,17 +4,17 @@
   <form ng-submit="new_post_submit()">
     <md-input-container>
       <label>What's up?</label>
-      <input ng-model="post.title"
+      <input ng-model="formData.title"
              class="long" focus-me="focus_input">
     </md-input-container>
     <md-input-container>
       <label>URL</label>
-      <input ng-model="post.url" class="long">
+      <input ng-model="formData.url" class="long">
     </md-input-container>
-    <md-select placeholder="Category" ng-model="post.category">
-      <md-option ng-repeat="category in categories" value="category.id">{{category.name}}</md-option>
+    <md-select placeholder="Category" ng-model="formData.category">
+      <md-option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</md-option>
     </md-select>
-    <md-checkbox ng-model="post.nsfw" aria-label="NSFW">
+    <md-checkbox ng-model="formData.nsfw" aria-label="NSFW">
       NSFW?
     </md-checkbox>
 

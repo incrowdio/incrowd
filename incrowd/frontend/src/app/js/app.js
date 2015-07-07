@@ -20,7 +20,7 @@ var app = angular.module('incrowd', [
 ])
 
   .config(function ($stateProvider, $urlRouterProvider) {
-
+    "use strict";
     $urlRouterProvider.otherwise('/posts');
 
     $stateProvider
@@ -118,6 +118,7 @@ var app = angular.module('incrowd', [
 
 // Allow loading of YouTube
   .config(function ($sceDelegateProvider) {
+    "use strict";
     $sceDelegateProvider.resourceUrlWhitelist([
       'self',
       'http://**.youtube.com/**',
@@ -127,12 +128,14 @@ var app = angular.module('incrowd', [
 
   // Django CSRF
   .config(['$httpProvider', function ($httpProvider) {
+    "use strict";
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
   }])
 
 
   .run(function ($rootScope, $http, $log, Auth, Users, Channel, Config) {
+    "use strict";
     if (localStorage.getItem('token')) {
       $http.defaults.headers.common.Authorization = 'Token ' + localStorage.getItem('token');
       $rootScope.loggedIn = true;
@@ -222,6 +225,7 @@ var app = angular.module('incrowd', [
   });
 
 function DialogController($scope, $mdDialog) {
+  "use strict";
   $scope.hide = function () {
     $mdDialog.hide();
   };
