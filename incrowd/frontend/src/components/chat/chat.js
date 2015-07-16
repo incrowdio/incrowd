@@ -58,8 +58,7 @@ angular.module('incrowd')
       message = message.replace('\n', '<br/>');
       if (username) {
         // TODO(pcsforeducation) fix for usernames at end of message
-        message = message.replace(regex, '<span class="highlight">@' + username
-          + '</span>');
+        message = message.replace(regex, '<span class="highlight">@' + username + '</span>');
       }
 
       return message;

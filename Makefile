@@ -98,6 +98,8 @@ integration:
 #########################
 
 # TODO(pcsforeducation) Add the important gulp tasks here
+lint:
+	cd incrowd/frontend && gulp lint
 
 #########################
 # CI/CD tools

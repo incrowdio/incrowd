@@ -10,7 +10,6 @@ from rest_framework import serializers
 from djangle import form_api
 from notify.models import notify_users
 from notify import utils as notify_utils
-from poll.models import VoteSerializer
 from push.utils import send_all
 from website.content_types import YouTube
 from website import utils
@@ -325,19 +324,15 @@ def send(recipient_list, subject, body):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    user_votes = serializers.SerializerMethodField()
 
     class Meta:
         model = UserProfile
         fields = (
             'id', 'username', 'profile_pic', 'email', 'first_name',
-            'last_name', 'poll_votes', 'user_votes', 'last_updated',
+            'last_name', 'poll_votes', 'last_updated',
             'location', 'tagline', 'email_settings', 'crowd'
         )
 
-    def get_user_votes(self, obj):
-        return VoteSerializer(obj.user_votes.all(), many=True,
-                              read_only=True).data
 
 
 class CategorySerializer(serializers.ModelSerializer):

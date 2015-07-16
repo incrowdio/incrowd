@@ -1,115 +1,69 @@
 angular.module('incrowd')
-  .controller('PollDetailCtrl', function ($scope, $http, $stateParams, $location, User, BACKEND_SERVER) {
+  .controller('PollDetailCtrl', function ($scope, $q, $rootScope, $http, $stateParams, $location, Users, Polls) {
+    "use strict";
     $scope.pollStub = $stateParams.pollStub;
-    $scope.new_submission_submit = function () {
-      $scope.submission['poll'] = $scope.poll.id;
-      console.log("submitting poll", $scope.submission, this, $scope.poll);
-      $http({
-        url: BACKEND_SERVER + 'submissions\/',
-        method: "POST",
-        data: $.param($scope.submission),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'Authorization': 'Token ' + localStorage.getItem('token')
-        }
-      }).success(function (data, status, headers, config) {
-        console.log('new poll submission');
+    $scope.formData = new Polls.Submissions.resource();
+    $scope.user = $rootScope.me;
 
-        $scope.submission = {};
-        get_submissions();
-      }).error(function ($scope, data, status, headers, config) {
-        console.log('error', data);
-        $scope.status = status + ' ' + headers;
-      });
-    };
-    $scope.removeVote = function (id) {
-      // Find the matching user vote
-      var vote;
-      $scope.user.user_votes.forEach(function (user_vote) {
-        if (user_vote.submission == id) {
-          vote = user_vote;
-        }
-      });
-      if (vote == undefined) {
-        console.log('Could not find matching vote for ', id);
-        return
-      }
-      $http({
-        url: BACKEND_SERVER + 'votes/' + vote.id + '\/',
-        method: "DELETE",
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'Authorization': 'Token ' + localStorage.getItem('token')
-        }
-      }).success(function (data, status, headers, config) {
-        $scope.poll.poll_submissions.forEach(function (submission) {
-          if (submission.id == vote.submission) {
-            submission.voted = false;
-          }
-        });
-      }).error(function ($scope, data, status, headers, config) {
-        console.log('error', data);
-      })
-    };
+    $q.all([
+      Polls.Submissions.get(),
+      Polls.Votes.get()
+    ]).then(function (data) {
+      console.log("poll data", data);
+      $scope.submissions = data[0];
+      $scope.votes = data[1];
+      console.log("poll resolved", $scope.submissions, $scope.votes);
 
-    $scope.addVote = function (id) {
-      var data = {'submission': id, 'user': $scope.user.id};
-      $http({
-        url: BACKEND_SERVER + 'votes\/',
-        method: "POST",
-        data: $.param(data),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          'Authorization': 'Token ' + localStorage.getItem('token')
-        }
-      }).success(function (data, status, headers, config) {
-        console.log('new vote', data);
-        $scope.user.user_votes.push(data);
-        // Update the submission
-        $scope.poll.poll_submissions.forEach(function (submission) {
-          if (submission.id == data.submission) {
+      // Could probably be faster with a filter or something. O(n^2)
+      var i, j, vote, submission;
+      for (i = 0; i < $scope.votes.length; i++) {
+        vote = $scope.votes[i];
+        for (j = 0; j < $scope.submissions.length; j++) {
+          submission = $scope.submissions[j];
+          if (vote.submission === submission.id) {
             submission.voted = true;
+            submission.vote = vote;
           }
-        });
-      }).error(function ($scope, data, status, headers, config) {
-        console.log('error', data);
-      })
+        }
+      }
+    });
+
+    //Polls.Submissions.resource.query().$promise.success(function (data) {
+    //  $scope.submissions = data;
+    //});
+    //
+    //Polls.Votes.resource.query().$promise.success(function (data) {
+    //  $scope.votes = data;
+    //  console.log('votes', data);
+    //});
+
+    $scope.submit = function () {
+      Polls.Submissions.create($scope.formData, $scope.pollStub).then(function () {
+        $scope.submissions = Polls.Submissions.resource.query();
+        console.log("submissions", $scope.submissions);
+        $scope.formData = new Polls.Submissions.resource();
+      });
     };
 
-    $scope.delete_submission = function (index) {
-      console.log('delete');
-      var submission = $scope.poll.poll_submissions[index];
-      $http.delete(BACKEND_SERVER + 'submissions/' + submission.id + '\/').success(function () {
-        // Delete post
-        $scope.poll.poll_submissions.splice(index, 1);
-      })
+    $scope.removeVote = function (submission) {
+      Polls.Votes.delete(submission.vote).then(function () {
+        submission.voted = false;
+        submission.vote = null;
+      });
     };
 
-    function get_submissions() {
-      $http.get(BACKEND_SERVER + 'polls/' + $scope.pollStub + '\/')
-        .then(function (res) {
-          $scope.poll = res.data;
-          // find user
-          var user;
-          User.users.forEach(function (site_user) {
-            if (localStorage.getItem('username') == site_user.username) {
-              user = site_user;
-            }
-          });
-          console.log('user is', user);
+    $scope.addVote = function (submission) {
+      Polls.Votes.create(submission).then(function (vote) {
+        submission.voted = true;
+        submission.vote = vote;
+      });
+    };
 
-          $scope.poll.poll_submissions.forEach(function (submission) {
-            console.log('sub votes', submission, user.user_votes);
-            var voted = false;
-            user.user_votes.forEach(function (vote) {
-              if (vote.submission == submission.id) {
-                voted = true;
-              }
-            });
-            submission.voted = voted;
-          })
-        });
-    }
+    $scope.deleteSubmission = function (submission) {
+      Polls.Submissions.delete(submission);
+    };
 
-    get_submissions();
+    Polls.promise.then(function () {
+      $scope.submissions = Polls.submissions;
+    });
   });

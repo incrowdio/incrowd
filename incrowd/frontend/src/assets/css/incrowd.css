@@ -373,6 +373,10 @@ md-sidenav.chat-sidenav {
     width: 504px;
 }
 
+.nav-sidenav md-content {
+    padding-top: 10px;
+}
+
 .middle-toolbar {
     z-index: 3;
 }
@@ -456,17 +460,6 @@ md-sidenav.nav-sidenav md-content {
 /*md-content.md-padding.content {*/
     /*padding-top: 20px;*/
 /*}*/
-
-.add-post-button {
-    padding-top: 4px;
-
-}
-
-.add-post-button .md-button-inner {
-    font-weight: bolder;
-    font-size: 48px;
-    margin-left: -2px;
-}
 
 /*Override troublesome Material rule*/
 md-card > img {

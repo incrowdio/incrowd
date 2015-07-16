@@ -134,7 +134,7 @@ var app = angular.module('incrowd', [
   }])
 
 
-  .run(function ($rootScope, $http, $log, Auth, Users, Channel, Config) {
+  .run(function ($rootScope, $http, $log, $cookies, Auth, Users, Channel, Polls) {
     "use strict";
     if (localStorage.getItem('token')) {
       $http.defaults.headers.common.Authorization = 'Token ' + localStorage.getItem('token');
@@ -142,6 +142,9 @@ var app = angular.module('incrowd', [
     } else {
       $rootScope.loggedIn = false;
     }
+
+    // set the Django CSRF token here
+    $http.defaults.headers.post['X-CSRFToken'] = $cookies.csrftoken;
 
     // Watch state changes, check if authed, if not, redirect to login
     $rootScope.$on('$stateChangeStart', function (e, toState) {

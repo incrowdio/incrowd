@@ -2,15 +2,15 @@
   <md-card class="md-whiteframe-z2 card_content">
     <h2>New Submission</h2>
 
-    <form ng-submit="new_submission_submit()">
+    <form ng-submit="submit()">
       <md-input-container>
         <label>Title</label>
-        <input ng-model="submission.title"
+        <input ng-model="formData.title"
                class="long" focus-me="focus_input">
       </md-input-container>
       <md-input-container>
         <label>URL</label>
-        <input label="URL" ng-model="submission.url"
+        <input label="URL" ng-model="formData.url"
                class="long" focus-me="focus_input">
       </md-input-container>
       <md-button class="md-raised md-primary" type="submit">
@@ -19,7 +19,7 @@
     </form>
   </md-card>
   <md-card class="md-whiteframe-z1 submission_entry post"
-           ng-repeat="submission in poll.poll_submissions">
+           ng-repeat="submission in submissions">
     <md-toolbar class="md-toolbar-tools">
       <div class="md-toolbar-tools">
         <div class="title_container" layout="column">
@@ -28,8 +28,8 @@
           </h2>
         </div>
         <div ng-if="submission.user == user.id"
-             ng-click="delete_submission($index)">
-          <span class="delete icon-cancel-circle icomoon"></span>
+             ng-click="deleteSubmission(submission)">
+          <span class="delete icon-cancel icomoon"></span>
         </div>
       </div>
     </md-toolbar>
@@ -39,12 +39,12 @@
 
         <md-button class="md-raised md-primary md-warn"
                    ng-if="submission.voted == true"
-                   ng-click="removeVote(submission.id)">
+                   ng-click="removeVote(submission)">
           Remove
         </md-button>
         <md-button class="md-raised md-primary"
-                   ng-if="submission.voted == false"
-                   ng-click="addVote(submission.id)">
+                   ng-if="!submission.voted"
+                   ng-click="addVote(submission)">
           Vote
         </md-button>
       </div>

@@ -1,5 +1,6 @@
 angular.module('incrowd')
   .controller('InviteCtrl', function ($scope, InviteFactory) {
+    "use strict";
     $scope.invite = {'invite_url': 'a'};
     $scope.invite_submit = function () {
       console.log('scope invite', $scope.invite);
@@ -8,7 +9,7 @@ angular.module('incrowd')
       create_invite.then(function (invite) {
         console.log('callback invite', invite);
         $scope.invite = invite;
-      })
+      });
     };
     $scope.invite = {'invite_url': 'b'};
   });

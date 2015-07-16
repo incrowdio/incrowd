@@ -3,9 +3,9 @@
   <md-item ng-repeat="message in chats" ng-class="chatHighlight(message)" >
     <div layout="row">
       <avatar user="message.user"></avatar>
-      <span class="text" ng-bind="(message.message | ChatMessageFilter)" flex></span>
     </div>
     <div class="chat_message">
+      <span class="text" ng-bind="(message.message | ChatMessageFilter)" flex></span>
       <div layout="row">
         <a class="chat_attachment" ng-if="message.attachment_url"
            ng-href="{{ message.attachment_url }}">
@@ -15,7 +15,7 @@
 
       <p><a class="username" ng-href="#/user/{{message.username}}">{{message.username}}</a>
         | {{ message.sent | DTSince }}
-        <span ng-if="message.user == user.id"> |
+        <span ng-if="message.user.id == user.id"> |
           <a href="" ng-click="delete_message(message.id)">delete</a></span></p>
     </div>
   </md-item>

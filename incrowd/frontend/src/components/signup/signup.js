@@ -1,17 +1,17 @@
 angular.module('incrowd')
   .controller('SignupCtrl', ['$scope', '$http', '$location', 'BACKEND_SERVER', function ($scope, $http, $location, BACKEND_SERVER) {
     // TODO(pcsforeducation) Only allow unauthenticated users to register
+    "use strict";
     $scope.formData = {};
 
     var params = $location.search();
     // Set defaults for server if BACKEND_SERVER config isn't set
-    var server = BACKEND_SERVER == undefined ? '/' : BACKEND_SERVER;
     var invite_code = params.code;
     var email = params.email;
 
     // Fill the form with any provided info in the URL params
-    $scope.formData['code'] = invite_code;
-    $scope.formData['email'] = email;
+    $scope.formData.code = invite_code;
+    $scope.formData.email = email;
 
     $scope.register = function () {
 //      console.log("submitting registration", $scope.formData);

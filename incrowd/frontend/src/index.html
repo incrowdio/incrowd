@@ -32,16 +32,17 @@
 
   </md-toolbar>
   <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
-    <a href="#/user/{{ user.username }}"
+    <a ui-sref="users_details({username: user.username})"
+       ui-sref-active="tab-active"
        class="menu-item menu-title">{{ user.username }}</a>
 
     <a class="menu-item menu-title "
        attronoff
        data-attr-on="{{ tab.mobile_only == true}}"
        data-attr-name="hide-gt-md"
-       ng-href="{{ tab.link }}"
+       ui-sref="{{ tab.state }}"
+       ui-sref-active="tab-active"
        ng-repeat="tab in tabs"
-       ng-click="select(tab)"
        ng-class="itemClass(tab)">
 
         <span ng-if="tab.items.length > 0" class="notification_alert">
@@ -49,7 +50,7 @@
         </span>
       {{ tab.name }}
     </a>
-    <a class="menu-item menu-title" href="#/invite">Invite</a>
+    <a class="menu-item menu-title" ui-sref="invite" ui-sref-active="tab-active">Invite</a>
     <a class="menu-item menu-title" ng-controller="AuthCtrl"
        ng-click="logout()">Log
                            out</a>
