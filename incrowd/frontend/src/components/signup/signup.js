@@ -1,34 +1,29 @@
 angular.module('incrowd')
-  .controller('SignupCtrl', ['$scope', '$http', '$location', 'BACKEND_SERVER', function ($scope, $http, $location, BACKEND_SERVER) {
+  .controller('SignupCtrl', function ($scope, $http, $log, $location, $state, Users, BACKEND_SERVER) {
     // TODO(pcsforeducation) Only allow unauthenticated users to register
     "use strict";
-    $scope.formData = {};
+    $scope.formData = new Users.resource();
 
     var params = $location.search();
-    // Set defaults for server if BACKEND_SERVER config isn't set
     var invite_code = params.code;
     var email = params.email;
+    var crowd = params.crowd;
 
     // Fill the form with any provided info in the URL params
     $scope.formData.code = invite_code;
     $scope.formData.email = email;
+    $scope.formData.crowd = crowd;
 
     $scope.register = function () {
-//      console.log("submitting registration", $scope.formData);
-      $http({
-        //url: server + 'register\/',
-        url: BACKEND_SERVER + 'register',
-        method: "POST",
-        data: $.param($scope.formData),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-      }).success(function (data, status, headers, config) {
-        $location.path('#/login').replace();
-      }).error(function ($scope, data, status, headers, config) {
-        console.log('error', data);
-        $scope.status = status + ' ' + headers;
+      $log.debug('Submitting new user', $scope.formData);
+      $scope.formData.$save().$promise.success(function (data, status, headers, config) {
+        $log.debug('User creation worked', data);
+        $state.go('login');
+      }).error(function (data, status, headers, config) {
+        $log.error('Error creating user');
+        //$log.error('error creating user', data);
+        //$scope.status = status + ' ' + headers;
       });
     };
 
-  }]);
+  });

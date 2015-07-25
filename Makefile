@@ -21,17 +21,25 @@ promote: docker_promote
 #########################
 
 # Build dev container
-docker_build:
+docker_build_dev:
 	cd incrowd && docker build -t incrowd .
 
-# Push the container as a testing release
-docker_upload:
+docker_build_testing:
 	docker build -t incrowd/incrowd:testing .
+
+docker_build:
+	docker build -t incrowd/incrowd .
+
+# Build and start the testing container
+docker_testing: docker_build_testing
+	docker run -i -v `pwd`/incrowd/config:/home/docker/code/config -p 8000:80 -t incrowd/incrowd:testing
+
+# Push the container as a testing release
+docker_upload: docker_build_testing
 	docker push incrowd/incrowd:testing
 
 # Push the container as a release
-docker_promote:
-	docker build -t incrowd/incrowd .
+docker_promote: docker_build
 	docker push incrowd/incrowd
 
 # Run the basic set up and run a dev server in the dev container

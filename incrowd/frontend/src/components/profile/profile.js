@@ -10,7 +10,6 @@ angular.module('incrowd')
   .controller('ProfileCtrl', function ($http, $scope, $stateParams, $filter, BACKEND_SERVER) {
     "use strict";
     $scope.username = $stateParams.username;
-    console.log('profile list username', $scope.username, $stateParams);
     if ($scope.username === "" || $scope.username === undefined) {
       $http.get(BACKEND_SERVER + 'users\/')
         .then(function (res) {
@@ -22,14 +21,9 @@ angular.module('incrowd')
           $scope.profiles = [res.data];
         });
     }
-    console.log('profiles', $scope.profiles);
     $scope.editSave = function (index) {
       var profile = $scope.profiles[index];
       $http.put(BACKEND_SERVER + 'users\/' + profile.username + '\/', profile);
-    };
-
-    $scope.log = function (msg) {
-      console.log(msg);
     };
 
     $scope.statuses = [
@@ -48,11 +42,8 @@ angular.module('incrowd')
     ];
 
     $scope.showStatus = function (user) {
-      console.log('show status user', user);
       var selected = $filter('filter')(
         $scope.statuses, {value: user.email_settings});
-      console.log('selected', selected, $scope.statuses);
-      console.log('selected display', (user.email_settings && selected.length), selected[0].text);
       return (user.email_settings && selected.length) ? selected[0].text : 'Not set';
     };
   })
@@ -62,13 +53,11 @@ angular.module('incrowd')
     var username = localStorage.getItem('username');
     $http.get(BACKEND_SERVER + 'users/' + username + '\/')
       .then(function (res) {
-        console.log('user result', res);
         $scope.user = res.data;
       });
     $scope.getProfilePic = function (user_id) {
       Users.users.forEach(function (user) {
         if (user.id === user_id) {
-          console.log('profile pic', user.profile_pic);
           return user.profile_pic;
         }
       });

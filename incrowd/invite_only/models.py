@@ -5,11 +5,10 @@ from urllib import urlencode
 
 from django.core.mail import send_mail
 from django.db import models
-from django import forms
 from django.conf import settings
 from rest_framework import serializers
 
-from website.models import UserSerializer
+from website.models import UserSerializer, CrowdSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +28,7 @@ def send(recipient_list, subject, body):
 
 class InviteCode(models.Model):
     invited_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    crowd = models.ForeignKey('website.Crowd')
     code = models.CharField(max_length=32, default=random_code, unique=True)
     used = models.BooleanField(default=False)
     invited_email = models.EmailField(blank=True, null=True, default=None)
@@ -47,7 +47,8 @@ class InviteCode(models.Model):
         query = {
             'email': self.invited_email,
             'code': self.code,
-            'name': self.invited_name
+            'name': self.invited_name,
+            'crowd': self.crowd.id
         }
         query_string = urlencode(query)
         return "{hostname}/#/accounts/signup?{query}".format(
@@ -80,16 +81,12 @@ To sign up, go to:
                 subject, body, str(e)))
 
 
-class InviteForm(forms.Form):
-    email = forms.EmailField()
-    name = forms.CharField()
-
-
 class InviteCodeSerializer(serializers.ModelSerializer):
     invited_by = UserSerializer(read_only=True)
     code = serializers.CharField(read_only=True)
-    user = serializers.BooleanField(default=False)
+    used = serializers.BooleanField(default=False)
     invite_url = serializers.SerializerMethodField()
+    crowd = CrowdSerializer(read_only=True)
 
     def get_invite_url(self, obj):
         return obj.invite_url()
@@ -97,5 +94,5 @@ class InviteCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = InviteCode
         fields = ('id', 'invited_by', 'code', 'used', 'invited_email',
-                  'invited_name', 'invite_url', 'user')
+                  'invited_name', 'invite_url', 'crowd')
         depth = 1

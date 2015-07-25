@@ -15,6 +15,7 @@ apt-get install -y --no-install-recommends software-properties-common \
     python-pip \
     supervisor
 pip install -r requirements.txt
+exit
 apt-get purge -y \
     man \
     vim-common \

@@ -9,10 +9,8 @@ angular.module('incrowd')
       Polls.Submissions.get(),
       Polls.Votes.get()
     ]).then(function (data) {
-      console.log("poll data", data);
       $scope.submissions = data[0];
       $scope.votes = data[1];
-      console.log("poll resolved", $scope.submissions, $scope.votes);
 
       // Could probably be faster with a filter or something. O(n^2)
       var i, j, vote, submission;
@@ -40,7 +38,6 @@ angular.module('incrowd')
     $scope.submit = function () {
       Polls.Submissions.create($scope.formData, $scope.pollStub).then(function () {
         $scope.submissions = Polls.Submissions.resource.query();
-        console.log("submissions", $scope.submissions);
         $scope.formData = new Polls.Submissions.resource();
       });
     };

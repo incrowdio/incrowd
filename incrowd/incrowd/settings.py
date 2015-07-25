@@ -142,7 +142,8 @@ else:
         'default': {
             'ENGINE': (os.environ.get('DB_BACKEND') or
                        'django.db.backends.sqlite3'),
-            'NAME': os.environ.get('DB_NAME') or os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': os.environ.get('DB_NAME') or os.path.join(
+                BASE_DIR, 'config/db.sqlite3'),
             'USER': os.environ.get('DB_USER') or 'incrowd',
             'PASSWORD': os.environ.get('DB_PASSWORD') or 'incrowd',
             'HOST': os.environ.get('DB_ADDR') or '192.168.59.103',

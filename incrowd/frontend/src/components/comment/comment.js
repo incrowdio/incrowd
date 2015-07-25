@@ -31,7 +31,7 @@ angular.module('incrowd')
           console.log($scope.formData);
           $scope.submitDisabled = true;
           $scope.formData.post = $scope.postId;
-          Posts.comment_submit($scope.formData).then(function () {
+          Posts.commentSubmit($scope.formData).then(function () {
             $scope.formData = new Posts.Comments.resource(
               {post: $scope.postId});
             $scope.submitDisabled = false;

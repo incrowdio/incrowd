@@ -21,7 +21,7 @@ angular.module('incrowd')
 
     $scope.new_post_submit = function () {
       console.log("submitting", $scope.formData);
-      Posts.post_submit($scope.formData).then(
+      Posts.postSubmit($scope.formData).then(
         function () {
           $scope.formData = new Posts.resource();
           $mdDialog.hide();

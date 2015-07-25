@@ -5,7 +5,6 @@ angular.module('incrowd')
 
     // Highlight current tab
     var find_tab = function () {
-      console.log('current state', $state);
       var current_location = $state.current.name;
       if (current_location) {
         $scope.tabs.forEach(function (tab) {

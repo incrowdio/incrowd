@@ -12,28 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ubuntu:trusty
+FROM debian:latest
 
-maintainer josh@servercobra.com
+MAINTAINER josh@servercobra.com
 
+# Set some settings
 ENV DJANGO_SETTINGS_MODULE incrowd.settings
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV SETTINGS_MODE prod
-# TODO(pcsforeducation) make this dynamic
-ENV DOCKER_HOST_IP 172.17.42.1
+
 ENV INCROWD_PATH "/home/docker/code"
 
 WORKDIR /home/docker/code
 
-ADD docker_configs/install.sh /home/docker/code/install.sh
+# System requirements, like Python
 ADD incrowd/requirements.txt /home/docker/code/requirements.txt
+ADD docker_configs/install.sh /home/docker/code/install.sh
 RUN bash /home/docker/code/install.sh
 
 # Prepare services
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
-# Everything after this point won't be cached on builds
+# Add the code
 ADD incrowd/ /home/docker/code
 
 # Finalize and clean up

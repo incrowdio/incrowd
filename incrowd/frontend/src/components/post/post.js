@@ -35,23 +35,36 @@ angular.module('incrowd')
     };
   })
 
-  .controller('PostListCtrl', function ($scope, $rootScope, $http, $sce, $location, $mdDialog, Posts, BACKEND_SERVER) {
+  .controller('PostListCtrl', function ($scope, $log, Posts) {
     "use strict";
 
     // Get data on startup
-    var page = 1, end_of_pages = false;
+    var endOfPages = false;
+    $scope.page = 1;
     $scope.busy = true;
 
     Posts.promise.then(function () {
       $scope.posts = Posts.posts;
+      $scope.busy = false;
     });
 
     $scope.scroll = function () {
-      if (!end_of_pages) {
-        console.log('scrolling, adding page', page + 1);
-        add_pages(page + 1);
+      if (!endOfPages && !$scope.busy) {
+        $log.debug('scrolling, adding page', $scope.page + 1);
+        $scope.busy = true;
+        Posts.addPage($scope.page + 1).then(function () {
+          $scope.busy = false;
+          $scope.page++;
+          $scope.posts = Posts.posts;
+          console.log('Scrolled to page', $scope.page, $scope.posts);
+        }, function () {
+          // TODO(pcsforeducation) this might be a real error
+          endOfPages = true;
+          $scope.busy = false;
+        });
+        $scope.busy = false;
       } else {
-        console.log('end of pages');
+        $log.debug('end of pages/busy', endOfPages, $scope.busy);
       }
 
     };

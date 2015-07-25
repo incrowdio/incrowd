@@ -1,11 +1,10 @@
 angular.module('pusher_service', [])
 
-  .factory('Channel', function ($rootScope, $http, BACKEND_SERVER, PUSHER_CHANNEL, PUSHER_APP_KEY, PUSHER_PRESENCE) {
+  .factory('Channel', function ($rootScope, $http, $log, BACKEND_SERVER, PUSHER_CHANNEL, PUSHER_APP_KEY, PUSHER_PRESENCE) {
     var Notifications = {};
     Notifications.pusher = new Pusher(PUSHER_APP_KEY, {
       auth: {
-        headers: {'Authorization': 'Token ' + localStorage.getItem('token')},
-
+        headers: {'Authorization': 'Token ' + localStorage.getItem('token')}
       },
       authEndpoint: BACKEND_SERVER + 'api/v1/pusher/auth'
     });
@@ -19,15 +18,15 @@ angular.module('pusher_service', [])
       data = angular.fromJson(data);
 
       if (data) {
-        if (type == 'pusher:subscription_error') {
-          // TODO(pcsforeducation) Handle this better
-          console.log('Could not subscribe', data);
+        if (type === 'pusher:subscription_error') {
+          // TODO(pcsforeducation) Handle this better, add a looping retry
+          $log.error('Could not subscribe', data);
           return;
         }
-        else if (type == 'pusher:subscription_succeeded') {
+        else if (type === 'pusher:subscription_succeeded') {
           $rootScope.$broadcast(type, Notifications.presence.members);
         }
-        console.log('Broadcasting', type, data);
+        $log.debug('Broadcasting', type, data);
         $rootScope.$broadcast(type, angular.fromJson(data));
       }
     };
@@ -35,7 +34,7 @@ angular.module('pusher_service', [])
     // Bind to all messages on our channels
     Notifications.channel.bind_all(messageCallback);
     Notifications.presence.bind_all(messageCallback);
-    console.log('channel members', Notifications.presence.members);
+    $log.debug('channel members', Notifications.presence.members);
 
     return Notifications;
   });
