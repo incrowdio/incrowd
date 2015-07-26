@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
+
 from django.db import models
+
 from rest_framework import serializers
 
 from website.models import UserSerializer
@@ -90,6 +92,7 @@ class VoteSerializer(serializers.ModelSerializer):
     crowd = serializers.CharField(max_length=64, read_only=True)
     day = serializers.CharField(read_only=True)
     user = UserSerializer(read_only=True)
+
     class Meta:
         model = Vote
         fields = ('submission', 'user', 'day', 'id', 'crowd')

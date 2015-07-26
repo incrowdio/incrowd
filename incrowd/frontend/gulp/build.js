@@ -6,7 +6,7 @@ var gulpif = require('gulp-if');
 var print = require('gulp-print');
 var rename = require('gulp-rename');
 var wiredep = require('wiredep').stream;
-
+var symlink = require('gulp-symlink');
 var paths = gulp.paths;
 
 var $ = require('gulp-load-plugins')({
@@ -89,6 +89,7 @@ gulp.task('html', ['inject'], function () {
       quotes: true
     })))
     .pipe(gulp.dest(paths.dist + '/'))
+    .pipe(gulpif('*.html', symlink(paths.dist + '/index.html')))
     .pipe($.size({title: paths.dist + '/', showFiles: true}));
 });
 
@@ -98,8 +99,9 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src($.mainBowerFiles())
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
+  return gulp.src(paths.src + '/assets/fonts/*')
+    .pipe(print())
+    .pipe($.filter('*.{eot,svg,ttf,woff}'))
     .pipe($.flatten())
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });

@@ -2,7 +2,7 @@ angular.module('config', [])
 
   .constant('ENV', 'development')
 
-  .constant('BACKEND_SERVER', 'http://localhost:8000/api/v1/')
+  .constant('BACKEND_SERVER', '/api/v1/')
 
   .constant('PUSHER_CHANNEL', 'private-incrowd-dev')
 

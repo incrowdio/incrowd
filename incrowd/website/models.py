@@ -4,6 +4,7 @@ import urlparse
 
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
+
 from django.db import models, IntegrityError
 
 from rest_framework import serializers
@@ -121,10 +122,8 @@ class UserProfile(AbstractUser):
     def serialize(self):
         return UserSerializer(self)
 
-
     class Meta:
         ordering = ['last_updated']
-
 
     def __unicode__(self):
         return self.username
@@ -291,9 +290,9 @@ class Comment(models.Model):
             send_all('comment', data.data, self.user.crowd)
 
     def _notify_users(self):
-        other_users = set(
-            Comment.objects.select_related().filter(post=self.post)
-                .exclude(user=self.user).values_list('user', flat=True))
+        other_users = set(Comment.objects.select_related().filter(
+            post=self.post).exclude(user=self.user).values_list(
+            'user', flat=True))
         # Add post auth
         if self.post.user_id not in other_users and \
                         self.post.user_id != self.user.id:
@@ -327,7 +326,8 @@ def send(recipient_list, subject, body):
 
 class UserSerializer(serializers.ModelSerializer):
     poll_votes = serializers.IntegerField(read_only=True)
-    profile_pic = serializers.URLField(required=False, default='http://google.com')
+    profile_pic = serializers.URLField(required=False,
+                                       default='http://google.com')
     crowd = CrowdSerializer(read_only=True)
     password = serializers.CharField(write_only=True)
 
@@ -358,7 +358,6 @@ class CategorySerializer(serializers.ModelSerializer):
     crowd = CrowdSerializer(read_only=True)
     post_count = serializers.IntegerField(read_only=True)
 
-
     class Meta:
         model = Category
         fields = ('id', 'created_by', 'name', 'color', 'post_count', 'crowd')
@@ -371,13 +370,11 @@ class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     comment_set = serializers.SerializerMethodField()
 
-
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
                   'category', 'comment_set', 'nsfw', 'crowd')
         depth = 1
-
 
     def get_comment_set(self, obj):
         return CommentSerializer(obj.comment_set.all(), many=True,
@@ -392,13 +389,11 @@ class PostDetailSerializer(serializers.ModelSerializer):
     comment_set = serializers.SerializerMethodField('get_comment_set')
     crowd = CrowdSerializer(read_only=True)
 
-
     class Meta:
         model = Post
         fields = ('id', 'submitted', 'edited', 'user', 'title', 'url', 'type',
                   'category', 'nsfw', 'crowd')
         depth = 1
-
 
     def get_comment_set(self, obj):
         return CommentSerializer(obj.comment_set.all(), many=True,
@@ -411,12 +406,10 @@ class CommentSerializer(serializers.ModelSerializer):
     crowd = CrowdSerializer(read_only=True)
     post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all())
 
-
     class Meta:
         model = Comment
         fields = ('id', 'user', 'text', 'submitted', 'edited', 'post',
                   'username', 'attachment_url', 'attachment_type', 'crowd')
-
 
     def get_username(self, obj):
         return obj.user.username

@@ -1,5 +1,7 @@
 #!/bin/bash
+set -e
 
+echo "deb http://ftp.us.debian.org/debian wheezy-backports main" >> /etc/apt/sources.list
 apt-get update
 apt-get install -y --no-install-recommends software-properties-common \
     build-essential \
@@ -10,12 +12,21 @@ apt-get install -y --no-install-recommends software-properties-common \
     libxml2-dev \
     make \
     nano \
+    nodejs-legacy \
     python \
     python-dev \
     python-pip \
     supervisor
+
+easy_install -U pip
+
 pip install -r requirements.txt
-exit
+pip install -r dev_requirements.txt
+
+bash install_npm.sh
+
+npm install bower -g
+
 apt-get purge -y \
     man \
     vim-common \
@@ -25,7 +36,6 @@ apt-get purge -y \
     eject \
     locales \
     software-properties-common \
-    python-pip \
     python3
 apt-get -y clean
 apt-get -y autoclean

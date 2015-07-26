@@ -16,10 +16,3 @@ six==1.9.0
 urllib3==1.10
 uWSGI==2.0.9
 wsgiref==0.1.2
-flake8==2.3.0
-mock==1.0.1
-pep8==1.5.7
-pyflakes==0.8.1
-pylint-django==0.5.5
-pylint==1.4.0
-tox==1.8.1

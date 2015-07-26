@@ -7,6 +7,9 @@ incrowd/libs/
 incrowd/fantasy
 incrowd/frontend/node_modules
 incrowd/frontend/bower_components
+incrowd/frontend/src/lib/
+incrowd/frontend/dist/
+incrowd/frontend/.tmp/
 incrowd/ansible/
 incrowd/google/
 incrowd/web/
