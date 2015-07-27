@@ -1,19 +1,14 @@
 from __future__ import unicode_literals
 
-from rest_framework import generics
+from rest_framework import viewsets
 
 from invite_only.models import InviteCode, InviteCodeSerializer
 
 
-class InviteCodeView(generics.ListCreateAPIView):
-    model = InviteCode
+class InviteCodeViewSet(viewsets.ModelViewSet):
     serializer_class = InviteCodeSerializer
+    queryset = InviteCode.objects.all()
 
-    def pre_save(self, obj):
-        obj.invited_by = self.request.user
-
-
-class InviteCodeDetail(generics.RetrieveAPIView):
-    model = InviteCode
-    serializer_class = InviteCodeSerializer
-    lookup_field = 'code'
+    def perform_create(self, serializer):
+        serializer.save(invited_by=self.request.user,
+                        crowd=self.request.user.crowd)

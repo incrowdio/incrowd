@@ -1,0 +1,66 @@
+<div class="md-whiteframe-z1 post {{ post.category.color }}" ng-cloak>
+  <md-toolbar class="{{ post.category.color }}"
+              ng-switch="post.type">
+    <div class="md-toolbar-tools md-padding" layout="row">
+      <avatar user="post.user" flex="20"></avatar>
+      <div class="title_container" flex="65">
+        <h2 class="title">
+          <a ng-if="post.type == 'link'" target="_blank"
+             ng-href="{{ post.url }}">
+            {{ post.title }}
+            <span class="icon-link icomoon link"></span>
+          </a>
+          <a ng-if="post.type != 'link'" ng-href="#/posts/{{ post.id }}">
+            {{ post.title }}
+          </a>
+        </h2>
+      </div>
+      <div ng-if="post.user.id == user.id" ng-click="delete_post(post.id)"
+           aria-label="Delete" flex="15">
+        <span class="delete icon-cancel icomoon"></span>
+      </div>
+    </div>
+
+  </md-toolbar>
+  <md-card-content>
+    <div ng-switch="post.type">
+      <div class="image" ng-switch-when="image">
+        <media></media>
+      </div>
+
+      <div class="gifv" ng-switch-when="gifv">
+        <media></media>
+      </div>
+
+      <div class="youtube" ng-switch-when="youtube">
+        <media></media>
+      </div>
+
+      <div class="video" ng-switch-when="video">
+        <media></media>
+      </div>
+
+      <div class="link" ng-switch-when="link">
+      </div>
+
+      <div class="text" ng-switch-default>
+      </div>
+    </div>
+  </md-card-content>
+  <!--Metadata-->
+  <div class="md-actions metadata" layout-align="center center">
+    <md-button ng-href="#/posts/{{ post.id }}" flex-sm="33">
+      {{ post.comment_set.length }}<span class="icon-comment icomoon comment-icon"></span>
+    </md-button>
+    <md-button ng-href="#/posts?category={{ post.category.id }}" flex-sm="33">{{ post.category.name }}</md-button>
+
+    <a class="md-button md-default-theme" flex-sm="33"><span ng-bind="post.submitted | DTSince"></span></a>
+  </div>
+  <div class="tags">
+    <md-chips layout="row" layout-align="center center">
+      <md-chip class="nsfw" ng-show="post.nsfw">NSFW</md-chip>
+    </md-chips>
+  </div>
+
+  <!--End Metadata-->
+</div>

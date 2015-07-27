@@ -1,6 +1,12 @@
 {
-  "name": "triviastats",
-  "version": "0.0.0",
+  "name": "incrowd",
+  "version": "0.1.0",
+  "description": "A private, invite-only social network focused on small groups.",
+  "homepage": "https://github.com/incrowdio/incrowd",
+  "repository": "incrowdio/incrowd",
+  "readme": "",
+  "license": "MIT",
+  "keywords": ["social network", "social"],
   "devDependencies": {
     "browser-sync": "^2.5.0",
     "chalk": "^1.0.0",
@@ -48,5 +54,8 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "dependencies": {
+    "gulp-symlink": "^2.1.1"
   }
 }

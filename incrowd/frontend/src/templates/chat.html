@@ -1,0 +1,13 @@
+<div class="chat_fullscreen">
+  <div class="connected_users chat_padding" layout="row"
+       ng-controller="UsersCtrl">
+    <span ng-repeat="user in connected_users" class="connected_user">
+      <profile-pic id="user.id"></profile-pic>
+    </span>
+  </div>
+
+  <md-content flex id="chat_container">
+    <chat></chat>
+  </md-content>
+  <chat-input></chat-input>
+</div>

@@ -1,7 +1,7 @@
+from rest_framework import viewsets
+
 from incrowd.filters import CrowdFilter
 from incrowd.permissions import IsOwnerOrReadOnly, IsPrivate, IsUserInCrowd
-
-from rest_framework import viewsets
 
 
 class InCrowdModelViewSet(viewsets.ModelViewSet):
@@ -22,3 +22,9 @@ class InCrowdModelViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return [permission() for permission in
                 list(self.permission_classes) + list(self.incrowd_permissions)]
+
+    def get_serializer_class(self):
+        # if self.request.method == 'POST':
+        #     return UserCreateSerializer
+
+        return super(InCrowdModelViewSet, self).get_serializer_class()

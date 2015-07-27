@@ -1,0 +1,9 @@
+<div class="chat_input">
+  <form name="chat_server" id="chat_form" ng-submit="send_message()">
+    <md-input-container>
+      <label>Chat</label>
+      <textarea ng-model="formData.message" ng-enter="send_message()"
+                columns="1"></textarea>
+    </md-input-container>
+  </form>
+</div>

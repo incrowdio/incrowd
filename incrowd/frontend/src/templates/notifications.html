@@ -1,0 +1,12 @@
+<md-card>
+  <md-list class="notification-list" ng-controller="NotificationCtrl">
+    <notification ng-repeat="notification in notifications" notification="notification"></notification>
+    <md-list-item ng-if="notifications.length == 0">
+      No notifications!
+    </md-list-item>
+    <md-button ng-click="remove_all()" ng-if="notifications.length > 0"
+               class="md-raised md-warn clear_notifications">Clear Notifications
+    </md-button>
+
+  </md-list>
+</md-card>

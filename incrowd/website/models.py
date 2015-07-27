@@ -4,17 +4,17 @@ import urlparse
 
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
+
 from django.db import models, IntegrityError
+
 from rest_framework import serializers
 
 from djangle import form_api
 from notify.models import notify_users
 from notify import utils as notify_utils
-from poll.models import VoteSerializer
 from push.utils import send_all
 from website.content_types import YouTube
 from website import utils
-
 
 logger = logging.getLogger(__name__)
 
@@ -276,7 +276,7 @@ class Comment(models.Model):
             self.text = notify_utils.ping_filter(
                 self.text, UserProfile.objects.all(), self.user,
                 'mentioned you in a comment', 'comment',
-                self.post.get_permalink())
+                self.post.id)
 
             message = utils.url_filter(self.text)
             for k in ('attachment_url', 'attachment_type'):
@@ -290,9 +290,9 @@ class Comment(models.Model):
             send_all('comment', data.data, self.user.crowd)
 
     def _notify_users(self):
-        other_users = set(
-            Comment.objects.select_related().filter(post=self.post)
-            .exclude(user=self.user).values_list('user', flat=True))
+        other_users = set(Comment.objects.select_related().filter(
+            post=self.post).exclude(user=self.user).values_list(
+            'user', flat=True))
         # Add post auth
         if self.post.user_id not in other_users and \
                         self.post.user_id != self.user.id:
@@ -305,7 +305,7 @@ class Comment(models.Model):
                 'user': self.user.username,
                 'title': self.post.title
             }),
-            link=self.post.get_permalink(),
+            identifier=self.post.id,
             type='comment',
             level='info')
 
@@ -325,19 +325,33 @@ def send(recipient_list, subject, body):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    user_votes = serializers.SerializerMethodField()
+    poll_votes = serializers.IntegerField(read_only=True)
+    profile_pic = serializers.URLField(required=False,
+                                       default='http://google.com')
+    crowd = CrowdSerializer(read_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = UserProfile
         fields = (
             'id', 'username', 'profile_pic', 'email', 'first_name',
-            'last_name', 'poll_votes', 'user_votes', 'last_updated',
-            'location', 'tagline', 'email_settings', 'crowd'
+            'last_name', 'poll_votes', 'last_updated',
+            'location', 'tagline', 'email_settings', 'crowd', 'password'
         )
 
-    def get_user_votes(self, obj):
-        return VoteSerializer(obj.user_votes.all(), many=True,
-                              read_only=True).data
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    profile_pic = serializers.URLField(
+        required=False, default='https://storage.googleapis.com/cliques'
+                                'io.appspot.com/default_profile.jpg')
+
+    class Meta:
+        model = UserProfile
+        fields = (
+            'id', 'username', 'email', 'first_name',
+            'last_name', 'profile_pic',
+            'location', 'tagline', 'email_settings', 'crowd', 'password'
+        )
 
 
 class CategorySerializer(serializers.ModelSerializer):

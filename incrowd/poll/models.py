@@ -1,9 +1,12 @@
 from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
+
 from django.db import models
+
 from rest_framework import serializers
 
+from website.models import UserSerializer
 from website import utils
 
 FREQUENCY_CHOICES = (('daily', 'daily'), ('once', 'once'))
@@ -66,10 +69,11 @@ class Vote(models.Model):
 
 class SubmissionSerializer(serializers.ModelSerializer):
     crowd = serializers.CharField(max_length=64, read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Submission
-        fields = ('title', 'url', 'submitted', 'poll', 'id', 'crowd')
+        fields = ('title', 'url', 'submitted', 'poll', 'id', 'crowd', 'user')
 
 
 class PollSerializer(serializers.ModelSerializer):
@@ -86,7 +90,8 @@ class PollSerializer(serializers.ModelSerializer):
 
 class VoteSerializer(serializers.ModelSerializer):
     crowd = serializers.CharField(max_length=64, read_only=True)
-    day = serializers.Field(source='day')
+    day = serializers.CharField(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Vote

@@ -6,7 +6,7 @@ var gulpif = require('gulp-if');
 var print = require('gulp-print');
 var rename = require('gulp-rename');
 var wiredep = require('wiredep').stream;
-
+var symlink = require('gulp-symlink');
 var paths = gulp.paths;
 
 var $ = require('gulp-load-plugins')({
@@ -15,8 +15,9 @@ var $ = require('gulp-load-plugins')({
 
 gulp.task('inject', ['partials', 'styles'], function () {
   var injectStyles = gulp.src([
-    paths.tmp + '/serve/{app,components}/**/*.css',
+    paths.src + '/assets/css/incrowd-custom-theme.css',
     paths.src + '/assets/css/*.css',
+    paths.src + '/components/**/*.css',
     '!' + paths.tmp + '/serve/app/vendor.css'
   ], {read: false});
 
@@ -42,7 +43,7 @@ gulp.task('inject', ['partials', 'styles'], function () {
     .pipe($.inject(injectScripts, injectOptions))
     // Use relative here so it gets picked up a findable file in assets() in
     // 'html'.
-    .pipe($.inject(gulp.src(paths.tmp + '/serve/templateCacheHtml.js',
+    .pipe($.inject(gulp.src(paths.src + '/cache/templateCacheHtml.js',
       {read: false}), {name: 'cache', addRootSlash: false, relative: true}))
     .pipe(print())
     .pipe(wiredep(wiredepOptions))
@@ -52,6 +53,7 @@ gulp.task('inject', ['partials', 'styles'], function () {
 
 gulp.task('partials', ['markups'], function () {
   return gulp.src([
+    paths.src + '/*/*.html',
     paths.src + '/{app,components}/**/*.html',
     paths.tmp + '/{app,components}/**/*.html'
   ])
@@ -60,10 +62,10 @@ gulp.task('partials', ['markups'], function () {
       spare: true,
       quotes: true
     }))
-    .pipe($.angularTemplatecache('/serve/templateCacheHtml.js', {
+    .pipe($.angularTemplatecache('/cache/templateCacheHtml.js', {
       module: 'incrowd'
     }))
-    .pipe(gulp.dest(paths.tmp + '/'));
+    .pipe(gulp.dest(paths.src + '/'));
 });
 
 gulp.task('html', ['inject'], function () {
@@ -87,6 +89,7 @@ gulp.task('html', ['inject'], function () {
       quotes: true
     })))
     .pipe(gulp.dest(paths.dist + '/'))
+    .pipe(gulpif('*.html', symlink(paths.dist + '/index.html')))
     .pipe($.size({title: paths.dist + '/', showFiles: true}));
 });
 
@@ -96,8 +99,9 @@ gulp.task('images', function () {
 });
 
 gulp.task('fonts', function () {
-  return gulp.src($.mainBowerFiles())
-    .pipe($.filter('**/*.{eot,svg,ttf,woff}'))
+  return gulp.src(paths.src + '/assets/fonts/*')
+    .pipe(print())
+    .pipe($.filter('*.{eot,svg,ttf,woff}'))
     .pipe($.flatten())
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });

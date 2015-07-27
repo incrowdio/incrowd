@@ -1,0 +1,17 @@
+.avatar-pic {
+    display: inline-block;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+    float: left;
+}
+
+.avatar-circular img {
+    height: 48px;
+    width: 48px;
+}

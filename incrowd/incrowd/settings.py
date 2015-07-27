@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import json
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -24,10 +23,6 @@ SITE_NAME = 'inCrowd'
 # Determine which environment we're running in.
 if os.environ.get('SETTINGS_MODE') == 'prod':
     ENV = 'prod'
-elif os.environ.get('SETTINGS_MODE') == 'CODESHIP':
-    ENV = 'codeship'
-elif os.environ.get('TRAVIS'):
-    ENV = 'travis'
 else:
     ENV = 'local'
 
@@ -35,6 +30,7 @@ else:
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# CHANGE THIS!
 SECRET_KEY = '4wd(bfk2m5qj2k0p7(w6)(q$+o040_+_9y$z^_h%ua^(=v2lb2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -53,10 +49,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'frontend/www'),
 )
 
 ALLOWED_HOSTS = []
@@ -116,6 +108,7 @@ AUTHENTICATION_BACKENDS = (
     # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
+# Set these for the mobile app (not used yet)
 PUSH_NOTIFICATIONS_SETTINGS = {
     'GCM_API_KEY': '<your api key>',
     'APNS_CERTIFICATE': '/path/to/your/certificate.pem',
@@ -124,32 +117,18 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
-if ENV == 'shippable':
-    INSTALLED_APPS += ['django_nose']
-    # Running in development, so use a local MySQL database.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'incrowd',
-            'USER': 'shippable',
-            'HOST': '172.17.42.1',  # Access MySQL on a Docker host
-        }
+# Default to SQLite, pass in more config via command line or custom settings.py
+DATABASES = {
+    'default': {
+        'ENGINE': (os.environ.get('DB_BACKEND') or
+                   'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DB_NAME') or os.path.join(
+            BASE_DIR, 'config/db.sqlite3'),
+        'USER': os.environ.get('DB_USER') or 'incrowd',
+        'PASSWORD': os.environ.get('DB_PASSWORD') or 'incrowd',
+        'HOST': os.environ.get('DB_ADDR') or '192.168.59.103',
     }
-
-else:
-    # Running in development, so use sqlite for simplicity
-    DATABASES = {
-        'default': {
-            'ENGINE': (os.environ.get('DB_BACKEND') or
-                       'django.db.backends.sqlite3'),
-            'NAME': os.environ.get('DB_NAME') or os.path.join(BASE_DIR, 'db.sqlite3'),
-            'USER': os.environ.get('DB_USER') or 'incrowd',
-            'PASSWORD': os.environ.get('DB_PASSWORD') or 'incrowd',
-            'HOST': os.environ.get('DB_ADDR') or '192.168.59.103',
-        }
-    }
-
-print DATABASES
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -169,18 +148,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
 
-# Allow serving the frontend during dev, otherwise this is a webserver's job
-if ENV == 'local':
-    STATICFILES_DIRS = (
-        'frontend',
-    )
-
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Add the /static as a hack for uWSGI static file serving
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
 MEDIA_ROOT = 'media'
 
 # AllAuth
 AUTH_USER_MODEL = 'website.UserProfile'
-
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
@@ -211,17 +184,9 @@ REST_FRAMEWORK = {
 }
 
 PUSH_DISABLED = False
-# Only supported push module is pusher
+# Only supported push module is pusher so far
 PUSH_MODULE = 'pusher'
 
-DJOSER = {
-    'DOMAIN': DOMAIN,
-    'SITE_NAME': SITE_NAME,
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'LOGIN_AFTER_ACTIVATION': True,
-    'SEND_ACTIVATION_EMAIL': True,
-}
 
 # Pusher
 PUSHER_ENABLE = False
@@ -231,7 +196,17 @@ PUSHER_SECRET = ''
 PUSHER_CHANNEL = ''
 PUSHER_PRESENCE = ''
 
-# Mime Types
+# API Signup
+DJOSER = {
+    'DOMAIN': DOMAIN,
+    'SITE_NAME': SITE_NAME,
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'LOGIN_AFTER_ACTIVATION': True,
+    'SEND_ACTIVATION_EMAIL': True,
+}
+
+# Supported MIME types
 MIME_IMAGES = [
     'image/gif',
     'image/gifv',
@@ -317,10 +292,9 @@ LOGGING = {
 try:
     from config.production_settings import *  # NOQA
 except Exception:
-    pass
+    print('Did not find any production settings, using insecure defaults')
 
-
-# Load environment overrides
+# Load environment overrides, handy for Docker containers
 try:
     env = os.environ.get('DJANGO_ENV', '{}')
     for key, value in json.loads(env).items():

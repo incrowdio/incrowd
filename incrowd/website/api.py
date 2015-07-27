@@ -14,7 +14,7 @@ from incrowd.viewsets import InCrowdModelViewSet
 from invite_only.models import InviteCode
 from website.models import UserProfile, Post, Comment, Category, \
     UserSerializer, PostSerializer, CommentSerializer, \
-    CategorySerializer, Crowd, CrowdSerializer
+    CategorySerializer, Crowd, CrowdSerializer, UserCreateSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -57,6 +57,12 @@ class UserViewSet(InCrowdModelViewSet):
                           IsPrivate)
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,
                        filters.OrderingFilter)
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserCreateSerializer
+
+        return super(UserViewSet, self).get_serializer_class()
 
 
 class PostViewSet(InCrowdModelViewSet):

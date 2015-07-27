@@ -4,28 +4,15 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
 
-from incrowd.views import get_token, get_cookie
-from website.views import presence
-from invite_only.api import InviteCodeView, InviteCodeDetail
-
-import website.urls
-import notify.urls
 import chat_server.urls
+from incrowd.views import get_token, get_cookie
+import invite_only.urls
+import notify.urls
 import poll.urls
+import website.urls
+from website.views import presence
 
 admin.autodiscover()
-
-
-v1_invite_urls = patterns(
-    '',
-    url(r'^invites/$',
-        InviteCodeView.as_view(),
-        name='invite-list'),
-    url(r'^invites/(?P<code>\w+)/$',
-        InviteCodeDetail.as_view(),
-        name='invite-details'),
-)
-
 
 urlpatterns = patterns(
     '',
@@ -44,10 +31,10 @@ urlpatterns = patterns(
     url(r'^api/v1/', include(notify.urls.router.urls)),
     url(r'^api/v1/', include(chat_server.urls.router.urls)),
     url(r'^api/v1/', include(poll.urls.router.urls)),
+    url(r'^api/v1/', include(invite_only.urls.router.urls)),
     url(r'^api/v1/', include('push.urls')),
 
     url(r'^api/v1/register/', 'website.api.register'),
-    url(r'^api/v1/', include(v1_invite_urls)),
     url('^api/v1/presence/$', presence),
 
     url(r'^api/v1/token/', get_token),
@@ -57,6 +44,7 @@ urlpatterns = patterns(
 
 if settings.DEBUG_TOOLBAR:
     import debug_toolbar
+
     urlpatterns += patterns(
         '',
         url(r'^__debug__/', include(debug_toolbar.urls)),

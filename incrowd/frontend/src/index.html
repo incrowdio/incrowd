@@ -1,9 +1,9 @@
 <!doctype html>
 <html class="no-js" lang="en" ng-app="incrowd">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <meta name="viewport"
-        content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+        content="initial-scale=1, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#607d8b">
   <link rel="shortcut icon" type="image/png" href="favicon.ico">
   <title>SlasherTraxx</title>
@@ -24,23 +24,25 @@
 </head>
 <body layout="vertical" ng-controller="UserCtrl">
 
-<md-sidenav layout="column"
-            class="md-sidenav-left md-whiteframe-z2"
-            md-component-id="left" ng-cloak>
-  <md-toolbar>
+<md-sidenav class="md-sidenav-left nav-sidenav"
+            md-component-id="left"
+            md-is-locked-open="$mdMedia('gt-md')"
+            ng-cloak>
+  <md-toolbar class="md-whiteframe-z1">
 
   </md-toolbar>
   <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
-    <a href="#/user/{{ user.username }}"
+    <a ui-sref="users_details({username: user.username})"
+       ui-sref-active="tab-active"
        class="menu-item menu-title">{{ user.username }}</a>
 
     <a class="menu-item menu-title "
        attronoff
        data-attr-on="{{ tab.mobile_only == true}}"
        data-attr-name="hide-gt-md"
-       ng-href="{{ tab.link }}"
+       ui-sref="{{ tab.state }}"
+       ui-sref-active="tab-active"
        ng-repeat="tab in tabs"
-       ng-click="select(tab)"
        ng-class="itemClass(tab)">
 
         <span ng-if="tab.items.length > 0" class="notification_alert">
@@ -48,10 +50,10 @@
         </span>
       {{ tab.name }}
     </a>
-    <a class="menu-item menu-title" href="#/invite">Invite</a>
+    <a class="menu-item menu-title" ui-sref="invite" ui-sref-active="tab-active">Invite</a>
     <a class="menu-item menu-title" ng-controller="AuthCtrl"
        ng-click="logout()">Log
-      out</a>
+                           out</a>
     <!--<a class="menu-item menu-title" ng-click="toggleLeft()">Hide Bar</a>-->
   </md-content>
 </md-sidenav>
@@ -59,8 +61,7 @@
 <div layout="column" layout-fill tabIndex="-1" role="main">
   <md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
     <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
-      <span ng-click="toggleLeft()" class="icon-menu icomoon menu"
-          ></span>
+      <span hide-gt-md ng-click="toggleLeft()" class="icon-menu icomoon reorder menu"></span>
       <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
       <a href="#/">SlasherTraxx</a>
     </h1>
@@ -68,13 +69,13 @@
     <md-button
         class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
         tabindex="-1"
-        ng-controller="PostListCtrl"
+        ng-controller="NewPostCtrl"
         ng-click="newPostDialog($event)"
         aria-label="New Post">
       <md-tooltip>
         New Post
       </md-tooltip>
-      <span class="md-button-inner icon-plus icomoon"
+      <span class="md-button-inner icon-add icomoon"
             ng-click="show($event)"></span>
 
       <div class="md-ripple-container"></div>
@@ -83,15 +84,13 @@
   </md-toolbar>
 
   <md-content id="content" ui-view md-scroll-y
-              class="md-padding content"></md-content>
+              class="content"></md-content>
 
 </div>
-
-<md-sidenav
-    class="md-sidenav-right md-whiteframe-z2 chat-sidenav"
-    md-component-id="right"
-    md-is-locked-open="$media('gt-sm')"
-    ng-cloak>
+<md-sidenav class="md-sidenav-right md-whiteframe-z2 chat-sidenav"
+            md-is-locked-open="$mdMedia('gt-md')"
+            md-component-id="right"
+            ng-cloak>
 
   <md-toolbar>
     <h1 class="md-toolbar-tools">Chat</h1>
@@ -106,7 +105,7 @@
   <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
     <chat></chat>
   </md-content>
-  <chatinput></chatinput>
+  <chat-input></chat-input>
 
 </md-sidenav>
 
@@ -116,22 +115,22 @@
 <!-- endbower -->
 <!-- endbuild -->
 
-<!-- build:js(.tmp) scripts/cache.js -->
-<!-- cache:js -->
-<!-- angular templates will be automatically converted in js and inserted here -->
+<!-- build:js(src) scripts/app.js -->
+<!-- inject:js -->
 <!-- endinject -->
 <!-- endbuild -->
 
-<!-- build:js(src) scripts/app.js -->
-<!-- inject:js -->
+<!-- build:js(src) scripts/cache.js -->
+<!-- cache:js -->
+<!-- angular templates will be automatically converted in js and inserted here -->
 <!-- endinject -->
 <!-- endbuild -->
 <script>
   (function (i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
     i[r] = i[r] || function () {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
     a = s.createElement(o),
         m = s.getElementsByTagName(o)[0];
     a.async = 1;

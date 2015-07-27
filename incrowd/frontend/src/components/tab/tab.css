@@ -1,0 +1,5 @@
+.tab-active {
+    border-left: 3px solid #3A3A3A;
+    margin-left: 5px;
+    background-color: #c3c3c3;
+}
