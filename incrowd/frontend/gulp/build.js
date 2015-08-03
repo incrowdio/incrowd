@@ -7,6 +7,8 @@ var print = require('gulp-print');
 var rename = require('gulp-rename');
 var wiredep = require('wiredep').stream;
 var symlink = require('gulp-symlink');
+var rimraf = require('gulp-rimraf');
+var uglify = require('gulp-uglify');
 var paths = gulp.paths;
 
 var $ = require('gulp-load-plugins')({
@@ -45,6 +47,8 @@ gulp.task('inject', ['partials', 'styles'], function () {
     // 'html'.
     .pipe($.inject(gulp.src(paths.src + '/cache/templateCacheHtml.js',
       {read: false}), {name: 'cache', addRootSlash: false, relative: true}))
+    .pipe($.inject(gulp.src(paths.src + '/prod_settings.js',
+      {read: false}), {name: 'settings', addRootSlash: false, relative: true}))
     .pipe(print())
     .pipe(wiredep(wiredepOptions))
     .pipe(gulp.dest(paths.tmp + '/serve'));
@@ -78,8 +82,8 @@ gulp.task('html', ['inject'], function () {
       return "assets: " + filepath;
     }))
     .pipe($.rev())
-    //.pipe(gulpif('*.js', $.ngAnnotate()))
-    //.pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
+    .pipe(gulpif('*.js', $.ngAnnotate()))
+    .pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
     //.pipe(gulpif('*.css', $.csso()))
     .pipe($.useref())
     .pipe($.revReplace())
@@ -89,7 +93,7 @@ gulp.task('html', ['inject'], function () {
       quotes: true
     })))
     .pipe(gulp.dest(paths.dist + '/'))
-    .pipe(gulpif('*.html', symlink(paths.dist + '/index.html')))
+    .pipe(gulpif('*.html', symlink(paths.dist + '/index.html', {force: true})))
     .pipe($.size({title: paths.dist + '/', showFiles: true}));
 });
 
@@ -100,9 +104,8 @@ gulp.task('images', function () {
 
 gulp.task('fonts', function () {
   return gulp.src(paths.src + '/assets/fonts/*')
-    .pipe(print())
     .pipe($.filter('*.{eot,svg,ttf,woff}'))
-    .pipe($.flatten())
+    .pipe(print())
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
@@ -144,7 +147,10 @@ gulp.task('misc', function () {
 });
 
 gulp.task('clean', function (done) {
-  $.del([paths.dist + '/', paths.tmp + '/'], done);
+  return gulp.src([paths.dist + '/', paths.tmp + '/'], { read: false })
+    .pipe(rimraf({ force: true }));
 });
 
-gulp.task('build', ['clean', 'html', 'images', 'fonts', 'misc', 'config']);
+
+
+gulp.task('build', ['html', 'images', 'fonts', 'misc', 'config']);

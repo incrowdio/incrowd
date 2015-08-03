@@ -6,25 +6,25 @@ var cloudfront = require("gulp-cloudfront");
 var paths = gulp.paths;
 
 var aws = {
-    "bucket": "incrowd.io",
-    "region": "us-east-1",
-    "distributionId": "E3E98Y3GYCNA27",
-    "patternIndex": /(templateCacheHtml\.js)|(index\.html)/gi
+  "bucket": "incrowd.io",
+  "region": "us-east-1",
+  "distributionId": "E3E98Y3GYCNA27",
+  "patternIndex": /(templateCacheHtml\.js)|(index\.html)/gi
 };
 
-gulp.task('prod', function() {
+gulp.task('prod', ['build'], function () {
 
   // create a new publisher
   var publisher = awspublish.create(aws);
 
   // define custom headers
   var headers = {
-     'Cache-Control': 'max-age=315360000, no-transform, public'
-   };
+    'Cache-Control': 'max-age=315360000, no-transform, public'
+  };
 
   return gulp.src(paths.dist + '/**/*')
 
-     // gzip, Set Content-Encoding headers and add .gz extension
+    // gzip, Set Content-Encoding headers and add .gz extension
     //.pipe(awspublish.gzip({ ext: '.gz' }))
 
     // publisher will add Content-Length, Content-Type and headers specified above
@@ -34,26 +34,31 @@ gulp.task('prod', function() {
     // create a cache file to speed up consecutive uploads
     .pipe(publisher.cache())
 
-     // print upload updates to console
+    // print upload updates to console
     .pipe(awspublish.reporter());
 
-    // invalidate root files in cloudfront to update
-    //.pipe(cloudfront(aws));
+  // invalidate root files in cloudfront to update
+  //.pipe(cloudfront(aws));
 });
 
-gulp.task('preprod', function() {
+gulp.task('preprod', ['build'], function () {
 
-  // create a new publisher
-  var publisher = awspublish.create({ bucket: 'testing.triviastats.com' });
+  var publisher = awspublish.create({
+    params: {
+      "Bucket": 'testing.incrowd.io',
+      "region": "us-east-1"
+    },
+    "region": "us-east-1"
+  });
 
   // define custom headers
   var headers = {
-     'Cache-Control': 'max-age=315360000, no-transform, public'
-   };
+    'Cache-Control': 'max-age=315360000, no-transform, public'
+  };
 
   return gulp.src(paths.dist + '/**/*')
 
-     // gzip, Set Content-Encoding headers and add .gz extension
+    // gzip, Set Content-Encoding headers and add .gz extension
     //.pipe(awspublish.gzip({ ext: '.gz' }))
 
     // publisher will add Content-Length, Content-Type and headers specified above
@@ -63,6 +68,8 @@ gulp.task('preprod', function() {
     // create a cache file to speed up consecutive uploads
     .pipe(publisher.cache())
 
-     // print upload updates to console
+    // print upload updates to console
     .pipe(awspublish.reporter());
+
+    //.pipe(cloudfront(aws));
 });

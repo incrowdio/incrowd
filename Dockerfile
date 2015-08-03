@@ -46,6 +46,7 @@ ADD incrowd/ /home/docker/code
 WORKDIR /home/docker/code/frontend
 RUN ln -s /home/docker/node_modules /home/docker/code/frontend/node_modules
 RUN ln -s /home/docker/bower_components /home/docker/code/frontend/src/lib
+# TODO(pcsforeducation) make another dockefile to run gulp build
 RUN gulp build
 
 # Prepare services

@@ -97,10 +97,6 @@ pep8:
 test_django:
 	cd incrowd && python manage.py test --noinput
 
-# Run integration tests
-integration:
-	./tests/integration.sh
-
 #########################
 # Frontend tools
 #########################
@@ -109,6 +105,12 @@ integration:
 lint:
 	cd incrowd/frontend && gulp lint
 
+frontend_preprod:
+	cd incrowd/frontend && gulp preprod
+
+frontend_prod:
+	cd incrowd/frontend && gulp prod
+
 #########################
 # CI/CD tools
 #########################
@@ -116,3 +118,6 @@ lint:
 # Prepare to run frontend tests
 install_ci:
 	npm install -g bower grunt grunt-cli
+
+integration:
+	bash tests/integration.sh
