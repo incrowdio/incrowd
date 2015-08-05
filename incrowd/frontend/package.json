@@ -6,7 +6,10 @@
   "repository": "incrowdio/incrowd",
   "readme": "",
   "license": "MIT",
-  "keywords": ["social network", "social"],
+  "keywords": [
+    "social network",
+    "social"
+  ],
   "devDependencies": {
     "browser-sync": "^2.5.0",
     "chalk": "^1.0.0",
@@ -56,6 +59,8 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
+    "gulp-clean": "^0.3.1",
+    "gulp-rimraf": "^0.1.1",
     "gulp-symlink": "^2.1.1"
   }
 }
