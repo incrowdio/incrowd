@@ -4,7 +4,6 @@ inCrowd
 
 A private, invite-only social network focused on small groups.
 
-[![Build Status](https://api.shippable.com/projects/54d31f855ab6cc13528ae4fa/badge?branchName=master)](https://app.shippable.com/projects/54d31f855ab6cc13528ae4fa/builds/latest)
 ![Docker Status](http://dockeri.co/image/incrowd/incrowd)
 
 Deploying
@@ -48,50 +47,10 @@ from the command line (taken from the [Docker documentation](https://docs.docker
 
         curl -sSL https://get.docker.com/ubuntu/ | sudo sh
 
-
-### Setup MySQL
-
-inCrowd uses MySQL as the database to store users, posts, etc. We'll use the EasyMySQL container
-for development purposes. We're doing to start the container with a root password, create
-the incrowd database, create an incrowd user with password 'incrowd, and finally mount
-a directory we've created on our system into the container to save the database (so you don't
-need to start from scratch every time).
-
-        docker run --name mysql -e MYSQL_ROOT_PASSWORD=password \
-            -e MYSQL_DATABASE=incrowd \
-            -e MYSQL_USER=incrowd \
-            -e MYSQL_PASSWORD=incrowd \
-            -v /home/josh/mysql:/var/lib/mysql \
-            -d mysql:5.7
-
-#### Alternative: Run on Linux
-
-Sometimes it's easier to run MySQL outside of Docker.
-
-        sudo apt-get -y update
-        
-        # Choose a secure password when prompted
-        sudo apt-get -y install mysql-server mysql-client
-          
-        sudo nano /etc/mysql/my.cnf
-        
-        # Replace "bind-address = 127.0.0.1" with 
-        
-        # "bind-address = 0.0.0.0" or "bind-address = 172.17.42.1", the docker bridge address
-
-        # Restart MySQL for settings to take effect
-        sudo /etc/init.d/mysql restart
-
-        mysql -uroot -pYOUR_MYSQL_PASSWORD
-        
-        > CREATE DATABASE incrowd;
-
-        > GRANT ALL PRIVILEGES ON incrowd.* TO 'incrowd'@'%' IDENTIFIED BY 'incrowd';
-        
 ### Install and run inCrowd
 
-inCrowd is distributed as a Docker container with the inCrowd app and the
-Nginx web server. To make management easier, we 
+inCrowd is distributed as a Docker container with the inCrowd app. The default configuration
+uses a SQLite database in the container. To make management easier, we 
 created an init script, which allows you to start, stop, update, and manage 
 the DB. It will also ensure that the container starts automatically if your
 server is rebooted. 
