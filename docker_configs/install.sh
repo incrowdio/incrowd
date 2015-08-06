@@ -6,22 +6,22 @@ apt-get update
 apt-get install -y --no-install-recommends software-properties-common \
     build-essential \
     curl \
-    git-core \
-    libmysqlclient-dev \
+    git \
+    libffi-dev \
     libsqlite3-dev \
-    libxml2-dev \
-    make \
+    libssl-dev \
     nano \
     nodejs-legacy \
     python \
     python-dev \
     python-pip \
-    supervisor
+    python-setuptools
 
 easy_install -U pip
 
 pip install -r requirements.txt
 pip install -r dev_requirements.txt
+pip install uwsgi
 
 bash install_npm.sh
 
@@ -36,6 +36,7 @@ apt-get purge -y \
     eject \
     locales \
     software-properties-common \
+    python-pip \
     python3
 apt-get -y clean
 apt-get -y autoclean
