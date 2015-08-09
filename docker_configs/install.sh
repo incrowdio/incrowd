@@ -8,6 +8,7 @@ apt-get install -y --no-install-recommends software-properties-common \
     curl \
     git \
     libffi-dev \
+    libmysqlclient-dev \
     libsqlite3-dev \
     libssl-dev \
     nano \
