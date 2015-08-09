@@ -3,6 +3,8 @@
 .vagrant
 incrowd/dev/
 incrowd/.tox/
+incrowd/.idea/
+incrowd/.vagrant/
 incrowd/libs/
 incrowd/fantasy
 incrowd/frontend/node_modules
@@ -17,6 +19,7 @@ incrowd/staticfiles
 incrowd/debug.log
 incrowd/db.sqlite3
 incrowd/dev_data.json
+incrowd/dev/
 incrowd/app/
 incrowd/config/
 incrowd/bin/
@@ -24,3 +27,5 @@ incrowd/include/
 incrowd/lib/
 incrowd/man/
 incrowd/shippable/
+*~
+*.pyc
