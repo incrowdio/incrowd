@@ -27,6 +27,7 @@
     "gulp-flatten": "*",
     "gulp-if": "^1.2.5",
     "gulp-inject": "*",
+    "gulp-invalidate-cloudfront": "^0.1.2",
     "gulp-jade-usemin": "*",
     "gulp-jshint": "*",
     "gulp-karma": "*",

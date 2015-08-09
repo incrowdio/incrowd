@@ -1,9 +1,20 @@
 'use strict';
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
-var cloudfront = require("gulp-cloudfront");
+var cloudfront = require('gulp-invalidate-cloudfront');
 
 var paths = gulp.paths;
+
+//var d = new Date().now()
+//console.log(d);
+
+var invalidationBatch = {
+//    CallerReference: new Date().now().toString(),
+    Paths: {
+        Quantity: 1,
+        Items: ['/index.html/']
+    }
+};
 
 var aws = {
   "bucket": "incrowd.io",
@@ -25,7 +36,7 @@ gulp.task('prod', function () {
   return gulp.src(paths.dist + '/**/*')
 
     // gzip, Set Content-Encoding headers and add .gz extension
-    //.pipe(awspublish.gzip({ ext: '.gz' }))
+    // .pipe(awspublish.gzip({ ext: '.gz' }))
 
     // publisher will add Content-Length, Content-Type and headers specified above
     // If not specified it will set x-amz-acl to public-read by default
@@ -35,10 +46,10 @@ gulp.task('prod', function () {
     .pipe(publisher.cache())
 
     // print upload updates to console
-    .pipe(awspublish.reporter());
+    .pipe(awspublish.reporter())
 
-  // invalidate root files in cloudfront to update
-  //.pipe(cloudfront(aws));
+    // invalidate root files in cloudfront to update
+    .pipe(cloudfront(invalidationBatch, aws));
 });
 
 gulp.task('preprod', function () {
@@ -59,7 +70,7 @@ gulp.task('preprod', function () {
   return gulp.src(paths.dist + '/**/*')
 
     // gzip, Set Content-Encoding headers and add .gz extension
-    //.pipe(awspublish.gzip({ ext: '.gz' }))
+    .pipe(awspublish.gzip())
 
     // publisher will add Content-Length, Content-Type and headers specified above
     // If not specified it will set x-amz-acl to public-read by default
@@ -71,5 +82,7 @@ gulp.task('preprod', function () {
     // print upload updates to console
     .pipe(awspublish.reporter());
 
+    // invalidate root files in cloudfront to update
+    //.pipe(cloudfront(invalidationBatch, aws));
     //.pipe(cloudfront(aws));
 });
