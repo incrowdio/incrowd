@@ -12,7 +12,7 @@ var aws = {
   "patternIndex": /(templateCacheHtml\.js)|(index\.html)/gi
 };
 
-gulp.task('prod', ['build'], function () {
+gulp.task('prod', function () {
 
   // create a new publisher
   var publisher = awspublish.create(aws);
@@ -41,7 +41,7 @@ gulp.task('prod', ['build'], function () {
   //.pipe(cloudfront(aws));
 });
 
-gulp.task('preprod', ['build'], function () {
+gulp.task('preprod', function () {
 
   var publisher = awspublish.create({
     params: {
