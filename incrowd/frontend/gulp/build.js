@@ -15,7 +15,7 @@ var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
-gulp.task('inject', ['partials', 'styles'], function () {
+gulp.task('inject', ['partials', 'styles', 'config'], function () {
   var injectStyles = gulp.src([
     paths.src + '/assets/css/incrowd-custom-theme.css',
     paths.src + '/assets/css/*.css',
@@ -26,6 +26,7 @@ gulp.task('inject', ['partials', 'styles'], function () {
   var injectScripts = gulp.src([
     paths.src + '/{app,components}/**/*.js',
     '!' + paths.src + '/settings.js',
+    '!' + paths.src + '/app/js/config.js',
     '!' + paths.src + '/{app,components}/**/*.spec.js',
     '!' + paths.src + '/{app,components}/**/*.mock.js'
   ]).pipe($.angularFilesort());
@@ -47,8 +48,8 @@ gulp.task('inject', ['partials', 'styles'], function () {
     // 'html'.
     .pipe($.inject(gulp.src(paths.src + '/cache/templateCacheHtml.js',
       {read: false}), {name: 'cache', addRootSlash: false, relative: true}))
-    .pipe($.inject(gulp.src(paths.src + '/prod_settings.js',
-      {read: false}), {name: 'settings', addRootSlash: false, relative: true}))
+    .pipe($.inject(gulp.src(paths.src + '/app/js/config.js',
+      {read: false}), {name: 'config', addRootSlash: false, relative: true}))
     .pipe(print())
     .pipe(wiredep(wiredepOptions))
     .pipe(gulp.dest(paths.tmp + '/serve'));
@@ -83,7 +84,7 @@ gulp.task('html', ['inject'], function () {
     }))
     .pipe($.rev())
     .pipe(gulpif('*.js', $.ngAnnotate()))
-    .pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
+    //.pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
     //.pipe(gulpif('*.css', $.csso()))
     .pipe($.useref())
     .pipe($.revReplace())
@@ -110,36 +111,13 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('config', function () {
-  gulp.src(paths.src + '/prod_settings.js')
-    .pipe(print())
-    .pipe(rename('settings.js'))
-    .pipe(print())
-    .pipe(gulp.dest(paths.dist))
-    .pipe(print());
+  //console.log('config')
+  gulp.src(paths.src + '/app/js/config.json')
+    .pipe(ngConstant({
+      name: 'config',
+    }))
+    .pipe(gulp.dest(paths.src + '/app/js/'));
 });
-
-//gulp.task('config', function () {
-//  gulp.src('gulp/prod_settings.json')
-//    .pipe(rename('settings.json'))
-//    .pipe(ngConstant({
-//      name: 'triviastats.config'
-//    }))
-//    .pipe(print())
-//
-//    .pipe(gulp.dest(paths.dist));
-//});
-//
-//gulp.task('config_dev', function () {
-//  gulp.src('gulp/dev_settings.json')
-//    .pipe(rename('settings.json'))
-//    .pipe(ngConstant({
-//      name: 'triviastats.config',
-//      wrap: 'commonjs'
-//    }))
-//    .pipe(print())
-//
-//    .pipe(gulp.dest(paths.src));
-//});
 
 gulp.task('misc', function () {
   return gulp.src(paths.src + '/**/*.ico')
@@ -153,4 +131,4 @@ gulp.task('clean', function (done) {
 
 
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc', 'config']);
+gulp.task('build', ['html', 'images', 'fonts', 'misc']);

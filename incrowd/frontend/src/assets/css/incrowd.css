@@ -433,6 +433,7 @@ md-sidenav.nav-sidenav md-toolbar {
 
 md-sidenav.nav-sidenav md-content {
     background-color: #f2f2f2;
+    overflow-x: hidden;
 }
 
 .main-toolbar {

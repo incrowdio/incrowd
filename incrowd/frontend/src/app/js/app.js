@@ -1,4 +1,5 @@
 var app = angular.module('incrowd', [
+  'config',
   'ngCookies',
   'ngResource',
   'ui.router',
@@ -14,8 +15,8 @@ var app = angular.module('incrowd', [
   'djangoRESTResources',
   'drf_auth.token',
   'djangle',
+
   'incrowdLib',
-  'config',
   'pusher_service'
 ])
 
