@@ -1,28 +1,31 @@
-all: clean test www
+#########################
+# Entrypoints
+#########################
 
-prod: clean test www_prod link_libs
+# Build a container and run the backend server
+dev: docker_build_testing docker_run
 
+# Build a container and drop to the shell in the container
+shell: docker_build_testing docker_shell
+
+# Upload the testing container
 upload: docker_upload
 
-#docker: docker_build docker_run
+# Promote the testing container to prod
+promote: docker_promote
 
-shell: docker_build docker_shell
-
-dev: docker_build docker_run
-
+# Run backend tests
 test: pep8 test_django
 
-ci: docker_build_ci docker_run_tests integration
+# Single entrypoint for CI
+ci: docker_build_testing docker_run_tests integration
 
-promote: docker_promote
 
 #########################
 # Dev tools
 #########################
 
 # Build dev container
-docker_build_dev:
-	cd incrowd && docker build -t incrowd .
 
 docker_build_testing:
 	docker build -t incrowd/incrowd:testing .
@@ -44,11 +47,11 @@ docker_promote: docker_build
 
 # Run the basic set up and run a dev server in the dev container
 docker_run:
-	docker run -i -v `pwd`/incrowd:/home/docker/code -p 8000:8000 -t incrowd /bin/bash -c "make docker_dev"
+	docker run -i -v `pwd`/incrowd:/home/docker/code -v `pwd`/incrowd/config:/home/docker/code/config -e SETTINGS_MODE=testing -p 8000:8000 -t incrowd/incrowd:testing /bin/bash -c "make docker_dev"
 
 # Get a shell inside a dev container
 docker_shell:
-	docker run -i -v `pwd`/incrowd:/home/docker/code -t incrowd /bin/bash
+	docker run -i -v `pwd`/incrowd:/home/docker/code -v `pwd`/incrowd/config:/home/docker/code/config -t incrowd/incrowd:testing /bin/bash
 
 # Serve the frontend via gulp for dev
 serve:
@@ -72,10 +75,6 @@ load_data:
 #########################
 # Testing tools
 #########################
-
-# Build testing container
-docker_build_ci:
-	docker build -t incrowd/incrowd:testing .
 
 # Run containers inside the testing container
 docker_run_tests:

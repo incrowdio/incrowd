@@ -33,23 +33,27 @@ ADD docker_configs/install.sh /home/docker/install.sh
 ADD docker_configs/install_npm.sh /home/docker/install_npm.sh
 RUN bash /home/docker/install.sh
 
+# Build frontend dependencies
+WORKDIR /tmp
+ADD incrowd/frontend/package.json /tmp/package.json
+ADD incrowd/frontend/bower.json /tmp/bower.json
+ADD docker_configs/frontend_build.sh /tmp/frontend_build.sh
+RUN bash /tmp/frontend_build.sh
+
 # Add the code
 ADD incrowd/ /home/docker/code
 
 # Link frontend dependencies, build frontend
 WORKDIR /home/docker/code/frontend
-
-# TODO(pcsforeducation) make another dockefile to run gulp build
-# Build frontend dependencies
-ADD docker_configs/frontend_build.sh /home/docker/frontend_build.sh
-RUN bash /home/docker/frontend_build.sh
+RUN mv /tmp/node_modules /home/docker/code/frontend/node_modules
+RUN mv /tmp/bower_components /home/docker/code/frontend/src/lib
 
 # Prepare services
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini
 
 # Finalize and clean up
 EXPOSE 80
-VOLUME ["/home/docker/code/config/"]
+VOLUME ["/home/docker/code/", "/home/docker/code/config/"]
 
 WORKDIR /home/docker/code
 ADD docker_configs/start.sh /home/docker/code/start.sh
