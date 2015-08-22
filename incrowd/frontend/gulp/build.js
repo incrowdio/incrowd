@@ -94,7 +94,9 @@ gulp.task('html', ['inject'], function () {
       quotes: true
     })))
     .pipe(gulp.dest(paths.dist + '/'))
-    .pipe(gulpif('*.html', symlink(paths.dist + '/index.html', {force: true})))
+    .pipe(rename('index.html'))
+    .pipe(gulp.dest(paths.dist + '/'))
+    //.pipe(gulpif('*.html', symlink(paths.dist + '/index.html', {force: true})))
     .pipe($.size({title: paths.dist + '/', showFiles: true}));
 });
 
