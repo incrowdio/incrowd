@@ -76,7 +76,7 @@ gulp.task('partials', ['markups'], function () {
 gulp.task('html', ['inject'], function () {
 
   var assets;
-  return gulp.src(paths.tmp + '/serve/*.html')
+  return gulp.src(paths.tmp + '/serve/*.html', {base: paths.src})
     .pipe(assets = $.useref.assets())
     .pipe(assets.restore())
     .pipe(print(function (filepath) {
