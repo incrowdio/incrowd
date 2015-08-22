@@ -53,6 +53,12 @@ docker_run:
 docker_shell:
 	docker run -i -v `pwd`/incrowd:/home/docker/code -v `pwd`/incrowd/config:/home/docker/code/config -t incrowd/incrowd:testing /bin/bash
 
+# Build frontend dependencies
+frontend_install:
+	cd incrowd/frontend && npm install gulp bower
+	cd incrowd/frontend && npm install
+	cd incrowd/frontend && bower install
+
 # Serve the frontend via gulp for dev
 serve:
 	cd incrowd/frontend && gulp serve
