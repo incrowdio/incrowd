@@ -6,7 +6,10 @@ CONTAINER_NAME=incrowd_integration
 HOST=${DOCKER_HOSTNAME:=localhost}
 PORT=8000
 CONTAINER_START_TIMEOUT=20
-# Note(pcsforeducation) not passing yet.
+
+# Workaround for Docker bug #3823
+umount $(grep 'aufs' /proc/mounts | awk '{print$2}' | sort -r)
+
 # Kill old container (if any), might error
 docker kill $CONTAINER_NAME
 docker rm $CONTAINER_NAME
