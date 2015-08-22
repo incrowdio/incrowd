@@ -1,0 +1,40 @@
+<div class="row content scroll">
+  <md-card>
+    <md-toolbar>
+      <h1 class="md-toolbar-tools">Login</h1>
+    </md-toolbar>
+    <md-content class="md-padding">
+      <p>This is an invite only, private social network designed for small
+        groups of friends.</p>
+
+      <p>Our goal is to make a space for you to be yourself with your closest
+        circle of friends. Share inside jokes and memories. Post pics of your
+        new puppy and of your crazy nights. All without your mom or your boss
+        looking over your shoulder.</p>
+
+      <p>You must be invited by a current member to join. There's no waiting
+        list.</p>
+      <span class="tagline">Are you in?</span>
+
+      <form ng-submit="login(credentials)" ng-controller="AuthCtrl" novalidate>
+        <md-input-container>
+          <label>Username</label>
+          <input ng-model="credentials.username"
+                 class="long" focus-me="focus_input">
+        </md-input-container>
+        <md-input-container>
+          <label>Password</label>
+          <input ng-model="credentials.password"
+                 class="long" type="password"
+                 focus-me="focus_input">
+        </md-input-container>
+        <md-button class="md-raised md-primary" type="submit">
+          Login
+        </md-button>
+
+        <md-button href="#/users/reset_password">Forgot your password?
+        </md-button>
+      </form>
+    </md-content>
+  </md-card>
+</div>

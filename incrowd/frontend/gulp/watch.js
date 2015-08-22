@@ -14,6 +14,7 @@ gulp.task('watch', ['markups', 'inject'], function () {
     paths.src + '/{app,components}/**/*.css',
     paths.src + '/{app,components}/**/*.js',
     paths.src + '/{app,components}/**/*.html',
+    paths.src + '/app/js/config.json',
     'bower.json'
   ], ['inject']);
   gulp.watch([

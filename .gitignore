@@ -1,0 +1,9 @@
+# Virtualenv
+lib/
+bin/
+
+# Testing
+tmp/
+tests/bin/
+tests/include/
+tests/lib/

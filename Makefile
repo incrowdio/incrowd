@@ -106,9 +106,11 @@ lint:
 	cd incrowd/frontend && gulp lint
 
 frontend_preprod:
+	cd incrowd/frontend && gulp build
 	cd incrowd/frontend && gulp preprod
 
 frontend_prod:
+	cd incrowd/frontend && gulp build
 	cd incrowd/frontend && gulp prod
 
 #########################
