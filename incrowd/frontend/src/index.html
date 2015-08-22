@@ -1,88 +1,101 @@
 <!doctype html>
 <html class="no-js" lang="en" ng-app="incrowd">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport"
-        content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#607d8b">
-  <link rel="shortcut icon" type="image/png" href="favicon.ico">
-  <title>SlasherTraxx</title>
-  <style type="text/css">@charset "UTF-8";
-  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
-    display: none !important;
-  }
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#607d8b">
+    <link rel='icon'
+          href="assets/favicons/icon.png"
+          sizes="180x180"
+          type="image/png" />
+    <link rel='shortcut icon'
+          href="assets/favicons/favicon.ico"
+          type="image/x-icon" />
+    <link rel='apple-touch-icon-precomposed'
+          href="assets/favicons/icon-touch.png" />
+    <title>SlasherTraxx</title>
+    <style type="text/css">@charset "UTF-8";
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
+        display: none !important;
+    }
 
-  ng\:form {
-    display: block;
-  }</style>
-  <!-- build:css(src) assets/incrowd.css -->
-  <!-- bower:css -->
-  <!-- endbower -->
-  <!-- inject:css -->
-  <!-- endinject -->
-  <!-- endbuild -->
+    ng\:form {
+        display: block;
+    }</style>
+    <!-- build:css(src) assets/incrowd.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- endbuild -->
 </head>
 <body layout="vertical">
 
 <md-sidenav class="md-sidenav-left nav-sidenav" md-component-id="left"
             md-is-locked-open="$mdMedia('gt-md')" ng-cloak>
-  <md-toolbar class="md-whiteframe-z1">
+    <md-toolbar class="md-whiteframe-z1">
 
-  </md-toolbar>
-  <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
-    <a ui-sref="users_details({username: user.username})"
-       ui-sref-active="tab-active"
-       class="menu-item menu-title">{{ user.username }}</a>
+    </md-toolbar>
+    <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
+        <a ui-sref="users_details({username: user.username})"
+           ui-sref-active="tab-active"
+           class="menu-item menu-title">{{ user.username }}</a>
 
-    <a class="menu-item menu-title "
-       attronoff
-       data-attr-on="{{ tab.mobile_only == true}}"
-       data-attr-name="hide-gt-md"
-       ui-sref="{{ tab.state }}"
-       ui-sref-active="tab-active"
-       ng-repeat="tab in tabs"
-       ng-class="itemClass(tab)">
+        <a class="menu-item menu-title "
+           attronoff
+           data-attr-on="{{ tab.mobile_only == true }}"
+           data-attr-name="hide-gt-md"
+           ui-sref="{{ tab.state }}"
+           ui-sref-active="tab-active"
+           ng-repeat="tab in tabs"
+           ng-class="itemClass(tab)">
 
         <span ng-if="tab.items.length > 0" class="notification_alert">
                 {{ tab.items.length }}
         </span>
-      {{ tab.name }}
-    </a>
-    <a class="menu-item menu-title" ui-sref="invite" ui-sref-active="tab-active">Invite</a>
-    <a class="menu-item menu-title" ng-controller="AuthCtrl"
-       ng-click="logout()">Log
-                           out</a>
-    <!--<a class="menu-item menu-title" ng-click="toggleLeft()">Hide Bar</a>-->
-  </md-content>
+          {{ tab.name }}
+        </a>
+        <a class="menu-item menu-title"
+           ui-sref="invite"
+           ui-sref-active="tab-active">Invite</a>
+        <a class="menu-item menu-title" ng-controller="AuthCtrl"
+           ng-click="logout()">Log
+                               out</a>
+        <!--<a class="menu-item menu-title" ng-click="toggleLeft()">Hide Bar</a>-->
+    </md-content>
 </md-sidenav>
 
 <div layout="column" layout-fill tabIndex="-1" role="main">
-  <md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
-    <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
-      <span hide-gt-md ng-click="toggleLeft()" class="icon-menu icomoon reorder menu"></span>
-      <span ng-if="alerts.length > 0" class="alerts">{{ alerts.length }}</span>
-      <a href="#/">SlasherTraxx</a>
-    </h1>
-    <!--Preferred Action button-->
-    <md-button
-        class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
-        tabindex="-1"
-        ng-controller="NewPostCtrl"
-        ng-click="newPostDialog($event)"
-        aria-label="New Post">
-      <md-tooltip>
-        New Post
-      </md-tooltip>
+    <md-toolbar class="main-toolbar md-whiteframe-z1" ng-cloak>
+        <h1 class="md-toolbar-tools title" ng-controller="TabCtrl">
+            <span hide-gt-md
+                  ng-click="toggleLeft()"
+                  class="icon-menu icomoon reorder menu"></span>
+            <span ng-if="alerts.length > 0"
+                  class="alerts">{{ alerts.length }}</span>
+            <a href="#/">SlasherTraxx</a>
+        </h1>
+        <!--Preferred Action button-->
+        <md-button
+                class="md-fab md-warn md-theme-light-blue fab-button add-post-button"
+                tabindex="-1"
+                ng-controller="NewPostCtrl"
+                ng-click="newPostDialog($event)"
+                aria-label="New Post">
+            <md-tooltip>
+                New Post
+            </md-tooltip>
       <span class="md-button-inner icon-add icomoon"
             ng-click="show($event)"></span>
 
-      <div class="md-ripple-container"></div>
-    </md-button>
-    <!--End preferred action-->
-  </md-toolbar>
+            <div class="md-ripple-container"></div>
+        </md-button>
+        <!--End preferred action-->
+    </md-toolbar>
 
-  <md-content id="content" ui-view md-scroll-y
-              class="content"></md-content>
+    <md-content id="content" ui-view md-scroll-y
+                class="content"></md-content>
 
 </div>
 <md-sidenav class="md-sidenav-right md-whiteframe-z2 chat-sidenav"
@@ -90,20 +103,20 @@
             md-component-id="right"
             ng-cloak>
 
-  <md-toolbar>
-    <h1 class="md-toolbar-tools">Chat</h1>
-  </md-toolbar>
-  <div class="connected_users chat_padding" layout="row"
-       ng-controller="UsersCtrl">
+    <md-toolbar>
+        <h1 class="md-toolbar-tools">Chat</h1>
+    </md-toolbar>
+    <div class="connected_users chat_padding" layout="row"
+         ng-controller="UsersCtrl">
     <span ng-repeat="user in connected_users" class="connected_user">
       <profile-pic id="user.id"></profile-pic>
     </span>
-  </div>
+    </div>
 
-  <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
-    <chat></chat>
-  </md-content>
-  <chat-input></chat-input>
+    <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
+        <chat></chat>
+    </md-content>
+    <chat-input></chat-input>
 
 </md-sidenav>
 
@@ -127,20 +140,20 @@
 <!-- endbuild -->
 
 <script>
-  (function (i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-        m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-9740779-25', 'slashertraxx.com');
-  ga('send', 'pageview');
+    ga('create', 'UA-9740779-25', 'slashertraxx.com');
+    ga('send', 'pageview');
 
 </script>
 </body>

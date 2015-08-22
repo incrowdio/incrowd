@@ -40,128 +40,50 @@ we get $25 in DigitalOcean credit to use for our build/testing/continuous
 integration system and test instances.
 
 
-### Install Docker
-
-If you didn't use an image with Docker pre-installed, please run these commands
-from the command line (taken from the [Docker documentation](https://docs.docker.com/installation/ubuntulinux/)
-
-        curl -sSL https://get.docker.com/ubuntu/ | sudo sh
-
-### Install and run inCrowd
-
-inCrowd is distributed as a Docker container with the inCrowd app. The default configuration
-uses a SQLite database in the container. To make management easier, we 
-created an init script, which allows you to start, stop, update, and manage 
-the DB. It will also ensure that the container starts automatically if your
-server is rebooted. 
-
-You can find the script at [https://github.com/incrowdio/incrowd/blob/master/etc/incrowd.init](https://github.com/incrowdio/incrowd/blob/master/etc/incrowd.init)
-
-Download and install the script:
-
-        wget https://raw.githubusercontent.com/incrowdio/incrowd/master/etc/incrowd.init
-        
-        sudo mv incrowd.init /etc/init.d/incrowd
-         
-        sudo chmod +x /etc/init.d/incrowd
-        
-        sudo /etc/init.d/incrowd start
-
-The start command will default to pulling the inCrowd container, running the
-database init and migration scripts (including adding default data). The first
-time you run it, it may take a few minutes.
-
-You can now visit your site by typing the IP of your server into your browser. 
-The default username is "admin" and the password is "pass". You can point any 
-domain name at the server, and it will serve inCrowd. The Nginx web server in 
-the container will match all domain names by default. 
-
-### Commands
-
-You can run other commands using the init script, by calling 
-`/etc/init.d/incrowd $COMMAND`. Some commands you can run:
-
-* stop: Stop the container
-
-* restart: Stop, then start the container
-
-* sync: Runs Django's syncdb and migrate commands. If the DB is empty, installs
-        default user, welcome post, etc.
-        
-* upgrade: Get the latest container
-
-You can modify the init settings by creating a file at /etc/default/incrowd.
-The syntax is "$VARIABLE_NAME=$SETTING", one per line, e.g. 
-"CONTAINER_NAME=not_incrowd". The settings you can modify are (with defaults in 
-brackets):
-
-* CONTAINER_NAME [incrowd]: The name of the running container, passed as 
-  --name on docker commands.
-  
-* CONTAINER_REPO [incrowd/incrowd]: The repo to pull the inCrowd container from
-
-* PULL_ON_STARTUP [true]: Whether docker pull happens on every call to start 
-  the container via the init script. If you set this to false, you'll need to 
-  run `/etc/init.d/incrowd upgrade` to get updates.
-
-* DB_SYNC_ON_STARTUP [true]:  Whether Django `syncdb` and `migrate` happens on 
-  every call to start the container via the init script. If you set this to 
-  false, you'll need to  run `/etc/init.d/incrowd sync` after any `upgrade`
-  but before `start` to ensure the DB layout is correct for the container.
-
 Development
 --------------------
 
-Local development is done with Docker. The incrowd/Dockerfile will build a 
-development environment and configure it correctly, mounting this directory
-in so your changes are automatically reflected. The root level Dockerfile is
-used for the deployable container.
+inCrowd is deployed and developed using Docker containers. You'll first need to
+[install Docker](https://docs.docker.com/installation/).
 
-If you are developing using OSX or Windows, you'll need [boot2docker](http://boot2docker.io/) 
-or a Linux VM with docker installed.
+The Dockerfile will build a container to run inCrowd, but can also be used for
+all your development needs, by ounting the `incrowd/` directory into the
+container.
 
-If you are using Linux, you'll want the latest Docker installed. Use the 
-following steps to get a later version than what you can get with package 
-managers such as apt-get by default (from the Docker docs):
+To build a container, mount `incrowd/` and bootstrap the backend server:
 
-        sudo sh -c "echo deb https://get.docker.com/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-        
-        sudo apt-get update
-        
-        sudo apt-get install lxc-docker
+    make dev
 
-Once you have Docker, you can build and run the docker container (you can
-leave off the 'sudo' if you add your user to the docker group):
+After a few minutes, it will be running Django's development server. You can
+get to the API by browsing [http://localhost:8000/api/v1/](http://localhost:8000/api/v1/),
+and the admin interface by going to
+[http://localhost:8000/admin/](http://localhost:8000/admin/).
 
-        sudo make docker
+The frontend can easily be run outside the container. To bootstrap all the
+required dependencies:
 
-This will build a Docker container, mount this directory, and then run it. You
-will be inside the Docker container when the command finishes. 
+    make frontend_install
 
-Once inside the container, you can run `make docker_dev` to configure the development
-environment (install bower and node requirements for the frontend and configure
-the database for the backend). You should then be able to access the server
-at http://$DOCKER_IP:8000. $DOCKER_IP will depend on whether you're using
-Linux, OSX, or Windows.
+Then, you can run the automatically reloading frontend server:
 
-After the initial config, you can use `make docker_sever` to do a Django
-runserver.
+    make serve
 
-You can load some dev data to get you started by running `make load_data` 
-after you've run docker_dev once. 
+This should open a browser window to
+[http://localhost:3000](http://localhost:3000). Each time you change one
+of the frontend files, gulp will notice the change, recompile the frontend, and
+refresh your browser.
 
-The default user name and password is "admin" and "pass".
-
-You can access the admin interface at http://$DOCKER_IP:8000/admin/.
-
-You can portfoward the backend boot2docker server so you can access it from the network,
-e.g. from a phone you're testing the app on. Run this command while boot2docker
-is shutdown: 
+Protip for OSX:
+---------------
+You can portfoward the backend boot2docker server so you can access it from the
+network, e.g. from a phone you're testing the app on. Run this command while
+boot2docker is shutdown:
     
     VBoxManage modifyvm "boot2docker-vm" --natpf1 "tcp-port8000,tcp,,8000,,8000";
 
 Contributing
 ------------
-We follow the standard branch and PR or fork and PR model. Travis will test your code when you submit it, and CodeShip will test and deploy your code when it is merged to the master branch.
-
-Append "--skip-ci" to the bottom of commits in PRs to avoid having CodeShip build them (we only get 50 free builds a month, unlimited is $50/mo). Travis will still build and test your commits.
+We follow the standard fork and PR model. Teamcity will test your code when you
+submit it, and deploy to our testing environment when PRs are merged. Merges
+will also upload a new version of the incrowd/incrowd:testing container to
+the Docker Hub.

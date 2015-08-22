@@ -112,11 +112,20 @@ gulp.task('fonts', function () {
     .pipe(gulp.dest(paths.dist + '/fonts/'));
 });
 
+gulp.task('favicons', function () {
+  return gulp.src(paths.src + '/assets/favicons/*')
+    .pipe($.filter('*.{png,ico}'))
+    .pipe(print())
+    .pipe(gulp.dest(paths.dist + '/assets/favicons/'))
+    // Also save to document root for backwards compat reasons
+    .pipe(gulp.dest(paths.dist));
+});
+
 gulp.task('config', function () {
   //console.log('config')
   gulp.src(paths.src + '/app/js/config.json')
     .pipe(ngConstant({
-      name: 'config',
+      name: 'config'
     }))
     .pipe(gulp.dest(paths.src + '/app/js/'));
 });
@@ -133,4 +142,4 @@ gulp.task('clean', function (done) {
 
 
 
-gulp.task('build', ['html', 'images', 'fonts', 'misc']);
+gulp.task('build', ['html', 'images', 'fonts', 'favicons', 'misc']);
