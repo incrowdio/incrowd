@@ -1,13 +1,13 @@
 angular.module('incrowd')
-  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, httpInterceptor, api, Auth, BACKEND_SERVER) {
+  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, $log, httpInterceptor, api, Auth, BACKEND_SERVER) {
     $scope.credentials = {
       username: '',
       password: ''
     };
     $scope.login = function (credentials) {
-      console.log('logging in', credentials);
+      $log.debug('logging in', credentials);
       Auth.setCredentials(credentials).then(function () {
-        console.log('credentials set', $rootScope.loggedIn);
+        $log.debug('credentials set', $rootScope.loggedIn);
         $state.go('login');
         $window.location.reload();
       });
