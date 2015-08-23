@@ -130,3 +130,12 @@ function removeChatIfAlreadyExists(chat, array) {
     return potentialMatch.id !== chat.id;
   });
 }
+
+function getIndexById(list, id) {
+  var i;
+  for (i = 0; i < list.length; i++) {
+    if (list[i].id === id) {
+      return i;
+    }
+  }
+}
