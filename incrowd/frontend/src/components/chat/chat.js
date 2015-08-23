@@ -11,13 +11,11 @@ angular.module('incrowd')
 
     $scope.scroll = function () {
       $timeout(function () {
-        var message_div = $('#sidebar_chat_container'),
-          message_div2 = $('#content');
-        $log.debug('scrolling on load', message_div);
-        message_div.scrollTop(1000000000);
+        document.getElementById(
+          'sidebar_chat_container').scrollTop = 1000000000;
         // Hack! Scroll whole ng-view if on mobile chat :(
         if ($location.url() === '/chat') {
-          message_div2.scrollTop(1000000000);
+          document.getElementById('content').scrollTop = 1000000000;
         }
       }, 10);
     };
