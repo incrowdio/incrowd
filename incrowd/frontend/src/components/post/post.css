@@ -144,9 +144,12 @@
     color: #eee;
 }
 
-.post .md-toolbar-tools {
-    height: 100%;
-    max-height: none;
+.post .avatar-circular img {
+    margin-top: -8px;
+}
+
+.post .delete {
+    margin-top: -8px;
 }
 
 md-input-group > input {
