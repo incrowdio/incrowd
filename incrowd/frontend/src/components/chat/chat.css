@@ -13,7 +13,7 @@
     padding-right: 0;
 }
 
-.chat_messages {
+.chat-messages {
     background-color: #eee;
     height: 100%;
     overflow-y: scroll;
@@ -21,7 +21,7 @@
     border-top-right-radius: 3px;
 }
 
-.chat_message {
+.chat-message {
     padding: 2px 5px;
     /* Trick to avoid overflow-x: hidden for wrapping*/
 
@@ -37,7 +37,11 @@
     /* End trick (applause) */
 }
 
-.chat_message .username {
+.chat-message .container {
+    padding-top: 8px;
+}
+
+.chat-message .username {
     text-decoration: none;
 }
 
@@ -61,11 +65,11 @@
     padding-right: 0;
 }
 
-.chat_messages p {
+.chat-messages p {
     margin-bottom: 0;
 }
 
-.chat_messages hr {
+.chat-messages hr {
     margin: 0;
     line-height: 1;
 }
@@ -78,23 +82,23 @@
     height: 100%;
 }
 
-.chat_container {
+.chat-container {
     /*padding-bottom: 40px;*/
     padding-top: 80px;
     z-index: 1;
     /*overflow:scroll;*/
 }
 
-.chat_container .md-tile-left {
+.chat-container .md-tile-left {
     padding: 7px 0 7px 5px;
     margin-right: 0;
 }
 
-.chat_message p {
+.chat-message p {
     opacity: .8;
 }
 
-.chat_fullscreen .chat_container {
+.chat_fullscreen .chat-container {
     padding-bottom: 30px;
 }
 
@@ -177,7 +181,7 @@ chatinput {
     margin-right: 10px;
 }
 
-.chat_padding {
+.chat-padding {
     padding-left: 10px;
     padding-right: 10px;
 }

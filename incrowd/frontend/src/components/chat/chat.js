@@ -1,7 +1,7 @@
 angular.module('incrowd')
   .controller('ChatCtrl', function ($scope, $rootScope, $log, $timeout, $location, Chats) {
     "use strict";
-    $scope.user = $rootScope.me;
+
     $scope.formData = new Chats.resource();
 
     Chats.promise.then(function () {
@@ -22,11 +22,6 @@ angular.module('incrowd')
       }, 10);
     };
 
-    $scope.delete_message = function (id) {
-      Chats.remove(id);
-    };
-
-
     //$scope.chatBackground = function (message, previous_message) {
     //  var primary = 'chat_background_primary',
     //    alt = 'chat_background_alternate';
@@ -46,6 +41,25 @@ angular.module('incrowd')
     $rootScope.$on('$newChatMessage', function () {
       $scope.scroll();
     });
+  })
+
+  .directive('chatMessage', function ($rootScope, Chats) {
+    "use strict";
+
+    return {
+      restrict: 'E',
+      scope: {
+        message: '='
+      },
+      templateUrl: 'components/chat/message.html',
+      link: function ($scope) {
+        $scope.user = $rootScope.me;
+
+        $scope.deleteMessage = function (message) {
+          Chats.remove(message);
+        };
+      }
+    }
   })
 
   .filter('ChatMessageFilter', function () {

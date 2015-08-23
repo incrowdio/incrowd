@@ -24,9 +24,9 @@ angular.module('incrowdLib')
       deferred.reject();
     });
 
-    Chats.remove = function (msg) {
-      Chats.resource.delete(msg.id).$promise.success(function () {
-        var index = Chats.messages.indexOf(msg);
+    Chats.remove = function (id) {
+      Chats.resource.delete({id: id}).$promise.success(function () {
+        var index = getIndexById(Chats.messages, id);
         Chats.messages.splice(index, 1);
       });
     };
