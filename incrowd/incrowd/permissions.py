@@ -15,7 +15,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         # Write permissions are only allowed to the owner of the snippet.
-        return obj.user == request.user
+        # NOTE(pcsforeducation) User doesn't have a .user
+        return obj == request.user or obj.user == request.user
 
 
 class IsUserInCrowd(permissions.BasePermission):

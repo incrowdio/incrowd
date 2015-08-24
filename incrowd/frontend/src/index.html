@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en" ng-app="incrowd">
+<html class="no-js" lang="en" ng-app="incrowd" ng-controller="TabCtrl">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport"
@@ -14,7 +14,7 @@
           type="image/x-icon" />
     <link rel='apple-touch-icon-precomposed'
           href="assets/favicons/icon-touch.png" />
-    <title>SlasherTraxx</title>
+    <title ng-bind="crowd.name"></title>
     <style type="text/css">@charset "UTF-8";
     [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
         display: none !important;
@@ -37,7 +37,7 @@
     <md-toolbar class="md-whiteframe-z1">
 
     </md-toolbar>
-    <md-content ng-controller="TabCtrl" ng-click="toggleLeft()">
+    <md-content ng-click="toggleLeft()">
         <a ui-sref="users_details({username: user.username})"
            ui-sref-active="tab-active"
            class="menu-item menu-title">{{ user.username }}</a>
@@ -74,7 +74,7 @@
                   class="icon-menu icomoon reorder menu"></span>
             <span ng-if="alerts.length > 0"
                   class="alerts">{{ alerts.length }}</span>
-            <a href="#/">SlasherTraxx</a>
+            <a href="#/" ng-bind="crowd.name"></a>
         </h1>
         <!--Preferred Action button-->
         <md-button

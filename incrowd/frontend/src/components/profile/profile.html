@@ -1,67 +1,68 @@
 <md-card class="md-whiteframe-z1 card_content profile">
+    <form name="profileForm" editable-form onaftersave="editSave($index)">
+        <md-toolbar class="md-theme-light">
+            <div class="md-toolbar-tools title_container">
+                <h2 class="username">{{ user.username }}</h2>
+                <h6 class="user_fullname"
+                    ng-if="user.first_name || user.last_name">
+                    ({{ user.first_name }} {{ user.last_name }})</h6>
 
-  <form name="profileForm" editable-form onaftersave="editSave($index)">
-    <md-toolbar class="md-theme-light">
-      <div class="md-toolbar-tools title_container">
-        <h2 class="username">{{ profile.username }}</h2>
-        <h6 class="user_fullname"
-            ng-if="profile.first_name || profile.last_name">
-          ({{ profile.first_name }} {{ profile.last_name }})</h6>
+            </div>
 
-      </div>
+        </md-toolbar>
+        <h4 ng-if="profileForm.$visible">Please keep all profile images
+                                         SFW</h4>
+        <h5 ng-if="user.tagline || profileForm.$visible">
+            <span class="icomoon icon-tag tagline_icon"></span><span
+                editable-text="user.tagline" e-name="tagline"
+                e-placeholder="Tagline">{{ user.tagline }}</span>
+        </h5>
+        <h5 ng-if="user.location || profileForm.$visible">
+            <span class="icomoon icon-location location_icon"></span><span
+                editable-text="user.location" e-name="location"
+                e-placeholder="Location">{{ user.location }}</span>
+        </h5>
+        <h5>Last online: {{ user.last_updated | DTSince }}</h5>
 
-    </md-toolbar>
-    <h4 ng-if="profileForm.$visible">Please keep all profile images SFW</h4>
-    <h5 ng-if="profile.tagline || profileForm.$visible">
-      <span class="icomoon icon-tag tagline_icon"></span><span
-        editable-text="profile.tagline" e-name="tagline"
-        e-placeholder="Tagline">{{ profile.tagline }}</span>
-    </h5>
-    <h5 ng-if="profile.location || profileForm.$visible">
-      <span class="icomoon icon-location location_icon"></span><span
-        editable-text="profile.location" e-name="location"
-        e-placeholder="Location">{{ profile.location }}</span>
-    </h5>
-    <h5>Last online: {{ profile.last_updated | DTSince }}</h5>
+        <div class="pic">
+            <img ng-src="{{ user.profile_pic }}">
+        </div>
+        <div ng-if="profileForm.$visible" class="pic_form"
+             class="large-6 large-offset-3 columns">
+      <span editable-url="user.profile_pic" e-name="pic"
+            e-placeholder="Profile Pic URL">{{ user.profile_pic }}</span>
+        </div>
+        <h5 ng-if="profileForm.$visible">Email Notifications
+            <select editable-select="user.email_settings"
+                    e-ng-options="s.value as s.text for s in statuses"
+                    >
+              {{ showStatus(user) }}
+            </select>
+        </h5>
 
-    <div class="pic">
-      <img ng-src="{{ profile.profile_pic }}">
-    </div>
-    <div ng-if="profileForm.$visible" class="pic_form"
-         class="large-6 large-offset-3 columns">
-      <span editable-url="profile.profile_pic" e-name="pic"
-            e-placeholder="Profile Pic URL">{{ profile.profile_pic }}</span>
-    </div>
-    <h5 ng-if="profileForm.$visible">Email Notifications
-      <select editable-select="profile.email_settings"
-              e-ng-options="s.value as s.text for s in statuses"
-              >
-        {{ showStatus(user) }}
-      </select>
-    </h5>
-    <div class="edit">
-      <!-- button to show form -->
-      <md-button class="md-raised md-primary"
-                 ng-click="profileForm.$show()"
-                 ng-show="profile.id == user.id && !profileForm.$visible"
-                 type="button">
-        Edit
-      </md-button>
-      <!-- buttons to submit / cancel form -->
-          <span ng-show="profile.id == user.id && profileForm.$visible">
+        <div class="edit">
+            <!-- button to show form -->
+            <md-button class="md-raised md-primary"
+                       ng-click="profileForm.$show()"
+                       ng-show="user.id == me.id && !profileForm.$visible"
+                       type="button">
+                Edit
+            </md-button>
+            <!-- buttons to submit / cancel form -->
+          <span ng-show="user.id == me.id && profileForm.$visible">
             <md-button class="md-raised md-primary"
                        ng-disabled="profileForm.$waiting">
-              Save
+                Save
             </md-button>
             <md-button class="md-raised md-warn"
-                       ng-show="profile.id == user.id && profileForm.$visible"
+                       ng-show="user.id == user.id && profileForm.$visible"
                        ng-disabled="profileForm.$waiting"
                        ng-click="profileForm.$cancel()"
                        type="button">
-              Cancel
+                Cancel
             </md-button>
         </span>
-    </div>
+        </div>
 
-  </form>
+    </form>
 </md-card>

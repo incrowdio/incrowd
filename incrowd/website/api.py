@@ -59,10 +59,13 @@ class UserViewSet(InCrowdModelViewSet):
                        filters.OrderingFilter)
 
     def get_serializer_class(self):
+        print "Getting User serializer", self.request.method
         if self.request.method == 'POST':
             return UserCreateSerializer
 
-        return super(UserViewSet, self).get_serializer_class()
+        s = super(UserViewSet, self).get_serializer_class()
+        print 'class is ', s
+        return s
 
 
 class PostViewSet(InCrowdModelViewSet):
