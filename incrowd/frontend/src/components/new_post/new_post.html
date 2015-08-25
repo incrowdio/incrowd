@@ -12,12 +12,24 @@
       <input ng-model="formData.url" class="long">
     </md-input-container>
     <md-select placeholder="Category" ng-model="formData.category">
-      <md-option ng-repeat="category in categories" value="{{category.id}}">{{category.name}}</md-option>
+      <md-option ng-repeat="category in categories" value="{{ category.id }}">{{ category.name }}</md-option>
     </md-select>
     <md-checkbox ng-model="formData.nsfw" aria-label="NSFW">
       NSFW?
     </md-checkbox>
-    <md-button class="md-raised md-primary" type="Submit">Submit</md-button>
+    <section layout="row"
+             layout-sm="column"
+             layout-align="center center"
+             layout-wrap>
+      <md-button class="md-raised md-primary" type="Submit" flex>Submit
+      </md-button>
+      <md-button class="md-raised md-warn"
+                 type="Submit"
+                 ng-click="cancel()"
+                 flex>
+          Cancel
+      </md-button>
+    </section>
+
   </form>
-  </div>
 </md-dialog>
