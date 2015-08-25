@@ -9,8 +9,8 @@ angular.module('incrowdLib')
     Users.users = [];
     Users.username = localStorage.getItem('username');
     $rootScope.me = {};
-    Users.resource = djResource(BACKEND_SERVER + 'users\/:userId\/', {
-      userId: '@user'
+    Users.resource = djResource(BACKEND_SERVER + 'users\/:username\/', {
+      username: '@username'
     });
     Users.checkInResource = djResource(BACKEND_SERVER + 'check_in\/');
 
@@ -21,7 +21,8 @@ angular.module('incrowdLib')
       Users.users.forEach(function (user) {
         if (user.username === Users.username) {
           $rootScope.me = user;
-          $log.debug('Found myself!', $rootScope.me);
+          $rootScope.crowd = user.crowd;
+          $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
         }
       });
 

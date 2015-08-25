@@ -329,7 +329,7 @@ class UserSerializer(serializers.ModelSerializer):
     profile_pic = serializers.URLField(required=False,
                                        default='http://google.com')
     crowd = CrowdSerializer(read_only=True)
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = UserProfile

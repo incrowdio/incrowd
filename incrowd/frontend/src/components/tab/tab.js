@@ -1,7 +1,11 @@
 angular.module('incrowd')
-  .controller('TabCtrl', function ($scope, $location, $mdSidenav, $state, $http, Config, BACKEND_SERVER, Notifications) {
+  .controller('TabCtrl', function ($scope, $location, $mdSidenav, $state, $rootScope, $http, Users, Config, BACKEND_SERVER, Notifications) {
     "use strict";
     $scope.tabs = [];
+
+    Users.promise.then(function () {
+      $scope.crowd = $rootScope.crowd;
+    });
 
     // Highlight current tab
     var find_tab = function () {

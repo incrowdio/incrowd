@@ -48,6 +48,8 @@ WORKDIR /home/docker/code/frontend
 RUN mv /tmp/node_modules /home/docker/code/frontend/node_modules
 RUN mv /tmp/bower_components /home/docker/code/frontend/src/lib
 RUN gulp build
+RUN rm -rf /home/docker/code/frontend/node_modules
+RUN rm -rf /home/docker/code/frontend/src/lib
 
 # Prepare services
 ADD docker_configs/uwsgi.ini /home/docker/code/uwsgi.ini

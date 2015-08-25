@@ -93,7 +93,7 @@ var app = angular.module('incrowd', [
       .state('users', {
         url: '/users',
         templateUrl: 'templates/profiles.html',
-        controller: 'ProfileCtrl',
+        controller: 'UsersCtrl',
         resolve: {
           'UserData': function (Users) {
             return Users.promise;
@@ -103,7 +103,7 @@ var app = angular.module('incrowd', [
       .state('users_details', {
         url: '/user/:username',
         templateUrl: 'templates/profiles.html',
-        controller: 'ProfileCtrl',
+        controller: 'UsersCtrl',
         resolve: {
           'UserData': function (Users) {
             return Users.promise;
@@ -113,7 +113,7 @@ var app = angular.module('incrowd', [
       .state('users.reset_password', {
         url: '/users/reset_password',
         templateUrl: 'templates/reset_password.html',
-        controller: 'ProfileCtrl'
+        controller: 'UsersCtrl'
       });
   })
 
@@ -149,7 +149,7 @@ var app = angular.module('incrowd', [
 
     // Watch state changes, check if authed, if not, redirect to login
     $rootScope.$on('$stateChangeStart', function (e, toState) {
-      $log.debug('state change start');
+      $log.debug('state change start', toState);
       var noAuthStates = ['login', 'signup', 'user.reset_password'];
       Auth.checkStateChange(e, toState, noAuthStates);
     });
