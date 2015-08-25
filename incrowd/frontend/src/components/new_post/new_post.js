@@ -37,6 +37,9 @@ angular.module('incrowd')
         templateUrl: 'components/new_post/new_post.html'
       });
     };
+    $scope.cancel = function () {
+      $mdDialog.cancel();
+    }
 
   });
 
