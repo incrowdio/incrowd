@@ -52,7 +52,7 @@
     <md-button ng-href="#/posts/{{ post.id }}" flex-sm="33">
       {{ post.comment_set.length }}<span class="icon-comment icomoon comment-icon"></span>
     </md-button>
-    <md-button ng-href="#/posts?category={{ post.category.id }}" flex-sm="33">{{ post.category.name }}</md-button>
+    <md-button class="category" ng-href="#/posts?category={{ post.category.id }}" flex-sm="33">{{ post.category.name }}</md-button>
 
     <a class="md-button md-default-theme" flex-sm="33"><span ng-bind="post.submitted | DTSince"></span></a>
   </div>

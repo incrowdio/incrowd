@@ -35,18 +35,20 @@
 }
 
 .comment .metadata {
-    color: #FF8800;
+    margin-top: 10px;
+    /*margin-left: 20px;*/
+    font-size: 75%;
+    color: #777;
+    display: block;
+}
+
+.comment .metadata a:visited {
+    color: #777;
 }
 
 .comment {
     text-overflow: ellipsis;
     border-bottom: 1px solid #ccc;
-}
-
-.comment .metadata {
-    margin-top: 10px;
-    /*margin-left: 20px;*/
-    font-size: 80%;
 }
 
 .comment_attachment {
@@ -69,8 +71,4 @@ comment-list md-list {
     max-width: 750px;
     margin: 0 auto;
     padding: 5px 15px;
-}
-
-comment p {
-    margin: 5px 0 20px 0;
 }

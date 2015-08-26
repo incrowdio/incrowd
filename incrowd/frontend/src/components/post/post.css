@@ -18,21 +18,23 @@
     text-align: right;
 }
 
-.metadata {
+.post .metadata {
     color: #111;
     margin-top: 0;
     text-align: center;
 }
 
-.metadata a {
+.post .metadata a,
+.post .metadata a:visited {
     text-decoration: none;
     color: #111;
     display: inline-block;
 }
 
-.metadata .md-button {
-    margin-left: 5px;
-    margin-right: 5px;
+.post .metadata .md-button {
+    margin: 2px 0;
+    max-width: 40%;
+    text-overflow: ellipsis;
 }
 
 .post p {
@@ -265,23 +267,23 @@ post div.green {
 /*!
  * categories.css
  */
-.category {
-    float: left;
-    font-size: 8px;
-}
+/*.category {*/
+    /*float: left;*/
+    /*font-size: 8px;*/
+/*}*/
 
-.category a,
-.category a:visited,
-.category a:hover,
-.category a:active {
-    color: white;
-    font-size: 120%;
-}
+/*.category a,*/
+/*.category a:visited,*/
+/*.category a:hover,*/
+/*.category a:active {*/
+    /*color: white;*/
+    /*font-size: 120%;*/
+/*}*/
 
-.right p,
-.right a {
-    text-align: right;
-}
+/*.right p,*/
+/*.right a {*/
+    /*text-align: right;*/
+/*}*/
 
 fieldset legend {
     background: none;

@@ -32,11 +32,15 @@ angular.module('incrowd')
         });
     };
 
-    $scope.newPostDialog = function () {
+    $scope.newPostDialog = function (ev) {
       $mdDialog.show({
-        templateUrl: 'components/new_post/new_post.html'
+        templateUrl: 'components/new_post/new_post.html',
+        parent: angular.element(document.body),
+        targetEvent: ev,
+        clickOutsideToClose:true
       });
     };
+
     $scope.cancel = function () {
       $mdDialog.cancel();
     }
