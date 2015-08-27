@@ -167,11 +167,11 @@ chatinput {
     padding: 0 2px;
 }
 
-.chat_attachment {
+.chat-attachment {
     max-width: 90%;
 }
 
-.chat_attachment img {
+.chat-attachment img {
     margin: 5px 0 10px 0;
     display: block;
     max-height: 200px;
@@ -213,4 +213,13 @@ chat avatar {
 chat .text {
     word-wrap: break-word;
     font-size: 90%;
+}
+
+.chat-extra {
+    font-size: 75%;
+    color: #777;
+}
+
+.chat-extra a:visited {
+    color: #777;
 }

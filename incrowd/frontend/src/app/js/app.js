@@ -8,14 +8,12 @@ var app = angular.module('incrowd', [
   'infinite-scroll',
   'xeditable',
   //'autocomplete',
-  'offClick',
   //'luegg.directives',
   //'monospaced.elastic',
   //'ngEmbed',
   'djangoRESTResources',
   'drf_auth.token',
   'djangle',
-
   'incrowdLib',
   'pusher_service'
 ])

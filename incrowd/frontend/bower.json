@@ -24,8 +24,7 @@
     "angular-xeditable": "~0.1.8",
     "angular-pusher": "~0.0.13",
     "pusher": "~2.2.4",
-    "angular-material": "~0.10.0",
-    "angular-off-click": "~0.0.2",
+    "angular-material": "~0.10.1",
     "angular-ui-router": "~0.2.13",
     "favico.js": "~0.3.5"
   },

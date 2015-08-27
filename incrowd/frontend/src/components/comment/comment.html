@@ -1,4 +1,4 @@
-<md-item-content>
+<md-item-content class="comment">
   <div class="md-tile-left">
     <profile-pic id="comment.user.id"></profile-pic>
   </div>
@@ -7,7 +7,7 @@
     <a class="comment_attachment" ng-if="comment.attachment_url"
      ng-href="{{ comment.attachment_url }}">
     <img ng-src="{{ comment.attachment_url }}"></a>
-    <p><a class="username" ng-href="#/user/{{comment.user.username}}">{{comment.user.username}}</a> | <span ng-bind="comment.submitted | DTSince ">{{ comment.submitted | DTSince }}</span><span ng-if="comment.user.id == user.id"> | <a href="" ng-click="delete_comment(comment.id, comment.post)">delete</a></span></p>
+    <span class="metadata"><a class="username" ng-href="#/user/{{comment.user.username}}">{{comment.user.username}}</a> | <span ng-bind="comment.submitted | DTSince ">{{ comment.submitted | DTSince }}</span><span ng-if="comment.user.id == user.id"> | <a href="" ng-click="delete_comment(comment.id, comment.post)">delete</a></span></span>
   </div>
 
 </md-item-content>
