@@ -17,4 +17,5 @@ class ChatMessageViewSet(viewsets.ModelViewSet):
     max_paginate_by = 1000
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user,
+                        crowd=self.request.user.crowd)

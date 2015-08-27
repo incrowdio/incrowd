@@ -27,6 +27,7 @@ class ChatMessage(models.Model):
     attachment_url = models.URLField(blank=True, null=True, default=None)
     attachment_type = models.CharField(max_length=32, blank=True, null=True,
                                        default=None)
+    crowd = models.ForeignKey('website.Crowd')
 
     def __unicode__(self):
         return "{0}: {1}".format(self.user.username, self.message)
