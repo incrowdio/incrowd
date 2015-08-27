@@ -15,7 +15,7 @@ angular.module('incrowdLib')
       submissionId: '@id'
     });
 
-    Polls.Submissions.resource = djResource(BACKEND_SERVER + 'polls\/submissions\/:submissionId', {
+    Polls.Submissions.resource = djResource(BACKEND_SERVER + 'polls\/submissions\/:submissionId\/', {
       pollStub: '@stub',
       submissionId: '@id'
     });
@@ -122,12 +122,16 @@ angular.module('incrowdLib')
 
     Polls.Submissions.delete = function (submission) {
       var index;
+      var d = $q.defer();
+
       $log.debug('Deleting submission', submission);
-      $http.delete(BACKEND_SERVER + 'submissions/' + submission.id + '\/').success(function () {
-        // Delete post
+      Polls.Submissions.resource.remove({submissionId: submission.id}).$promise.success(function () {
         index = getIndexById(Polls.Submissions.submissions, submission.id);
         Polls.Submissions.submissions.splice(index, 1);
+        d.resolve();
       });
+
+      return d.promise;
     };
 
     return Polls;
