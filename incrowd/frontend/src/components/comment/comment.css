@@ -48,7 +48,6 @@
 
 .comment {
     text-overflow: ellipsis;
-    border-bottom: 1px solid #ccc;
 }
 
 .comment_attachment {

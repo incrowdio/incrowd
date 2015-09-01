@@ -47,7 +47,18 @@ angular.module('incrowd')
     Users.promise.then(function () {
       $scope.users = Users.users;
       $scope.connected_users = Users.connected_users;
-      $scope.crowd = $rootScope.me;
+      $scope.crowd = $rootScope.crowd;
+      $scope.me = $rootScope.me;
+    });
+  })
+  .controller('UserCtrl', function ($scope, $rootScope, $log, $stateParams, Users) {
+    "use strict";
+    var username = $stateParams.username;
+    $log.debug('Getting profile for user', username);
+    Users.promise.then(function () {
+      $scope.users = [Users.get(username)];
+      $scope.connected_users = Users.connected_users;
+      $scope.crowd = $rootScope.crowd;
       $scope.me = $rootScope.me;
     });
   });
