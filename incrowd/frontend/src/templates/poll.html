@@ -18,37 +18,5 @@
       </md-button>
     </form>
   </md-card>
-  <md-card class="md-whiteframe-z1 submission_entry post"
-           ng-repeat="submission in submissions">
-    <md-toolbar class="md-toolbar-tools">
-      <div class="md-toolbar-tools">
-        <div class="title_container" layout="column">
-          <h2 class="title">
-            {{ submission.title }}
-          </h2>
-        </div>
-        <div ng-if="submission.user == user.id"
-             ng-click="deleteSubmission(submission)">
-          <span class="delete icon-cancel icomoon"></span>
-        </div>
-      </div>
-    </md-toolbar>
-    <md-card-content>
-        <img class="post_list image" ng-src="{{ submission.url }}">
-      <div layout="horizontal" layout-align="center" class="metadata">
-
-        <md-button class="md-raised md-primary md-warn"
-                   ng-if="submission.voted == true"
-                   ng-click="removeVote(submission)">
-          Remove
-        </md-button>
-        <md-button class="md-raised md-primary"
-                   ng-if="!submission.voted"
-                   ng-click="addVote(submission)">
-          Vote
-        </md-button>
-      </div>
-    </md-card-content>
-
-  </md-card>
+  <submission submission="submission" ng-repeat="submission in submissions"></submission>
 </div>

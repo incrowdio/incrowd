@@ -3,7 +3,14 @@ angular.module('incrowd')
     "use strict";
     $scope.pollStub = $stateParams.pollStub;
     $scope.formData = new Polls.Submissions.resource();
-    $scope.user = $rootScope.me;
+
+
+    $scope.submit = function () {
+      Polls.Submissions.create($scope.formData, $scope.pollStub).then(function () {
+        $scope.submissions = Polls.Submissions.resource.query();
+        $scope.formData = new Polls.Submissions.resource();
+      });
+    };
 
     $q.all([
       Polls.Submissions.get(),
@@ -26,41 +33,39 @@ angular.module('incrowd')
       }
     });
 
-    //Polls.Submissions.resource.query().$promise.success(function (data) {
-    //  $scope.submissions = data;
-    //});
-    //
-    //Polls.Votes.resource.query().$promise.success(function (data) {
-    //  $scope.votes = data;
-    //  console.log('votes', data);
-    //});
+  })
+  .directive('submission', function ($rootScope, Polls) {
+    "use strict";
+    return {
+      restrict: 'E',
+      scope: {
+        submission: '='
+      },
+      templateUrl: 'components/poll/submission.html',
+      link: function ($scope) {
+        $scope.user = $rootScope.me;
 
-    $scope.submit = function () {
-      Polls.Submissions.create($scope.formData, $scope.pollStub).then(function () {
-        $scope.submissions = Polls.Submissions.resource.query();
-        $scope.formData = new Polls.Submissions.resource();
-      });
+        $scope.removeVote = function (submission) {
+          Polls.Votes.delete(submission.vote).then(function () {
+            submission.voted = false;
+            submission.vote = null;
+          });
+        };
+
+        $scope.addVote = function (submission) {
+          Polls.Votes.create(submission).then(function (vote) {
+            submission.voted = true;
+            submission.vote = vote;
+          });
+        };
+
+        $scope.deleteSubmission = function (submission) {
+          Polls.Submissions.delete(submission);
+        };
+
+        Polls.promise.then(function () {
+          $scope.submissions = Polls.submissions;
+        });
+      }
     };
-
-    $scope.removeVote = function (submission) {
-      Polls.Votes.delete(submission.vote).then(function () {
-        submission.voted = false;
-        submission.vote = null;
-      });
-    };
-
-    $scope.addVote = function (submission) {
-      Polls.Votes.create(submission).then(function (vote) {
-        submission.voted = true;
-        submission.vote = vote;
-      });
-    };
-
-    $scope.deleteSubmission = function (submission) {
-      Polls.Submissions.delete(submission);
-    };
-
-    Polls.promise.then(function () {
-      $scope.submissions = Polls.submissions;
-    });
   });
