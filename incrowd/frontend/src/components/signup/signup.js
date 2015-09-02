@@ -1,9 +1,9 @@
 angular.module('incrowd')
-  .controller('SignupCtrl', function ($scope, $http, $log, $location, $state, Users, BACKEND_SERVER) {
+  .controller('SignupCtrl', function ($scope, $http, $log, $location, $state, Users, BACKEND_SERVER, djResource) {
     // TODO(pcsforeducation) Only allow unauthenticated users to register
     "use strict";
-    $scope.formData = new Users.resource();
-
+    var resource = djResource(BACKEND_SERVER + 'users\/', {});
+    $scope.formData = new resource();
     var params = $location.search();
     var invite_code = params.code;
     var email = params.email;
@@ -16,13 +16,10 @@ angular.module('incrowd')
 
     $scope.register = function () {
       $log.debug('Submitting new user', $scope.formData);
-      $scope.formData.$save().$promise.success(function (data, status, headers, config) {
-        $log.debug('User creation worked', data);
+      Users.create($scope.formData).then(function (data, status, headers, config) {
         $state.go('login');
-      }).error(function (data, status, headers, config) {
-        $log.error('Error creating user');
-        //$log.error('error creating user', data);
-        //$scope.status = status + ' ' + headers;
+      }, function (data, status, headers, config) {
+        $log.error('Could not create user');
       });
     };
 
