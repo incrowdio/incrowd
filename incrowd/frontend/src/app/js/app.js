@@ -101,7 +101,7 @@ var app = angular.module('incrowd', [
       .state('users_details', {
         url: '/user/:username',
         templateUrl: 'templates/profiles.html',
-        controller: 'UsersCtrl',
+        controller: 'UserCtrl',
         resolve: {
           'UserData': function (Users) {
             return Users.promise;

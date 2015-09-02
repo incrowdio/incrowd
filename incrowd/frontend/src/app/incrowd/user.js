@@ -18,19 +18,28 @@ angular.module('incrowdLib')
       Users.users = data.results;
 
       // Find me
-      Users.users.forEach(function (user) {
-        if (user.username === Users.username) {
-          $rootScope.me = user;
-          $rootScope.crowd = user.crowd;
-          $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
-        }
-      });
+      $rootScope.me = Users.get(Users.username);
+      console.log('me', $rootScope.me)
+      $rootScope.crowd = $rootScope.me.crowd;
+      $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
 
       deferred.resolve(Users.users);
       //$rootScope.$apply();
     }).error(function () {
       deferred.reject();
     });
+
+    Users.get = function (username) {
+      console.log('looking for user', username)
+      for (var i = 0; i < Users.users.length; i++) {
+        var user = Users.users[i];
+        if (user.username === username) {
+          console.log('found user', user)
+          return user;
+        }
+      };
+    };
+
 
     //Users.add = function (user) {
     //  for (var i = 0; i < Users.connected_users.length; i++) {
@@ -55,7 +64,7 @@ angular.module('incrowdLib')
 
     Users.checkIn = function () {
       var r = new Users.checkInResource();
-      r.$save().$promise.then(function() {
+      r.$save().$promise.then(function () {
         $log.debug('checked in');
       });
     };

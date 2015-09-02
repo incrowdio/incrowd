@@ -108,7 +108,6 @@ String.prototype.insert = function (index, string) {
 
 function youtube_url_to_id(url) {
   "use strict";
-  console.log('converting ' + url + ' to youtube id');
   if (!url) {
     return;
   }
@@ -120,7 +119,6 @@ function youtube_url_to_id(url) {
   if (ampersandPosition !== -1) {
     vid = vid.substring(0, ampersandPosition);
   }
-  console.log('converted ' + url + ' to ' + vid);
   return vid;
 }
 
