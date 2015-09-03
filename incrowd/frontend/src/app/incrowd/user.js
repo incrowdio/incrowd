@@ -19,8 +19,10 @@ angular.module('incrowdLib')
 
       // Find me
       $rootScope.me = Users.get(Users.username);
-      console.log('me', $rootScope.me)
-      $rootScope.crowd = $rootScope.me.crowd;
+      console.log('me', $rootScope.me);
+      if ($rootScope.me) {
+        $rootScope.crowd = $rootScope.me.crowd;
+      }
       $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
 
       deferred.resolve(Users.users);
@@ -30,14 +32,15 @@ angular.module('incrowdLib')
     });
 
     Users.get = function (username) {
-      console.log('looking for user', username)
-      for (var i = 0; i < Users.users.length; i++) {
-        var user = Users.users[i];
+      var i, user;
+      console.log('looking for user', username);
+      for (i = 0; i < Users.users.length; i++) {
+        user = Users.users[i];
         if (user.username === username) {
-          console.log('found user', user)
+          console.log('found user', user);
           return user;
         }
-      };
+      }
     };
 
 
@@ -61,6 +64,21 @@ angular.module('incrowdLib')
     //    }
     //  }
     //};
+
+    Users.create = function (formData) {
+      var d = $q.defer();
+      $log.debug('Creating new user', formData);
+
+      formData.$save().$promise.success(function (data) {
+        $log.debug('User creation success');
+        d.resolve(data);
+      }).error(function (data) {
+        $log.error('User creation failed');
+        d.reject(data);
+      });
+
+      return d.promise;
+    };
 
     Users.checkIn = function () {
       var r = new Users.checkInResource();

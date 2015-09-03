@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import urlparse
+from django.contrib.auth.hashers import make_password
 
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
@@ -344,6 +345,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
     profile_pic = serializers.URLField(
         required=False, default='https://storage.googleapis.com/cliques'
                                 'io.appspot.com/default_profile.jpg')
+
+    def create(self, validated_data):
+        instance = super(UserCreateSerializer, self).create(validated_data)
+        instance.password = make_password(validated_data['password'])
+        instance.save()
+        return instance
 
     class Meta:
         model = UserProfile
