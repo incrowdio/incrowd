@@ -71,7 +71,7 @@ angular.module('incrowdLib')
     // Listen to Channel updates for notifications
     $rootScope.$on('notify', function (event, message) {
       $log.debug('new notification', message);
-      if (message.user === User.me.id) {
+      if (message.user === $rootScope.me.id) {
         Notifications.notifications.push(message);
         Notifications.update_favicon();
         $rootScope.$apply();
