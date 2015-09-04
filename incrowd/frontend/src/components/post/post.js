@@ -56,7 +56,7 @@ angular.module('incrowd')
           $scope.busy = false;
           $scope.page++;
           $scope.posts = Posts.posts;
-          console.log('Scrolled to page', $scope.page, $scope.posts);
+          $log.debug('Scrolled to page', $scope.page, $scope.posts);
         }, function () {
           // TODO(pcsforeducation) this might be a real error
           endOfPages = true;
@@ -76,11 +76,8 @@ angular.module('incrowd')
     $scope.postId = $stateParams.postId;
 
     // Bind to the post once fetched
-    console.log(Posts.promise);
     Posts.promise.then(function () {
       $scope.post = Posts.get(parseInt($scope.postId));
-      console.log("post", $scope.post);
-      console.log("Posts", Posts.posts);
       //$scope.post.youtube = youtube_url_to_id($scope.post.url);
     });
 

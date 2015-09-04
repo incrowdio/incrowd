@@ -34,19 +34,19 @@ ADD docker_configs/install_npm.sh /home/docker/install_npm.sh
 RUN bash /home/docker/install.sh
 
 # Build frontend dependencies
-WORKDIR /tmp
-ADD incrowd/frontend/package.json /tmp/package.json
-ADD incrowd/frontend/bower.json /tmp/bower.json
-ADD docker_configs/frontend_build.sh /tmp/frontend_build.sh
-RUN bash /tmp/frontend_build.sh
+WORKDIR /opt
+ADD incrowd/frontend/package.json /opt/package.json
+ADD incrowd/frontend/bower.json /opt/bower.json
+ADD docker_configs/frontend_build.sh /opt/frontend_build.sh
+RUN bash /opt/frontend_build.sh
 
 # Add the code
 ADD incrowd/ /home/docker/code
 
 # Link frontend dependencies, build frontend
 WORKDIR /home/docker/code/frontend
-RUN mv /tmp/node_modules /home/docker/code/frontend/node_modules
-RUN mv /tmp/bower_components /home/docker/code/frontend/src/lib
+RUN ln -s /opt/node_modules /home/docker/code/frontend/node_modules
+RUN ln -s /opt/bower_components /home/docker/code/frontend/src/lib
 RUN gulp build
 RUN rm -rf /home/docker/code/frontend/node_modules
 RUN rm -rf /home/docker/code/frontend/src/lib

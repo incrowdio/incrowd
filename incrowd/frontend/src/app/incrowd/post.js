@@ -66,7 +66,6 @@ angular.module('incrowdLib')
 
     Posts.get = function (id) {
       var index = getPostIndex(id);
-      console.log('get postindex', id, index);
       return Posts.posts[index];
     };
 

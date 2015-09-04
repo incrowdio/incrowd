@@ -28,7 +28,6 @@ angular.module('incrowd')
         $scope.user = $rootScope.me;
         $scope.formData = new Posts.Comments.resource({});
         $scope.new_comment_submit = function () {
-          console.log($scope.formData);
           $scope.submitDisabled = true;
           $scope.formData.post = $scope.postId;
           Posts.commentSubmit($scope.formData).then(function () {

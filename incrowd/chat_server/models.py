@@ -45,12 +45,13 @@ class ChatMessage(models.Model):
             message = web_utils.url_filter(self.message)
             for k in ('message', 'attachment_url', 'attachment_type'):
                 setattr(self, k, message[k])
+            self.save()
 
             # Search for highlights
-            self.message = notify_utils.ping_filter(
+            notify_utils.ping_filter(
                 self.message, UserProfile.objects.all(), self.user,
-                'pinged you in chat', 'chat')
-            self.save()
+                'pinged you in chat', 'chat', self.id)
+
             # Push
             data = ChatMessageSerializer(instance=self)
             logger.info("sending chat to all: {}".format(data.data))
@@ -62,7 +63,7 @@ class ChatMessage(models.Model):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    username = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ChatMessage
