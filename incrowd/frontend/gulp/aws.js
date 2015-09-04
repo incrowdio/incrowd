@@ -1,19 +1,16 @@
-'use strict';
+"use strict";
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
 var cloudfront = require('gulp-invalidate-cloudfront');
-
 var paths = gulp.paths;
 
-//var d = new Date().now()
-//console.log(d);
 
 var invalidationBatch = {
 //    CallerReference: new Date().now().toString(),
-    Paths: {
-        Quantity: 1,
-        Items: ['/index.html/']
-    }
+  Paths: {
+    Quantity: 1,
+    Items: ['/index.html/']
+  }
 };
 
 var aws = {
@@ -22,6 +19,7 @@ var aws = {
   "distributionId": "E3E98Y3GYCNA27",
   "patternIndex": /(templateCacheHtml\.js)|(index\.html)/gi
 };
+
 
 gulp.task('prod', function () {
 
@@ -82,7 +80,7 @@ gulp.task('preprod', function () {
     // print upload updates to console
     .pipe(awspublish.reporter());
 
-    // invalidate root files in cloudfront to update
-    //.pipe(cloudfront(invalidationBatch, aws));
-    //.pipe(cloudfront(aws));
+  // invalidate root files in cloudfront to update
+  //.pipe(cloudfront(invalidationBatch, aws));
+  //.pipe(cloudfront(aws));
 });

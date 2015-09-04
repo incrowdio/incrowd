@@ -164,7 +164,8 @@ chatinput {
     background-color: rgba(239, 139, 24, .4);
 
     /*color: #eee;*/
-    padding: 0 2px;
+    padding: 2px;
+    margin: 0 2px;
 }
 
 .chat-attachment {

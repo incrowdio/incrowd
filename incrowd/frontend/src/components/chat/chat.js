@@ -57,17 +57,15 @@ angular.module('incrowd')
           Chats.remove(message);
         };
       }
-    }
+    };
   })
 
-  .filter('ChatMessageFilter', function () {
+  .filter('HighlightFilter', function () {
     "use strict";
     return function (message) {
       // Highlights
       var username = localStorage.getItem('username'),
         regex = new RegExp('@' + username + ' ', 'gi');
-      // New lines
-      message = message.replace('\n', '<br/>');
       if (username) {
         // TODO(pcsforeducation) fix for usernames at end of message
         message = message.replace(regex, '<span class="highlight">@' + username + '</span>');

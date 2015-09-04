@@ -6,6 +6,21 @@
     font-size: 125%;
 }
 
+.notification .md-padding {
+    padding-top: 0;
+}
+
+.notification .dtsince {
+    font-size: 75%;
+}
+
+.notification .cancel {
+    font-size: 200%;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
 .notification-icon {
     margin-right: 5px;
 }

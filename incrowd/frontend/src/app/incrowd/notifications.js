@@ -1,5 +1,5 @@
 angular.module('incrowdLib')
-  .service('Notifications', function ($q, $log, $rootScope, $location, djResource, BACKEND_SERVER, favicoService, Users) {
+  .service('Notifications', function ($q, $log, $rootScope, $location, $state, $stateParams, djResource, BACKEND_SERVER, favicoService, Users) {
     "use strict";
     var Notifications = {}, deferred = $q.defer();
 
@@ -54,16 +54,27 @@ angular.module('incrowdLib')
 
     // Listen for location changes, remove notifications if user sees page that
     // they were notified about changes on
-    $rootScope.$on('$locationChangeSuccess', function (event) {
-      Notifications.clear_for_url($location.url());
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+      Notifications.clear_for_url(toState, toParams);
     });
 
-    Notifications.clear_for_url = function (url) {
+
+    Notifications.clear_for_url = function (toState, toParams) {
       Notifications.notifications.forEach(function (n) {
-        $log.debug('checking for clear on ', url, n.link);
-        if (url === n.link) {
+        $log.debug('checking for clear on ', n.type === 'comment' && $state.current.name === 'post' && $stateParams.postId === n.identifier);
+        if (n.type === 'comment' && toState.name === 'post_details' && toParams.postId === n.identifier) {
           $log.debug('Deleting notification because you\'re on the page ', n);
-          Notifications.remove_notification(n);
+          Notifications.remove(n);
+        }
+      });
+    };
+
+    Notifications.clear_chats = function () {
+      Notifications.notifications.forEach(function (n) {
+        $log.debug('clearing chat notifications');
+        if (n.type === 'chat') {
+          $log.debug('Deleting seen chat notification.');
+          Notifications.remove(n);
         }
       });
     };
@@ -71,7 +82,7 @@ angular.module('incrowdLib')
     // Listen to Channel updates for notifications
     $rootScope.$on('notify', function (event, message) {
       $log.debug('new notification', message);
-      if (message.user === User.me.id) {
+      if (message.user === $rootScope.me.id) {
         Notifications.notifications.push(message);
         Notifications.update_favicon();
         $rootScope.$apply();

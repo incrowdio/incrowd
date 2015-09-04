@@ -19,7 +19,6 @@ angular.module('incrowdLib')
 
       // Find me
       $rootScope.me = Users.get(Users.username);
-      console.log('me', $rootScope.me);
       if ($rootScope.me) {
         $rootScope.crowd = $rootScope.me.crowd;
       }
@@ -33,11 +32,9 @@ angular.module('incrowdLib')
 
     Users.get = function (username) {
       var i, user;
-      console.log('looking for user', username);
       for (i = 0; i < Users.users.length; i++) {
         user = Users.users[i];
         if (user.username === username) {
-          console.log('found user', user);
           return user;
         }
       }
@@ -115,11 +112,6 @@ angular.module('incrowdLib')
           }
         }
       }
-
-      // TODO(pcsforeducation) fix and use this for user
-      //console.log('me set', Channel.presence.members['me']['info']);
-      //Users.me = Channel.presence.members['me']['info'];
-      //$rootScope.$apply();
     });
 
     return Users;

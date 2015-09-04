@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def ping_filter(message, users, sending_user, notify_text, notify_type,
-                notify_url=None):
+                notify_id=None):
     for user in users:
         if username_in_message(message, user.username):
             # Create notification
@@ -20,7 +20,7 @@ def ping_filter(message, users, sending_user, notify_text, notify_type,
                 user=user,
                 from_user=sending_user,
                 type=notify_type,
-                link=notify_url)
+                identifier=notify_id)
             note.save()
             logger.info("Created notification for user {} from {}"
                         .format(note.user, note.from_user))
