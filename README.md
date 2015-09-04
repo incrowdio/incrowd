@@ -73,6 +73,11 @@ This should open a browser window to
 of the frontend files, gulp will notice the change, recompile the frontend, and
 refresh your browser.
 
+PRs will be automatically tested with both the unit tests and an integration tests
+by a TeamCity server. The frontened will be tested by 
+[BrowserStack](https://www.browserstack.com/), who has graciously donated free
+testing for inCrowd (thanks!!).
+
 Protip for OSX:
 ---------------
 You can portfoward the backend boot2docker server so you can access it from the
