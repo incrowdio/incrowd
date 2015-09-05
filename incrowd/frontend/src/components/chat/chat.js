@@ -75,6 +75,17 @@ angular.module('incrowd')
     };
   })
 
+  .filter('NewLineFilter', function () {
+    "use strict";
+    return function (message) {
+      console.log('new line filter', message)
+      // Highlights
+      message = message.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      console.log('new line filter executed', message)
+      return message;
+    };
+  })
+
   .directive('ngEnter', function () {
     "use strict";
     return function (scope, element, attrs) {

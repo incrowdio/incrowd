@@ -15,7 +15,7 @@ angular.module('incrowd')
       }
     };
   })
-  .directive('commentList', function ($rootScope, Posts) {
+  .directive('commentList', function ($rootScope, $log, Posts) {
     "use strict";
     return {
       restrict: 'E',
@@ -30,6 +30,7 @@ angular.module('incrowd')
         $scope.new_comment_submit = function () {
           $scope.submitDisabled = true;
           $scope.formData.post = $scope.postId;
+          $log.debug('Submitting comment', $scope.formData);
           Posts.commentSubmit($scope.formData).then(function () {
             $scope.formData = new Posts.Comments.resource(
               {post: $scope.postId});
