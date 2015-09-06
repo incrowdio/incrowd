@@ -9,13 +9,14 @@ var wiredep = require('wiredep').stream;
 var symlink = require('gulp-symlink');
 var rimraf = require('gulp-rimraf');
 var uglify = require('gulp-uglify');
+var webkitAssign = require('webkit-assign/gulp');
 var paths = gulp.paths;
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
-gulp.task('inject', ['partials', 'styles', 'config'], function () {
+gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
   var injectStyles = gulp.src([
     paths.src + '/assets/css/incrowd-custom-theme.css',
     paths.src + '/assets/css/*.css',
@@ -54,6 +55,13 @@ gulp.task('inject', ['partials', 'styles', 'config'], function () {
     .pipe(wiredep(wiredepOptions))
     .pipe(gulp.dest(paths.tmp + '/serve'));
 
+});
+
+gulp.task('webkitFix', function () {
+  return gulp.src([
+    'src/lib/angular/angular.js'
+  ]).pipe(print())
+    .pipe(gulpif('angular.js', webkitAssign()));
 });
 
 gulp.task('partials', ['markups'], function () {
@@ -136,10 +144,9 @@ gulp.task('misc', function () {
 });
 
 gulp.task('clean', function (done) {
-  return gulp.src([paths.dist + '/', paths.tmp + '/'], { read: false })
-    .pipe(rimraf({ force: true }));
+  return gulp.src([paths.dist + '/', paths.tmp + '/'], {read: false})
+    .pipe(rimraf({force: true}));
 });
-
 
 
 gulp.task('build', ['html', 'images', 'fonts', 'favicons', 'misc']);

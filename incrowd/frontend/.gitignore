@@ -5,3 +5,6 @@ build/
 src/lib/
 .awspublish*
 dist/
+# Ignore local changes, use git add -f if changing the config files
+src/app/js/config.json
+src/app/js/config.js
