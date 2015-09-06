@@ -59,7 +59,8 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
 });
 
 gulp.task('webkitFix', function () {
-  return gulp.src(paths.src + 'angular.js')
+  return gulp.src(paths.src + '/angular.js')
+    .pipe(print())
     .pipe(gulp.dest(paths.dist + '/'));
 });
 
