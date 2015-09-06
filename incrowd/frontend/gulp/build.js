@@ -26,7 +26,7 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
 
   var injectScripts = gulp.src([
     paths.src + '/{app,components}/**/*.js',
-    '!' + paths.src + '/app/js/angular.js',
+    '!' + paths.src + '/angular.js',
     '!' + paths.src + '/settings.js',
     '!' + paths.src + '/app/js/config.js',
     '!' + paths.src + '/{app,components}/**/*.spec.js',
@@ -59,10 +59,8 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
 });
 
 gulp.task('webkitFix', function () {
-  return gulp.src([
-    'src/lib/angular/angular.js'
-  ]).pipe(print())
-    ;
+  return gulp.src(paths.src + 'angular.js')
+    .pipe(gulp.dest(paths.dist + '/'));
 });
 
 gulp.task('partials', ['markups'], function () {

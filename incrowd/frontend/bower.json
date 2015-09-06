@@ -18,7 +18,6 @@
     "angular-resource": "~1.4.x",
     "angular-touch": "~1.4.x",
     "angular-cookies": "~1.4.x",
-    "highlightjs": "*",
     "ngInfiniteScroll": "564f3d15bb",
     "angular-sanitize": "~1.4.x",
     "angular-xeditable": "~0.1.8",
