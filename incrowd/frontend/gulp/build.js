@@ -26,6 +26,7 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
 
   var injectScripts = gulp.src([
     paths.src + '/{app,components}/**/*.js',
+    '!' + paths.src + '/app/js/angular.js',
     '!' + paths.src + '/settings.js',
     '!' + paths.src + '/app/js/config.js',
     '!' + paths.src + '/{app,components}/**/*.spec.js',
@@ -39,7 +40,7 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
 
   var wiredepOptions = {
     directory: 'src/lib',
-    exclude: [/bootstrap\.css/, /foundation\.css/]
+    exclude: [/bootstrap\.css/, /foundation\.css/, 'src/lib/angular/angular.js']
   };
 
   return gulp.src(paths.src + '/*.html')
@@ -61,7 +62,7 @@ gulp.task('webkitFix', function () {
   return gulp.src([
     'src/lib/angular/angular.js'
   ]).pipe(print())
-    .pipe(gulpif('angular.js', webkitAssign()));
+    ;
 });
 
 gulp.task('partials', ['markups'], function () {
@@ -92,6 +93,7 @@ gulp.task('html', ['inject'], function () {
     }))
     .pipe($.rev())
     .pipe(gulpif('*.js', $.ngAnnotate()))
+    //.pipe(gulpif('angular.js', webkitAssign()))
     //.pipe(gulpif('*.js', $.uglify({preserveComments: $.uglifySaveLicense})))
     //.pipe(gulpif('*.css', $.csso()))
     .pipe($.useref())
