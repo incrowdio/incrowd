@@ -49,6 +49,7 @@
     "jade": "^1.9.2",
     "jshint-stylish": "*",
     "json3": "*",
+    "karma": "0.12",
     "karma-jasmine": "*",
     "karma-phantomjs-launcher": "*",
     "main-bower-files": "^2.6.2",
