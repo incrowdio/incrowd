@@ -52,7 +52,7 @@ def cron(request):
     # TODO(pcsforeducation) support multiple polls
     poll = Poll.objects.all()[0]
     submissions = defaultdict(int)
-    votes = Vote.objects.all()
+    votes = Vote.objects.filter(crowd=poll.crowd)
     for vote in votes:
         submissions[vote.submission.id] += 1
     # Eww.
@@ -74,8 +74,8 @@ def cron(request):
 
             _post_winning_submission(poll, winning_submissions[winning_index])
 
-    seven_days_ago = datetime.datetime.utcnow().replace(tzinfo=utc) \
-                     - datetime.timedelta(days=7)
+    seven_days_ago = datetime.datetime.utcnow().replace(
+        tzinfo=utc) - datetime.timedelta(days=7)
     Submission.objects.filter(submitted__lt=seven_days_ago).delete()
 
     return HttpResponse('ok')
@@ -89,7 +89,8 @@ def _post_winning_submission(poll, submission_id):
                 title="{}: {}".format(poll.stub, submission.title),
                 url=submission.url,
                 type='image',
-                nsfw=True)
+                nsfw=True,
+                crowd=submission.crowd)
     post.save()
     text = poll.winning_text.format(
         title=poll.title,
@@ -98,7 +99,8 @@ def _post_winning_submission(poll, submission_id):
 
     comment = Comment(user=user,
                       post=post,
-                      text=text)
+                      text=text,
+                      crowd=submission.crowd)
     comment.save()
     winning_user = UserProfile.objects.get(id=submission.user.id)
     winning_user.poll_votes += 1
