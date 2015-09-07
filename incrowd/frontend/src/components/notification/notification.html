@@ -1,8 +1,7 @@
-<md-card ng-click="goTo(notification)" class="notification">
-  <md-content class="md-padding">
+<md-card class="notification">
+  <md-content ng-click="goTo(notification)" class="md-padding">
     <p>{{notification.text}}</p>
     <span class="dtsince">{{notification.created_at | DTSince }}</span>
-    <span class="icon-cancel icomoon cancel"></span>
   </md-content>
-
+  <span ng-click="remove(notification)" class="icon-cancel icomoon cancel"></span>
 </md-card>

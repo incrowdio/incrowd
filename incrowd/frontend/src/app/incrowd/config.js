@@ -15,7 +15,10 @@ angular.module('incrowdLib', [])
 
     // Create list of tabs to display
     var tabs_deferred = $q.defer();
-    Polls.promise.then(function (data) {
+    $q.all([
+      Polls.get(),
+      Notifications.get()
+    ]).then(function (data) {
       var tabs = [];
 
       tabs = [
@@ -43,7 +46,7 @@ angular.module('incrowdLib', [])
           'alert': ''
         }
       ];
-      data.forEach(function (poll) {
+      data[0].forEach(function (poll) {
         tabs.push({
           'name': poll.stub,
           'state': 'polls({pollStub: "' + poll.stub + '"})',

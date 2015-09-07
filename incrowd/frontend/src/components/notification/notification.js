@@ -46,5 +46,4 @@ angular.module('incrowd')
 
     // Remove notifications if we open to a page in notifications
     Notifications.clear_for_url($location.url());
-
   });
