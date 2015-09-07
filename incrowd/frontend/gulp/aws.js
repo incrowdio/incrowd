@@ -15,7 +15,7 @@ var invalidationBatch = {
 
 var prod = {
     params: {
-      "Bucket": 'incrowd.io',
+      "Bucket": 'www.incrowd.io',
       "region": "us-east-1"
     },
     "region": "us-east-1"
