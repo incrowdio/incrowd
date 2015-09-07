@@ -1,17 +1,21 @@
-.avatar-pic {
-    display: inline-block;
-    width: 48px;
-    height: 48px;
-    min-width: 48px;
-    border-radius: 50%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: cover;
+.avatar-circular {
+    max-width: 48px;
+}
+
+.avatar-circular a {
     position: relative;
-    float: left;
 }
 
 .avatar-circular img {
-    height: 48px;
-    width: 48px;
+    width: 46px;
+    height: 46px;
+
+    /* fill the container, preserving aspect ratio, and cropping to fit */
+    background-size: cover;
+
+    /* center the image vertically and horizontally */
+    background-position: center;
+
+    /* round the edges to a circle with border radius 1/2 container size */
+    border-radius: 50%;
 }
