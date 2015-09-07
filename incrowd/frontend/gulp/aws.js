@@ -13,18 +13,26 @@ var invalidationBatch = {
   }
 };
 
-var aws = {
-  "bucket": "incrowd.io",
-  "region": "us-east-1",
-  "distributionId": "E3E98Y3GYCNA27",
-  "patternIndex": /(templateCacheHtml\.js)|(index\.html)/gi
+var prod = {
+    params: {
+      "Bucket": 'incrowd.io',
+      "region": "us-east-1"
+    },
+    "region": "us-east-1"
+};
+
+var preprod = {
+  params: {
+    "Bucket": 'testing.incrowd.io',
+    "region": "us-east-1"
+  },
+  "region": "us-east-1"
 };
 
 
 gulp.task('prod', function () {
-
   // create a new publisher
-  var publisher = awspublish.create(aws);
+  var publisher = awspublish.create(prod);
 
   // define custom headers
   var headers = {
@@ -34,7 +42,7 @@ gulp.task('prod', function () {
   return gulp.src(paths.dist + '/**/*')
 
     // gzip, Set Content-Encoding headers and add .gz extension
-    // .pipe(awspublish.gzip({ ext: '.gz' }))
+     .pipe(awspublish.gzip())
 
     // publisher will add Content-Length, Content-Type and headers specified above
     // If not specified it will set x-amz-acl to public-read by default
@@ -44,21 +52,15 @@ gulp.task('prod', function () {
     .pipe(publisher.cache())
 
     // print upload updates to console
-    .pipe(awspublish.reporter())
+    .pipe(awspublish.reporter());
 
     // invalidate root files in cloudfront to update
-    .pipe(cloudfront(invalidationBatch, aws));
+    //.pipe(cloudfront(invalidationBatch, aws));
 });
 
 gulp.task('preprod', function () {
-
-  var publisher = awspublish.create({
-    params: {
-      "Bucket": 'testing.incrowd.io',
-      "region": "us-east-1"
-    },
-    "region": "us-east-1"
-  });
+  // create a new publisher
+  var publisher = awspublish.create(preprod);
 
   // define custom headers
   var headers = {
