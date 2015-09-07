@@ -24,15 +24,6 @@ angular.module('incrowdLib')
       voteId: '@id'
     });
 
-    // Init poll list
-    Polls.resource.query().$promise.success(function (data) {
-      Polls.polls = data;
-      deferred.resolve(Polls.polls);
-      //$rootScope.$apply();
-    }).error(function () {
-      deferred.reject();
-    });
-
     function getIndexById(list, id) {
       var i;
       for (i = 0; i < list.length; i++) {
@@ -59,6 +50,20 @@ angular.module('incrowdLib')
       }).error(function (data) {
         $log.error('Poll submission failed', data);
         d.reject(data);
+      });
+
+      return d.promise;
+    };
+
+    Polls.get = function () {
+      var d = $q.defer();
+
+      Polls.resource.query().$promise.success(function (data) {
+        console.log('poll query', data);
+        Polls.polls = data;
+        d.resolve(data);
+      }).error(function () {
+        d.reject();
       });
 
       return d.promise;
@@ -133,6 +138,11 @@ angular.module('incrowdLib')
 
       return d.promise;
     };
+
+    // Init poll list
+    Polls.get().then(function (data) {
+      deferred.resolve(Polls.polls);
+    });
 
     return Polls;
   });

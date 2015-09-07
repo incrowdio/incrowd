@@ -18,11 +18,20 @@ angular.module('incrowdLib')
       Notifications.notifications = data.results;
       Notifications.update_favicon();
       deferred.resolve(Notifications.notifications);
-      //$rootScope.$apply();
     }).error(function () {
       Notifications.update_favicon();
       deferred.reject();
     });
+
+    Notifications.get = function () {
+      var getDeferred = $q.defer();
+
+      Notifications.promise.then(function () {
+        getDeferred.resolve(Notifications.notifications);
+      });
+
+      return getDeferred.promise;
+    };
 
     Notifications.remove = function (item) {
       Notifications.resource.delete({id: item.id}).$promise.success(function () {
@@ -35,9 +44,11 @@ angular.module('incrowdLib')
     Notifications.remove_all = function () {
       // TODO(pcsforeducation) delete to /notifications should delete all
       var i, item;
+      $log.debug('Clearing notifications');
       for (i = 0; i < Notifications.notifications.length; i++) {
         item = Notifications.notifications[i];
-        Notifications.resource.delete(item.id);
+        $log.debug('Removing notification', item);
+        Notifications.resource.delete({id: item.id});
       }
       Notifications.notifications = [];
       Notifications.update_favicon();

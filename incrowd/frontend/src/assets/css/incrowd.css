@@ -474,3 +474,7 @@ md-input-container textarea.md-input {
 .md-subheader .md-subheader-content {
     z-index: 2;
 }
+
+.close-button {
+    margin-left: 15px;
+}
