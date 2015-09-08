@@ -110,13 +110,9 @@ test_django:
 lint:
 	cd incrowd/frontend && gulp lint
 
-frontend_preprod:
+aws:
 	cd incrowd/frontend && gulp build
-	cd incrowd/frontend && gulp preprod
-
-frontend_prod:
-	cd incrowd/frontend && gulp build
-	cd incrowd/frontend && gulp prod
+	cd incrowd/frontend && gulp aws
 
 #########################
 # CI/CD tools
