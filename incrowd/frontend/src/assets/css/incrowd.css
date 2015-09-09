@@ -439,9 +439,12 @@ md-sidenav.nav-sidenav md-content {
     height: 64px;
 }
 
-.menu {
+.title .menu {
     cursor: pointer;
     cursor: hand;
+    font-size: 135%;
+    margin-right: 10px;
+    margin-top: 5px;
 }
 
 .hide-tab {

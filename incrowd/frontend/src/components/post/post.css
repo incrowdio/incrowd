@@ -128,6 +128,16 @@
     margin-right: -50px;
 }
 
+.post .md-toolbar-tools {
+    height: auto;
+    max-height: 128px;
+}
+
+.title_container {
+    max-height: 128px;
+    overflow: hidden;
+}
+
 .title_container h2 {
     margin-top: 0;
     margin-bottom: 0;
@@ -144,14 +154,6 @@
 .post md-button {
     margin: 15px;
     color: #eee;
-}
-
-.post .avatar-circular img {
-    margin-top: -8px;
-}
-
-.post .delete {
-    margin-top: -8px;
 }
 
 md-input-group > input {
@@ -249,7 +251,7 @@ post div.green {
 }
 
 .post .link {
-    font-size: 65%;
+    font-size: 75%;
 }
 
 .flex-video {
@@ -263,27 +265,6 @@ post div.green {
 .posted-button {
     cursor: default;
 }
-
-/*!
- * categories.css
- */
-/*.category {*/
-    /*float: left;*/
-    /*font-size: 8px;*/
-/*}*/
-
-/*.category a,*/
-/*.category a:visited,*/
-/*.category a:hover,*/
-/*.category a:active {*/
-    /*color: white;*/
-    /*font-size: 120%;*/
-/*}*/
-
-/*.right p,*/
-/*.right a {*/
-    /*text-align: right;*/
-/*}*/
 
 fieldset legend {
     background: none;
@@ -305,10 +286,6 @@ avatar {
 .comment-icon {
     margin-left: 5px;
 }
-
-/*.tags {*/
-    /*padding-bottom: 10px;*/
-/*}*/
 
 .post md-chips .md-chips {
     box-shadow: none;
