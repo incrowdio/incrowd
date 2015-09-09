@@ -1,13 +1,14 @@
 /*!
  * icomoon.css
  */
+
 @font-face {
     font-family: 'icomoon';
-    src: url('../fonts/icomoon.eot?wlgoqn');
-    src: url('../fonts/icomoon.eot?#iefixwlgoqn') format('embedded-opentype'),
-    url('../fonts/icomoon.ttf?wlgoqn') format('truetype'),
-    url('../fonts/icomoon.woff?wlgoqn') format('woff'),
-    url('../fonts/icomoon.svg?wlgoqn#icomoon') format('svg');
+    src: url('../fonts/icomoon.eot?rmlduq');
+    src: url('../fonts/icomoon.eot?#iefixrmlduq') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?rmlduq') format('truetype'),
+    url('../fonts/icomoon.woff?rmlduq') format('woff'),
+    url('../fonts/icomoon.svg?rmlduq#icomoon') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -26,20 +27,8 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-playlist_add:before {
-    content: "\e01e";
-}
-
 .icon-queue:before {
     content: "\e01f";
-}
-
-.icon-chat:before {
-    content: "\e046";
-}
-
-.icon-comment:before {
-    content: "\e048";
 }
 
 .icon-forum:before {
@@ -56,10 +45,6 @@
 
 .icon-chat_bubble_outline:before {
     content: "\e055";
-}
-
-.icon-textsms:before {
-    content: "\e061";
 }
 
 .icon-add:before {
@@ -86,28 +71,16 @@
     content: "\e074";
 }
 
-.icon-remove:before {
-    content: "\e07f";
-}
-
 .icon-send:before {
     content: "\e087";
-}
-
-.icon-insert_comment:before {
-    content: "\e0e6";
-}
-
-.icon-mode_comment:before {
-    content: "\e0ed";
 }
 
 .icon-cancel:before {
     content: "\e205";
 }
 
-.icon-wc:before {
-    content: "\e241";
+.icon-menu:before {
+    content: "\e20e";
 }
 
 .icon-group:before {
@@ -126,24 +99,12 @@
     content: "\e24b";
 }
 
-.icon-notifications_off:before {
-    content: "\e24c";
-}
-
-.icon-people:before {
-    content: "\e251";
-}
-
 .icon-person:before {
     content: "\e253";
 }
 
 .icon-person_add:before {
     content: "\e254";
-}
-
-.icon-person_outline:before {
-    content: "\e255";
 }
 
 .icon-account_circle:before {
@@ -154,12 +115,12 @@
     content: "\e27e";
 }
 
-.icon-face:before {
-    content: "\e290";
-}
-
 .icon-highlight_remove:before {
     content: "\e29c";
+}
+
+.icon-open_in_new:before {
+    content: "\e2b2";
 }
 
 .icon-search:before {
@@ -168,34 +129,6 @@
 
 .icon-settings:before {
     content: "\e2cb";
-}
-
-.icon-shop_two:before {
-    content: "\e2dd";
-}
-
-.icon-thumb_down:before {
-    content: "\e2ed";
-}
-
-.icon-thumb_up:before {
-    content: "\e2ee";
-}
-
-.icon-toc:before {
-    content: "\e2f0";
-}
-
-.icon-reorder:before {
-    content: "\e310";
-}
-
-.icon-http:before {
-    content: "\e313";
-}
-
-.icon-menu:before {
-    content: "\e20e";
 }
 
 /*Override to use icomoon inside md-buttons*/
