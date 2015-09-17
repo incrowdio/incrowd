@@ -1,5 +1,5 @@
 angular.module('incrowd')
-  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, $log, httpInterceptor, api, Auth, BACKEND_SERVER) {
+  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, $log, httpInterceptor, Auth, BACKEND_SERVER) {
     $scope.credentials = {
       username: '',
       password: ''

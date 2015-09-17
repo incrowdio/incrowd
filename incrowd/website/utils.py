@@ -122,11 +122,6 @@ def url_filter(text):
         attachment_type = 'image'
         attachment_url = urls[0]
 
-    # Make URLs into links
-    for url in urls:
-        logger.info('replacing extra urls: {}'.format(url))
-        text = text.replace(
-            url, '<a ng-href="{0}">{0}</a>'.format(url))
     return {
         'message': text,
         'attachment_type': attachment_type,
