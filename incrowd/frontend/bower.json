@@ -25,7 +25,8 @@
     "pusher": "~2.2.4",
     "angular-material": "~0.10.1",
     "angular-ui-router": "~0.2.13",
-    "favico.js": "~0.3.5"
+    "favico.js": "~0.3.5",
+    "Autolinker.js": "~0.18.1"
   },
   "description": "A small, private social network",
   "main": "js/app.js",

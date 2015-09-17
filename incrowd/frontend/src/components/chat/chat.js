@@ -78,12 +78,16 @@ angular.module('incrowd')
   .filter('NewLineFilter', function () {
     "use strict";
     return function (message) {
-      console.log('new line filter', message)
       // Highlights
-      message = message.replace(/(?:\r\n|\r|\n)/g, '<br />');
-      console.log('new line filter executed', message)
-      return message;
+      return message.replace(/(?:\r\n|\r|\n)/g, '<br />');
     };
+  })
+
+  .filter('LinkFilter', function () {
+    "use strict";
+    return function (message) {
+      return Autolinker.link(message, {twitter: false, hashtag: false});
+    }
   })
 
   .directive('ngEnter', function () {

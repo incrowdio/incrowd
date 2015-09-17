@@ -1,5 +1,5 @@
 angular.module('drf_auth.token', [])
-  .factory('httpInterceptor', function httpInterceptor($log, $rootScope, $state) {
+  .factory('httpInterceptor', function httpInterceptor($log, $rootScope, $state, Auth) {
     "use strict";
     return function (promise) {
       var success = function (response) {
@@ -9,6 +9,7 @@ angular.module('drf_auth.token', [])
       var error = function (response) {
         if (response.status === 401) {
           $log.debug('User not authed, redirecting to login');
+          Auth.clearCredentials();
           // user is not authenticated. stow the state they wanted before you
           // send them to the signin state, so you can return them when you're done
           $rootScope.returnToState = $rootScope.toState;
@@ -22,16 +23,6 @@ angular.module('drf_auth.token', [])
       };
 
       return promise.then(success, error);
-    };
-  })
-
-  .factory('api', function ($http, $cookies, $log) {
-    "use strict";
-    return {
-      init: function (token) {
-        $log.debug('settting access token', token || $cookies.token);
-        $http.defaults.headers.common['X-Access-Token'] = token || $cookies.token;
-      }
     };
   })
 

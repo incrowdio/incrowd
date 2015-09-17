@@ -3,7 +3,7 @@
     <avatar user="message.user"></avatar>
     <div class="container">
       <span class="text"
-            ng-bind-html="(message.message | HighlightFilter)"
+            ng-bind-html="(message.message | HighlightFilter | LinkFilter)"
             flex></span>
     </div>
   </div>
