@@ -17,35 +17,27 @@ var $ = require('gulp-load-plugins')({
 });
 
 gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
-  var injectStyles = gulp.src([
-    paths.src + '/assets/css/incrowd-custom-theme.css',
-    paths.src + '/assets/css/*.css',
-    paths.src + '/components/**/*.css',
-    '!' + paths.tmp + '/serve/app/vendor.css'
-  ], {read: false});
-
-  var injectScripts = gulp.src([
-    paths.src + '/{app,components}/**/*.js',
-    '!' + paths.src + '/angular.js',
-    '!' + paths.src + '/settings.js',
-    '!' + paths.src + '/app/js/config.js',
-    '!' + paths.src + '/{app,components}/**/*.spec.js',
-    '!' + paths.src + '/{app,components}/**/*.mock.js'
-  ]).pipe($.angularFilesort());
-
-  var injectOptions = {
-    ignorePath: [paths.src],
-    addRootSlash: false
-  };
-
   var wiredepOptions = {
     directory: 'src/lib',
     exclude: [/bootstrap\.css/, /foundation\.css/, 'src/lib/angular/angular.js']
   };
 
+  // Sort scripts for angular before injecting
+  var injectScripts = gulp.src(paths.js).pipe($.angularFilesort());
+
   return gulp.src(paths.src + '/*.html')
-    .pipe($.inject(injectStyles, injectOptions))
-    .pipe($.inject(injectScripts, injectOptions))
+    .pipe($.inject(
+      gulp.src(paths.css, {read: false}), {
+        ignorePath: [paths.src],
+        addRootSlash: false,
+        name: 'styles'
+      }))
+    .pipe($.inject(injectScripts, {
+      ignorePath: [paths.src],
+      addRootSlash: false,
+      name: 'angular'
+    }))
+
     // Use relative here so it gets picked up a findable file in assets() in
     // 'html'.
     .pipe($.inject(gulp.src(paths.src + '/cache/templateCacheHtml.js',
