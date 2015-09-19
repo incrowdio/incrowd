@@ -1,3 +1,4 @@
+beautifulsoup4==4.4.0
 django-cors-headers==1.1.0
 django-filter==0.10.0
 django-mailgun==0.2.2
@@ -7,6 +8,8 @@ djangorestframework==3.1
 #django-push-notifications==1.2.1
 #-e git://github.com/jleclanche/django-push-notifications@7e5b806a1d65706e7f554456b3907a3ff980fb39#egg=django-push-notifications
 djoser==0.3.1
+httmock==1.2.3
+httpretty==0.8.10
 MySQL-python==1.2.5
 newrelic==2.54.0.41
 pusher==0.8

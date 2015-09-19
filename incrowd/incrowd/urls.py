@@ -8,6 +8,7 @@ import chat_server.urls
 from incrowd.views import get_token, get_cookie
 import invite_only.urls
 import notify.urls
+# TODO(pcsforeducation) update this to use Django's app system
 import poll.urls
 import website.urls
 from website.views import presence
@@ -19,7 +20,6 @@ urlpatterns = patterns(
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/v1/auth/', include('djoser.urls')),
     url(r'^api/v1/cron/poll/$', 'poll.views.cron'),
-    url(r'^api/v1/cron/fantasy/$', 'fantasy_football.views.cron'),
 
     # Djangle
     url(r'^api/_forms', 'djangle.views.render_serializers'),
@@ -33,9 +33,10 @@ urlpatterns = patterns(
     url(r'^api/v1/', include(poll.urls.router.urls)),
     url(r'^api/v1/', include(invite_only.urls.router.urls)),
     url(r'^api/v1/', include('push.urls')),
+    url(r'^api/v1/fantasy/cron/$', 'plugins.fantasy.views.cron'),
 
     url(r'^api/v1/register/', 'website.api.register'),
-    url('^api/v1/presence/$', presence),
+    url(r'^api/v1/presence/$', presence),
 
     url(r'^api/v1/token/', get_token),
     url(r'^api/cookie/', get_cookie),

@@ -58,7 +58,7 @@ docker_server:
 pep8:
 	flake8 chat_server
 	flake8 incrowd
-	flake8 fantasy_football
+	flake8 plugins/fantasy
 	flake8 invite_only
 	flake8 notify
 	flake8 poll
