@@ -1,0 +1,12 @@
+sudo: false
+python: "2.7"
+# Need to write javascript tests first...
+#before_script:
+#    - npm install -g bower
+#    - cd incrowd/frontend && npm install
+#    - cd incrowd/frontend && bower install
+install: 
+    - "pip install -r incrowd/requirements.txt"
+    - "pip install -r incrowd/dev_requirements.txt"
+script:
+    - make test
