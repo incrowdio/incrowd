@@ -25,15 +25,12 @@ dependencies:
     - pip install ansible
 
   cache_directories:
-    - ".tox/"
-
-test:
-  post:
-    - docker build -t incrowd/incrowd:testing .
+    - "~/incrowd/.tox/"
 
 deployment:
   docker:
     branch: master
     commands:
+      - docker build -t incrowd/incrowd:testing .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push incrowd/incrowd:testing
