@@ -34,3 +34,12 @@ deployment:
       - docker build -t incrowd/incrowd:testing .
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker push incrowd/incrowd:testing
+      - git clone git@github.com:pcsforeducation/incrowd-ansible.git ~/incrowd-ansible
+      - cd ~/incrowd-ansible && make incrowd_testing
+
+  release:
+    tag: /v[0-9]+(\.[0-9]+)*/
+    commands:
+      - git clone git@github.com:pcsforeducation/incrowd-ansible.git ~/incrowd-ansible
+      - cd ~/incrowd-ansible && make incrowd
+      
