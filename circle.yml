@@ -7,20 +7,30 @@ machine:
   node:
     version: 0.10.40
 
+  python:
+    version: 2.7.10
+
   environment:
     DJANGO_SETTINGS_MODULE: incrowd.settings
     DEBIAN_FRONTEND: noninteractive
     INITRD: No
     SETTINGS_MODE: testing
 
+  services:
+    - docker
+
 ## Customize dependencies
 dependencies:
   pre:
     - pip install ansible
 
-  # we automatically cache and restore many dependencies between
-  # builds. If you need to, you can add custom paths to cache:
   cache_directories:
-    - ".tox/"   # relative to the build directory
+    - ".tox/"
 
-
+deployment:
+  docker:
+    branch: master
+    commands:
+      - docker build -t incrowd/incrowd:testing .
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push incrowd/incrowd:testing
