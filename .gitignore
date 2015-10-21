@@ -7,3 +7,4 @@ tmp/
 tests/bin/
 tests/include/
 tests/lib/
+.tox/
