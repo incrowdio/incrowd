@@ -46,7 +46,7 @@ var app = angular.module('incrowd', [
       .state('login', {
         url: '/login',
         templateUrl: 'templates/login.html',
-        controller: 'AuthCtrl'
+        controller: 'LoginCtrl'
       })
       .state('chat', {
         url: '/chat',
@@ -130,6 +130,22 @@ var app = angular.module('incrowd', [
     "use strict";
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+    $httpProvider.interceptors.push(function ($injector, $log, $q) {
+      return {
+        responseError: function (rejection) {
+          if (rejection.status === 401) {
+            $log.debug('Injector caught 401')
+            $injector.get('Auth').clearCredentials();
+            $injector.get('$state').go('login');
+          }
+
+          /* If not a 401, do nothing with this error.
+           * This is necessary to make a `responseError`
+           * interceptor a no-op. */
+          return $q.reject(rejection);
+        }
+      };
+    });
   }])
 
 
