@@ -15,23 +15,23 @@ angular.module('incrowdLib')
       }
       if (difference < 3600) {
         time = Math.floor(difference / 60);
-        label = time > 1 ? 'm' : 'minute';
+        label = time > 1;
       }
       else if (difference < 86400) {
         time = Math.floor(difference / 3600);
-        label = time > 1 ? 'h' : 'hour';
+        label = 'h';
       }
       else if (difference < 2592000) {
         time = Math.floor(difference / 86400);
-        label = time > 1 ? 'd' : 'day';
+        label = 'd';
       }
       else if (difference < 77760000) {
         time = Math.floor(difference / 2592000);
-        label = time > 1 ? 'mo' : 'month';
+        label = 'mo';
       }
       else if (difference < 933120000) {
         time = Math.floor(difference / 77760000);
-        label = time > 1 ? 'yr' : 'year';
+        label = 'yr';
       }
       else if (difference < 9331200000) {
         // :) A guy can dream, right?
@@ -39,7 +39,7 @@ angular.module('incrowdLib')
         time = Math.floor(difference / 933120000);
         label = time > 1 ? 'decades' : 'decade';
       }
-      return time + label + ' ago';
+      return time + ' ' + label;
     };
   })
   .directive('attronoff', function () {
