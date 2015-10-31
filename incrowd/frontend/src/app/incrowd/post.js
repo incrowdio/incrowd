@@ -65,8 +65,21 @@ angular.module('incrowdLib')
     });
 
     Posts.get = function (id) {
+      var getDeferred = $q.defer();
+
       var index = getPostIndex(id);
-      return Posts.posts[index];
+      if (index === undefined) {
+        // Not in the cache, fetch post
+        // TODO: should cache this lookup.. but need to figure out how to display posts in order still
+        $log.debug('Post not in cache, fetching: ', id);
+        Posts.resource.get({postId: id}).$promise.success(function (post) {
+          getDeferred.resolve(post);
+        })
+      }
+      else {
+        getDeferred.resolve(Posts.posts[index]);
+      }
+      return getDeferred.promise;
     };
 
     Posts.delete = function (id) {

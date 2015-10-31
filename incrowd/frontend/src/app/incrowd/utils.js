@@ -11,11 +11,11 @@ angular.module('incrowdLib')
       var difference = (now - Date.parse(dt)) / 1000;
       if (difference < 60) {
         time = Math.floor(difference);
-        return "just now";
+        return 'just now';
       }
       if (difference < 3600) {
         time = Math.floor(difference / 60);
-        label = time > 1;
+        label = 's';
       }
       else if (difference < 86400) {
         time = Math.floor(difference / 3600);

@@ -77,10 +77,11 @@ angular.module('incrowd')
 
     // Bind to the post once fetched
     Posts.promise.then(function () {
-      $scope.post = Posts.get(parseInt($scope.postId));
+      Posts.get(parseInt($scope.postId)).then(function(post) {
+        $scope.post = post;
+      });
       //$scope.post.youtube = youtube_url_to_id($scope.post.url);
     });
-
 
     $scope.formData = new Posts.Comments.resource({post: $scope.postId});
     $scope.submitDhow = false;
