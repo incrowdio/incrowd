@@ -7,9 +7,6 @@
 }
 
 .avatar-circular img {
-    width: 46px;
-    height: 46px;
-
     /* fill the container, preserving aspect ratio, and cropping to fit */
     background-size: cover;
 
