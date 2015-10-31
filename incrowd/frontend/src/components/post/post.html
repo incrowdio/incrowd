@@ -13,6 +13,7 @@
           <a ng-if="post.type != 'link'" ng-href="#/posts/{{ post.id }}">
             {{ post.title }}
           </a>
+            <span class="nsfw" ng-show="post.nsfw">NSFW</span>
         </h2>
       </div>
       <div ng-if="post.user.id == user.id" ng-click="delete_post(post.id)"
@@ -55,11 +56,6 @@
     <md-button class="category" ng-href="#/posts?category={{ post.category.id }}" flex-sm="33">{{ post.category.name }}</md-button>
 
     <a class="md-button md-default-theme" flex-sm="33"><span ng-bind="post.submitted | DTSince"></span></a>
-  </div>
-  <div class="tags">
-    <md-chips layout="row" layout-align="center center">
-      <md-chip class="nsfw" ng-show="post.nsfw">NSFW</md-chip>
-    </md-chips>
   </div>
 
   <!--End Metadata-->

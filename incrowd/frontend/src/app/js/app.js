@@ -134,7 +134,7 @@ var app = angular.module('incrowd', [
       return {
         responseError: function (rejection) {
           if (rejection.status === 401) {
-            $log.debug('Injector caught 401')
+            $log.debug('Injector caught 401');
             $injector.get('Auth').clearCredentials();
             $injector.get('$state').go('login');
           }
