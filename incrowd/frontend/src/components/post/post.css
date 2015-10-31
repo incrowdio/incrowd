@@ -295,6 +295,11 @@ avatar {
     margin-top: 0;
 }
 
-.post md-chips .md-chip .nsfw {
+.nsfw {
+    padding: 2px 12px 2px 12px;
+    border-radius: 16px;
+    margin-left: 5px;
     background-color: #f44336;
+    font-size: 16px;
+    line-height: 20px;
 }

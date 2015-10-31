@@ -64,3 +64,5 @@ shippable/
 man/
 leader/
 node_modules/
+frontend/gulp/aws_config.json
+frontend/src/app/js/config.js

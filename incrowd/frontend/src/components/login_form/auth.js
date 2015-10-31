@@ -1,5 +1,5 @@
 angular.module('incrowd')
-  .controller('AuthCtrl', function ($scope, $rootScope, $location, $window, $state, $log, httpInterceptor, Auth, BACKEND_SERVER) {
+  .controller('LoginCtrl', function ($scope, $rootScope, $location, $window, $state, $log, Auth) {
     $scope.credentials = {
       username: '',
       password: ''
@@ -11,6 +11,16 @@ angular.module('incrowd')
         $state.go('login');
         $window.location.reload();
       });
+    };
+    $scope.loggedIn = $rootScope.loggedIn;
+    if ($scope.loggedIn === true) {
+      $state.go('posts');
+    }
+  })
+  .controller('LogoutCtrl', function ($scope, $rootScope, $location, $window, $state, $log, Auth) {
+    $scope.credentials = {
+      username: '',
+      password: ''
     };
     $scope.logout = function () {
       Auth.clearCredentials();

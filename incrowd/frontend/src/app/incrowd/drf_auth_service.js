@@ -1,31 +1,4 @@
 angular.module('drf_auth.token', [])
-  .factory('httpInterceptor', function httpInterceptor($log, $rootScope, $state, Auth) {
-    "use strict";
-    return function (promise) {
-      var success = function (response) {
-        return promise.resolve(response);
-      };
-
-      var error = function (response) {
-        if (response.status === 401) {
-          $log.debug('User not authed, redirecting to login');
-          Auth.clearCredentials();
-          // user is not authenticated. stow the state they wanted before you
-          // send them to the signin state, so you can return them when you're done
-          $rootScope.returnToState = $rootScope.toState;
-          $rootScope.returnToStateParams = $rootScope.toStateParams;
-
-          // now, send them to the login state so they can log in
-          $state.go('login');
-        }
-
-        return promise.reject(response);
-      };
-
-      return promise.then(success, error);
-    };
-  })
-
   // Note: You should inject this to your app.run() to get Auth set up as early
   // as possible.
   .factory('Auth', function (Base64, $http, $log, $rootScope, $location, $window, $state, $q, BACKEND_SERVER) {
@@ -76,6 +49,9 @@ angular.module('drf_auth.token', [])
         // now, redirect only not authenticated and on auth required states
         if ($rootScope.loggedIn !== true && noAuthStates.indexOf(toState.name) === -1) {
           event.preventDefault();
+          // Clear auth so we don't get an infinite loop
+          this.clearCredentials();
+
           // user is not authenticated. stow the state they wanted before you
           // send them to the signin state, so you can return them when you're done
           $rootScope.returnToState = $rootScope.toState;
