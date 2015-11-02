@@ -14,21 +14,40 @@ angular.module('incrowdLib')
     });
     Users.checkInResource = djResource(BACKEND_SERVER + 'check_in\/');
 
-    Users.resource.query().$promise.success(function (data) {
-      Users.users = data.results;
-
-      // Find me
-      $rootScope.me = Users.get(Users.username);
-      if ($rootScope.me) {
-        $rootScope.crowd = $rootScope.me.crowd;
+    Users.setConnected = function () {
+      Users.connected_users = [];
+      var user, updated, i;
+      var now = new Date();
+      for (i = 0; i < Users.users.length; i++) {
+        user = Users.users[i];
+        updated = new Date(user.last_updated);
+        if (updated > now - (60 * 1000)) {
+          Users.connected_users.push(user);
+        }
       }
-      $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
+      $log.debug("Connected users: ", Users.connected_users);
+    };
 
-      deferred.resolve(Users.users);
-      //$rootScope.$apply();
-    }).error(function () {
-      deferred.reject();
-    });
+    Users.getAll = function () {
+      Users.resource.query().$promise.success(function (data) {
+        Users.users = data.results;
+
+        // Find me
+        $rootScope.me = Users.get(Users.username);
+        if ($rootScope.me) {
+          $rootScope.crowd = $rootScope.me.crowd;
+        }
+        $log.debug('Found myself!', $rootScope.me, $rootScope.crowd);
+
+        Users.setConnected();
+
+        deferred.resolve(Users.users);
+        //$rootScope.$apply();
+      }).error(function () {
+        deferred.reject();
+      });
+    };
+
 
     Users.get = function (username) {
       var i, user;
@@ -41,26 +60,25 @@ angular.module('incrowdLib')
     };
 
 
-    //Users.add = function (user) {
-    //  for (var i = 0; i < Users.connected_users.length; i++) {
-    //    if (user.id == Users.connected_users[i].id) {
-    //      console.log('user already connected', user);
-    //      return;
-    //    }
-    //  }
-    //  console.log('adding user', user);
-    //  Users.connected_users.push(user);
-    //};
-    //
-    //Users.remove = function (user) {
-    //  for (var i = 0; i < Users.connected_users.length; i++) {
-    //    if (user.id == Users.connected_users[i].id) {
-    //      console.log('removing', user);
-    //      Users.connected_users.splice(i, 1);
-    //      break;
-    //    }
-    //  }
-    //};
+    Users.add = function (user) {
+      for (var i = 0; i < Users.connected_users.length; i++) {
+        if (user.id == Users.connected_users[i].id) {
+          return;
+        }
+      }
+      console.log('adding user', user);
+      Users.connected_users.push(user);
+    };
+
+    Users.remove = function (user) {
+      for (var i = 0; i < Users.connected_users.length; i++) {
+        if (user.id == Users.connected_users[i].id) {
+          $log.debug('User signed off', user);
+          Users.connected_users.splice(i, 1);
+          return;
+        }
+      }
+    };
 
     Users.create = function (formData) {
       var d = $q.defer();
@@ -81,6 +99,7 @@ angular.module('incrowdLib')
       var r = new Users.checkInResource();
       r.$save().$promise.then(function () {
         $log.debug('checked in');
+        Users.getAll();
       });
     };
 
@@ -90,18 +109,25 @@ angular.module('incrowdLib')
     }, 60 * 1000);
     Users.checkIn();
 
-    $rootScope.$on('pusher:member_added', function (event, data) {
-      $log.debug('adding user', event, data);
-      Users.add(data.info);
-      $log.debug('connected users', Users.connected_users);
-      $rootScope.$apply();
-    });
-    $rootScope.$on('pusher:member_removed', function (event, data) {
-      $log.debug('removing user', event, data);
-      Users.remove(data.info);
-      $log.debug('connected users', Users.connected_users);
-      $rootScope.$apply();
-    });
+    // Init the users
+    Users.getAll();
+
+    // TODO: decide if these are still useful. Refreshing users every 60
+    // seconds is probably good enough.
+
+    //$rootScope.$on('pusher:member_added', function (event, data) {
+    //  $log.debug('adding user', event, data);
+    //  Users.add(data.info);
+    //  $log.debug('connected users', Users.connected_users);
+    //  $rootScope.$apply();
+    //});
+    //$rootScope.$on('pusher:member_removed', function (event, data) {
+    //  $log.debug('removing user', event, data);
+    //  Users.remove(data.info);
+    //  $log.debug('connected users', Users.connected_users);
+    //  $rootScope.$apply();
+    //});
+
     $rootScope.$on('pusher:subscription_succeeded', function (event, data) {
       $log.debug('subscription data', data.members);
       if (data.members) {

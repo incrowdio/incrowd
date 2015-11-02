@@ -107,12 +107,7 @@
   <md-toolbar>
     <h1 class="md-toolbar-tools">Chat</h1>
   </md-toolbar>
-  <div class="connected_users chat_padding" layout="row"
-       ng-controller="UsersCtrl">
-    <span ng-repeat="user in connected_users" class="connected_user">
-      <profile-pic id="user.id"></profile-pic>
-    </span>
-  </div>
+  <online-users></online-users>
 
   <md-content flex id="sidebar_chat_container" scroll-chat-on-load>
     <chat></chat>
