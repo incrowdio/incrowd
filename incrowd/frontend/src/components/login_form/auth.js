@@ -8,7 +8,7 @@ angular.module('incrowd')
       $log.debug('logging in', credentials);
       Auth.setCredentials(credentials).then(function () {
         $log.debug('credentials set', $rootScope.loggedIn);
-        $state.go('login');
+        $state.go('posts');
         $window.location.reload();
       });
     };
