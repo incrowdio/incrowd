@@ -48,7 +48,11 @@ angular.module('incrowdLib')
       for (i = 0; i < Notifications.notifications.length; i++) {
         item = Notifications.notifications[i];
         $log.debug('Removing notification', item);
-        Notifications.resource.delete({id: item.id});
+        try {
+          Notifications.resource.delete({id: item.id});
+        } catch (e) {
+          $log.warning('Error while removing notification', e);
+        }
       }
       Notifications.notifications = [];
       Notifications.update_favicon();

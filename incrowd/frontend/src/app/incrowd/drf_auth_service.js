@@ -11,24 +11,25 @@ angular.module('drf_auth.token', [])
       $rootScope.loggedIn = false;
     }
     $log.debug('User logged in: ', $rootScope.loggedIn);
-    var deferred = $q.defer();
     return {
       setCredentials: function (credentials) {
-        $log.debug('creds', credentials.username, credentials.password);
+        var deferred = $q.defer();
         var encoded = Base64.encode(credentials.username + ':' +
           credentials.password);
-        $log.debug('encode', encoded);
+        $log.debug('Getting auth token.');
         $http.get(BACKEND_SERVER + 'token\/', {
           headers: {
             'Authorization': 'Basic ' + encoded
           }
         }).success(function (data) {
           // Successfully logged in, save token, return success to caller
+          $log.debug('Successfully got auth token');
           var token = data.token;
           localStorage.setItem('token', token);
           localStorage.setItem('username', data.username);
           $http.defaults.headers.common.Authorization = 'Token ' + token;
           $rootScope.loggedIn = true;
+          $log.debug('resolving..')
           deferred.resolve();
         }).error(function (data, status, headers) {
           // Login failed
