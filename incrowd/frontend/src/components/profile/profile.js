@@ -42,6 +42,19 @@ angular.module('incrowd')
       }
     };
   })
+  .directive('onlineUsers', function ($rootScope, Users) {
+    "use strict";
+    return {
+      restrict: 'E',
+      templateUrl: 'components/profile/online_users.html',
+      link: function ($scope) {
+        Users.promise.then(function () {
+          $scope.users = Users.users;
+          $scope.me = $rootScope.me;
+        });
+      }
+    };
+  })
   .controller('UsersCtrl', function ($scope, $rootScope, Users) {
     "use strict";
     Users.promise.then(function () {
