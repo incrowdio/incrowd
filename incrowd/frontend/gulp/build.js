@@ -16,7 +16,7 @@ var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license', 'del']
 });
 
-gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
+gulp.task('inject', ['partials', 'styles', 'webkitFix'], function () {
   var wiredepOptions = {
     directory: 'src/lib',
     exclude: [/bootstrap\.css/, /foundation\.css/, 'src/lib/angular/angular.js']
@@ -42,8 +42,8 @@ gulp.task('inject', ['partials', 'styles', 'config', 'webkitFix'], function () {
     // 'html'.
     .pipe($.inject(gulp.src(paths.src + '/cache/templateCacheHtml.js',
       {read: false}), {name: 'cache', addRootSlash: false, relative: true}))
-    .pipe($.inject(gulp.src(paths.src + '/app/js/config.js',
-      {read: false}), {name: 'config', addRootSlash: false, relative: true}))
+    //.pipe($.inject(gulp.src(paths.src + '/app/js/config.js',
+    //  {read: false}), {name: 'config', addRootSlash: false, relative: true}))
     .pipe(print())
     .pipe(wiredep(wiredepOptions))
     .pipe(gulp.dest(paths.tmp + '/serve'));
@@ -122,15 +122,6 @@ gulp.task('favicons', function () {
     .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('config', function () {
-  //console.log('config')
-  gulp.src(paths.src + '/app/js/config.json')
-    .pipe(ngConstant({
-      name: 'config'
-    }))
-    .pipe(gulp.dest(paths.src + '/app/js/'));
-});
-
 gulp.task('misc', function () {
   return gulp.src(paths.src + '/**/*.ico')
     .pipe(gulp.dest(paths.dist + '/'));
@@ -141,5 +132,22 @@ gulp.task('clean', function (done) {
     .pipe(rimraf({force: true}));
 });
 
+gulp.task('config', function () {
+  //console.log('config')
+  gulp.src(paths.dist + '/config.json')
+    .pipe(ngConstant({
+      name: 'config'
+    }))
+    .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('configSrc', function () {
+  //console.log('config')
+  gulp.src(paths.src + '/config.json')
+    .pipe(ngConstant({
+      name: 'config'
+    }))
+    .pipe(gulp.dest(paths.src));
+});
 
 gulp.task('build', ['html', 'images', 'fonts', 'favicons', 'misc']);

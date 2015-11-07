@@ -2,7 +2,6 @@
 var gulp = require('gulp');
 var awspublish = require('gulp-awspublish');
 var cloudfront = require('gulp-invalidate-cloudfront');
-var awsConfig = require('./aws_config.json');
 var paths = gulp.paths;
 
 
@@ -16,6 +15,8 @@ var paths = gulp.paths;
 
 
 gulp.task('aws', function () {
+  var awsConfig = require('./aws_config.json');
+
   // create a new publisher
   var publisher = awspublish.create(awsConfig);
 
