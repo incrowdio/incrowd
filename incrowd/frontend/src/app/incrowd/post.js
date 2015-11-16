@@ -46,6 +46,14 @@ angular.module('incrowdLib')
       }
     }
 
+    function getPostIdMap() {
+      var map = {};
+      angular.forEach(Posts.posts, function (post) {
+        map[post.id] = post;
+      });
+      return map;
+    }
+
     Posts.resource.query().$promise.success(function (data) {
       Posts.posts = data.results;
       deferred.resolve(Posts.posts);
@@ -136,7 +144,14 @@ angular.module('incrowdLib')
     Posts.addPage = function (page) {
       var d = $q.defer();
       Posts.resource.query({page: page}).$promise.success(function (data) {
-        Posts.posts = Posts.posts.concat(data.results);
+        var postIds = getPostIdMap();
+        angular.forEach(data.results, function (post) {
+          if (postIds[post.id] === undefined) {
+            Posts.posts.push(post)
+          } else {
+            $log.debug('Filtered out duplicated post id', post.id);
+          }
+        });
         $log.debug('Added posts page', page);
         d.resolve(Posts.posts);
         //$rootScope.$apply();
