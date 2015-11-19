@@ -23,7 +23,6 @@ angular.module('incrowd')
           return icons[item.type];
         };
         $scope.goTo = function (item) {
-          $scope.remove(item);
           if (item.type === 'comment') {
             $state.go('post_details', {postId: item.identifier});
           }

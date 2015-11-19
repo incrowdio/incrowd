@@ -76,7 +76,7 @@ angular.module('incrowdLib')
 
     Notifications.clear_for_url = function (toState, toParams) {
       Notifications.notifications.forEach(function (n) {
-        $log.debug('checking for clear on ', n.type === 'comment' && $state.current.name === 'post' && $stateParams.postId === n.identifier);
+        $log.debug('checking for clear on ', n.type === 'comment', $state.current.name === 'post', $stateParams.postId === n.identifier);
         if (n.type === 'comment' && toState.name === 'post_details' && toParams.postId === n.identifier) {
           $log.debug('Deleting notification because you\'re on the page ', n);
           Notifications.remove(n);

@@ -30,7 +30,7 @@ angular.module('incrowdLib')
     function getPostIndex(id) {
       var i;
       for (i = 0; i < Posts.posts.length; i++) {
-        $log.debug('Comparing post', Posts.posts[i].id === id, Posts.posts[i].id, id, Posts.posts[i]);
+        //$log.debug('Comparing post', Posts.posts[i].id === id, Posts.posts[i].id, id, Posts.posts[i]);
         if (Posts.posts[i].id === id) {
           return i;
         }
