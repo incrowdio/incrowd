@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .service('Notifications', function ($q, $log, $rootScope, $location, $state, $stateParams, djResource, BACKEND_SERVER, favicoService, Users) {
     "use strict";
     var Notifications = {}, deferred = $q.defer();

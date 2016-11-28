@@ -14,7 +14,6 @@ var app = angular.module('incrowd', [
   'djangoRESTResources',
   'drf_auth.token',
   'djangle',
-  'incrowdLib',
   'pusher_service'
 ])
 

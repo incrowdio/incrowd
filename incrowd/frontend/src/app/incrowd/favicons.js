@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .factory('favicoService', [
     function () {
       var favico = new Favico({

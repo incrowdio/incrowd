@@ -1,12 +1,13 @@
 from __future__ import unicode_literals
 import logging
+from push_notifications.models import APNSDevice, GCMDevice
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+import pusher_module
 
 from django.conf import settings
 from django.http import HttpResponse
-from push_notifications.models import APNSDevice, GCMDevice
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-import pusher_module
 from website.models import UserProfile
 
 logger = logging.getLogger()
@@ -37,6 +38,13 @@ def mobile_webhook(request):
         return _invalidate(request)
     else:
         return _register(request)
+
+
+@permission_classes((AllowAny, ))
+@api_view(['GET', 'POST'])
+def ionic_push(request):
+    print('Ionic push. method: {}, body: {}'.format(
+        request.method, request.body))
 
 
 def _register(request):

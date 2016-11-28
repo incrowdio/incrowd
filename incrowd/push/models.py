@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 PUSH_CHOICES = (('website', 'pusher'),
                 ('ionic', 'ionic'))
 
+PUSH_DEVICE_TYPES = (('ios', 'ios'), ('android', 'android'))
 
 def random_key(length=64):
     return ''.join(random.choice('0123456789ABCDEF') for _ in range(length))
@@ -36,3 +37,14 @@ class PushSession(models.Model):
 
     def __repr__(self):
         return "<{0}, {1}>".format(PushSession, self.__unicode__())
+
+
+class PushDeviceToken(models.Model):
+    screen_height = models.IntegerField()
+    screen_width = models.IntegerField()
+    token = models.CharField(max_length=255)
+    unregister = models.BooleanField(default=False)
+    received = models.DateTimeField()
+    app_id = models.CharField(max_length=64)
+    user_id = models.CharField(max_length=64)
+    device_type = models.CharField(max_length=16, choices=PUSH_DEVICE_TYPES)

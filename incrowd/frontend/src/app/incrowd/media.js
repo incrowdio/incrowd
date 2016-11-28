@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .directive('media', function () {
     "use strict";
     return {

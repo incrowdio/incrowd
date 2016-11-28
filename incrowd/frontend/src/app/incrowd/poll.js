@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .service('Polls', function ($http, $rootScope, $q, $log, $stateParams, $location, djResource, Users, BACKEND_SERVER) {
     "use strict";
 

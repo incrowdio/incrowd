@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .service('Users', function ($q, $log, $rootScope, $interval, BACKEND_SERVER, djResource) {
     "use strict";
 

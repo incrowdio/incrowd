@@ -1,4 +1,4 @@
-angular.module('incrowdLib')
+angular.module('incrowd')
   .filter('DTSince', function () {
     "use strict";
     return function (dt) {
